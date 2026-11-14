@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ghlIsLive } from "@/lib/ghl";
 import s from "./chrome.module.css";
 
 export function SiteHeader({ minimal }: { minimal?: boolean }) {
@@ -35,6 +36,36 @@ export function SiteFooter() {
           </a>
         </p>
       </div>
+      <PreviewNav />
     </footer>
+  );
+}
+
+/** Preview only: links to every step, because the webinar sits between the pages and nothing is connected yet. */
+function PreviewNav() {
+  if (ghlIsLive()) return null;
+  const links: [string, string][] = [
+    ["/", "1. Registration"],
+    ["/registered", "2. Registered"],
+    ["/replay", "3. Replay"],
+    ["/apply", "4. Apply and book"],
+    ["/nda", "5. NDA"],
+    ["/confirmed", "6. Confirmation"],
+    ["/apply/thank-you", "Not qualified"],
+  ];
+  return (
+    <nav aria-label="Preview pages" style={{ maxWidth: 760, margin: "40px auto 0", padding: "16px 0 0", borderTop: "1px solid rgba(246,241,231,0.2)", textAlign: "center", fontSize: "0.95rem" }}>
+      <p style={{ margin: "0 0 8px", color: "#f0dc9b" }}>Preview only: jump to any page in the funnel</p>
+      <p style={{ margin: 0, display: "flex", flexWrap: "wrap", gap: "8px 18px", justifyContent: "center" }}>
+        {links.map(([href, label]) => (
+          <a key={href} href={href} style={{ color: "#f6f1e7" }}>
+            {label}
+          </a>
+        ))}
+      </p>
+      <p style={{ margin: "8px 0 0", color: "rgba(246,241,231,0.7)", fontSize: "0.85rem" }}>
+        The NDA and confirmation pages open after you pick a time in the application.
+      </p>
+    </nav>
   );
 }

@@ -20,11 +20,13 @@ export function WebinarKitForm({ html, id }: { html: string | null; id?: string 
             <span className={s.mockField}>First name</span>
             <span className={s.mockField}>Email address</span>
             <span className={s.mockField}>Mobile number</span>
-            <span className={s.mockButton}>Save my seat</span>
-          </div>
+                      </div>
+          <a className={s.mockButton} href="/registered">
+            Save my seat
+          </a>
           <p className={s.mockNote} role="note">
-            Placeholder: the live registration form goes here once the embed code is added. This preview collects
-            nothing.
+            Placeholder: the live registration form goes here once the embed code is added. In this preview the
+            button skips to the next page and collects nothing.
           </p>
         </div>
       )}

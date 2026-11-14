@@ -32,6 +32,7 @@
 }
 .mockButton {
   display: block;
+  text-decoration: none;
   text-align: center;
   background: var(--ink);
   color: var(--ivory);
