@@ -58,7 +58,7 @@ export function ButtonLink({
   ...rest
 }: { href: string; variant?: BtnVariant; block?: boolean; children: ReactNode } & Omit<ComponentProps<"a">, "href">) {
   const cls = cx(s.btn, variantClass(variant), block && s.btnBlock);
-  if (href.startsWith("#") || href.startsWith("http")) {
+  if (href.startsWith("#") || href.startsWith("http") || href.startsWith("/api/")) {
     return (
       <a href={href} className={cls} {...rest}>
         {children}
