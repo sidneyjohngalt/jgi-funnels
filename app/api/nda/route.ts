@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     }
 
     const name = clean(body.name, 160);
-    if (body.agreed !== true || name.split(/\s+/).filter(Boolean).length < 2) {
+    if (body.agreed !== true || name.split(" ").filter(Boolean).length < 2) {
       return NextResponse.json(
         { ok: false, message: "Please tick the box and type your full first and last name to sign." },
         { status: 400 },
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         `Browser: ${ua.slice(0, 300)}`,
         `NDA version: ${NDA_VERSION}`,
         `Email on file: ${s.email}`,
-      ].join("\n"),
+      ].join(String.fromCharCode(10)),
     );
     await updateContact(s.contactId, {
       customFields: [

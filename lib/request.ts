@@ -18,16 +18,16 @@ export function clean(v: unknown, max = 500): string {
 }
 
 export function validEmail(e: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+  return /^[^ @]+@[^ @]+[.][^ @]{2,}$/.test(e);
 }
 
 export function validPhone(p: string): boolean {
-  return p.replace(/\D/g, "").length >= 7;
+  return p.replace(/[^0-9]/g, "").length >= 7;
 }
 
 /** Normalise US numbers to E.164 when possible; otherwise return as typed. */
 export function normalisePhone(p: string): string {
-  const digits = p.replace(/\D/g, "");
+  const digits = p.replace(/[^0-9]/g, "");
   if (p.trim().startsWith("+")) return `+${digits}`;
   if (digits.length === 10) return `+1${digits}`;
   if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;

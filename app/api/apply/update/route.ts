@@ -55,7 +55,7 @@ export async function POST(req: Request) {
       `Heard about us from: ${a.heardFrom || "not given"}`,
       `Questions for the call: ${a.questions || "none"}`,
     ];
-    await addNote(s.contactId, lines.join("\n"));
+    await addNote(s.contactId, lines.join(String.fromCharCode(10)));
 
     const qualified = isQualified({ firstName: s.firstName, lastName: "", email: s.email, phone: "", ...a });
     if (qualified) {

@@ -89,8 +89,8 @@ export default function ApplicationForm({
     if (step === 0) {
       if (!a.firstName.trim()) e.firstName = "Please enter your first name.";
       if (!a.lastName.trim()) e.lastName = "Please enter your last name.";
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(a.email.trim())) e.email = "Please enter a valid email address.";
-      if (a.phone.replace(/\D/g, "").length < 7) e.phone = "Please enter a phone number we can reach you on.";
+      if (!/^[^ @]+@[^ @]+[.][^ @]{2,}$/.test(a.email.trim())) e.email = "Please enter a valid email address.";
+      if (a.phone.replace(/[^0-9]/g, "").length < 7) e.phone = "Please enter a phone number we can reach you on.";
     }
     if (step === 1 && !a.investorType) e.investorType = "Please choose the closest match.";
     if (step === 2) {

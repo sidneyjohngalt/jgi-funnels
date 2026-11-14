@@ -9,7 +9,7 @@ export const NDA_TITLE = "Mutual Non-Disclosure Agreement";
 
 export const NDA_PARAGRAPHS: string[] = [
   "PLACEHOLDER TEXT. This is not the final agreement. The final wording will come from counsel and will replace everything below before this page goes live.",
-  "1. Purpose. John Galt Institute, Inc. (\"JGI\") will give you private information about its business and its plans so that you can decide whether to take part as a collaborator.",
+  '1. Purpose. John Galt Institute, Inc. ("JGI") will give you private information about its business and its plans so that you can decide whether to take part as a collaborator.',
   "2. Confidential information. This means anything JGI gives you through the data room, on calls or in writing that is not already public, including financial models, the cap table, the prospectus, technology details and plans.",
   "3. Your promise. You agree to keep the information private, to use it only to evaluate taking part, and to pass it only to your own legal, tax or financial advisors who are bound to keep it private too.",
   "4. What is not covered. Information that is already public, that you already knew, or that you receive lawfully from someone else is not covered.",

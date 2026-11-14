@@ -3,7 +3,7 @@ import { getSession } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 
-const icsDate = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+const icsDate = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, "").replace(/[.][0-9]{3}/, "");
 
 /** Add-to-calendar file for the booked call. */
 export async function GET() {
@@ -22,11 +22,11 @@ export async function GET() {
     `DTSTART:${icsDate(s.booking.start)}`,
     `DTEND:${icsDate(s.booking.end)}`,
     `SUMMARY:First call with ${BOOKING.hostName}`,
-    `DESCRIPTION:Your first call with John Galt Institute. Before the call\\, go through your preparation page${origin ? `: ${origin}/confirmed` : "."}`,
+    `DESCRIPTION:Your first call with John Galt Institute. Before the call go through your preparation page${origin ? `: ${origin}/confirmed` : "."}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ];
-  return new Response(lines.join("\r\n"), {
+  return new Response(lines.join(String.fromCharCode(13, 10)), {
     headers: {
       "Content-Type": "text/calendar; charset=utf-8",
       "Content-Disposition": 'attachment; filename="call-with-michael.ics"',

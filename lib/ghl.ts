@@ -146,7 +146,7 @@ export async function freeSlots(input: { startMs: number; endMs: number; timezon
   const r = await call<Record<string, { slots?: string[] } | unknown>>("GET", `/calendars/${cal}/free-slots?${q}`);
   const out: Record<string, string[]> = {};
   for (const [k, v] of Object.entries(r)) {
-    if (/^\d{4}-\d{2}-\d{2}$/.test(k) && v && typeof v === "object" && Array.isArray((v as { slots?: unknown }).slots)) {
+    if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(k) && v && typeof v === "object" && Array.isArray((v as { slots?: unknown }).slots)) {
       out[k] = (v as { slots: string[] }).slots;
     }
   }

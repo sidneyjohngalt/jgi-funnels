@@ -37,7 +37,7 @@ export default function NdaForm({ title, paragraphs, placeholder }: { title: str
     }
   }
 
-  const fullName = name.trim().split(/\s+/).filter(Boolean).length >= 2;
+  const fullName = name.trim().split(" ").filter(Boolean).length >= 2;
   const canSign = agreed && fullName && !busy;
 
   return (
