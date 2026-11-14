@@ -1,0 +1,330 @@
+/* ---------- Layout ---------- */
+.section {
+  padding: var(--section) var(--pad);
+}
+.sectionTight {
+  padding: clamp(44px, 7vw, 72px) var(--pad);
+}
+.inner {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+.narrow {
+  max-width: var(--narrow);
+  margin: 0 auto;
+}
+
+.ivory {
+  background: var(--ivory);
+}
+.raised {
+  background: var(--ivory-raised);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+.dark {
+  background: var(--charcoal-deep);
+  color: var(--ivory);
+}
+.navy {
+  background: var(--vault-navy);
+  color: var(--ivory);
+}
+.green {
+  background: var(--ledger-green);
+  color: var(--ivory);
+}
+:global(.dark) .muted {
+  color: rgba(246, 241, 231, 0.78);
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+.lead {
+  font-size: clamp(1.15rem, 1.6vw, 1.3rem);
+  line-height: 1.6;
+}
+
+/* ---------- Label ---------- */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--gold-text);
+  margin-bottom: 18px;
+}
+:global(.dark) .eyebrow {
+  color: var(--gold);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 14px 30px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.btnGold {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--charcoal-deep);
+}
+.btnGhost {
+  background: transparent;
+  color: var(--ink);
+}
+:global(.dark) .btnGhost {
+  color: var(--ivory);
+  border-color: rgba(246, 241, 231, 0.6);
+}
+.btnBlock {
+  width: 100%;
+}
+.linkBtn {
+  background: none;
+  border: none;
+  padding: 8px 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+/* ---------- Card ---------- */
+.card {
+  background: var(--ivory-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: clamp(24px, 3.5vw, 36px);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+}
+
+/* ---------- Placeholder ---------- */
+.placeholder {
+  border: 2px dashed var(--gold-text);
+  background: repeating-linear-gradient(-45deg, rgba(240, 220, 155, 0.22) 0 14px, rgba(240, 220, 155, 0.08) 14px 28px);
+  border-radius: var(--radius);
+  padding: 28px;
+  color: var(--ink);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.placeholderTag {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  background: var(--gold-text);
+  color: var(--white);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.placeholderTitle {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.placeholderNote {
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+  max-width: 46ch;
+}
+:global(.dark) .placeholder {
+  color: var(--ivory);
+  border-color: var(--gold);
+}
+:global(.dark) .placeholderNote {
+  color: rgba(246, 241, 231, 0.75);
+}
+:global(.dark) .placeholderTag {
+  background: var(--gold);
+  color: var(--charcoal-deep);
+}
+
+/* ---------- Video ---------- */
+.video {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--charcoal-deep);
+  aspect-ratio: 16 / 9;
+  box-shadow: var(--shadow);
+}
+.video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.videoPh {
+  aspect-ratio: 16 / 9;
+}
+
+/* ---------- Raise progress ---------- */
+.raise {
+  display: grid;
+  gap: 12px;
+}
+.raiseNums {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  font-size: 1rem;
+}
+.raiseNums strong {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+.raiseBar {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(246, 241, 231, 0.18);
+  overflow: hidden;
+}
+.ivory .raiseBar,
+.raised .raiseBar {
+  background: var(--hairline);
+}
+.raiseFill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 999px;
+}
+
+/* ---------- Progress steps ---------- */
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.74rem;
+  line-height: 1.3;
+}
+.step {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  color: var(--ink-muted);
+  border-top: 3px solid var(--hairline);
+  padding-top: 10px;
+}
+.stepNum {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  display: inline-grid;
+  place-items: center;
+  font-size: 0.78rem;
+}
+.stepActive {
+  color: var(--ink);
+  border-top-color: var(--ink);
+}
+.stepActive .stepNum {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--ivory);
+}
+.stepDone {
+  border-top-color: var(--gold-text);
+}
+.stepDone .stepNum {
+  background: var(--champagne);
+  border-color: var(--champagne);
+  color: var(--ink);
+}
+:global(.dark) .step {
+  color: rgba(246, 241, 231, 0.7);
+  border-top-color: rgba(246, 241, 231, 0.25);
+}
+:global(.dark) .stepActive {
+  color: var(--ivory);
+  border-top-color: var(--gold);
+}
+:global(.dark) .stepActive .stepNum {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--charcoal-deep);
+}
+:global(.dark) .stepDone {
+  border-top-color: var(--champagne);
+}
+@media (min-width: 640px) {
+  .steps {
+    font-size: 0.8rem;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ---------- Dry-run banner ---------- */
+.devBanner {
+  background: var(--champagne);
+  color: var(--ink);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 8px var(--pad);
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* Light cards inside dark sections keep light-surface colours. */
+:global(.dark) .card {
+  color: var(--ink);
+}
+:global(.dark) .card .muted,
+:global(.dark) .card .placeholderNote {
+  color: var(--ink-muted);
+}
+:global(.dark) .card .eyebrow {
+  color: var(--gold-text);
+}
+:global(.dark) .card .placeholder {
+  color: var(--ink);
+  border-color: var(--gold-text);
+}
+:global(.dark) .card .placeholderTag {
+  background: var(--gold-text);
+  color: var(--white);
+}

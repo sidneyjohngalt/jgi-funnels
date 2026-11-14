@@ -1,0 +1,233 @@
+.hero {
+  background:
+    radial-gradient(1000px 420px at 90% -10%, rgba(255, 192, 0, 0.1), transparent 60%),
+    var(--charcoal-deep);
+  color: var(--ivory);
+  padding: clamp(40px, 6vw, 80px) var(--pad) clamp(56px, 8vw, 96px);
+}
+.heroInner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.heroTitle {
+  color: var(--ivory);
+}
+.when {
+  display: grid;
+  gap: 16px;
+  margin: 28px 0;
+  padding: 24px;
+  border: 1px solid rgba(240, 220, 155, 0.35);
+  border-radius: var(--radius);
+  background: rgba(255, 253, 248, 0.04);
+}
+@media (min-width: 720px) {
+  .when {
+    grid-template-columns: 1.3fr 1fr 1fr;
+  }
+}
+.when > div {
+  display: grid;
+  gap: 4px;
+}
+.whenLabel {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+  color: var(--gold);
+}
+.whenValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.heroActions {
+  margin-bottom: 40px;
+}
+.welcome {
+  max-width: 900px;
+}
+
+.big {
+  font-size: clamp(1.15rem, 1.7vw, 1.3rem);
+}
+.muted {
+  color: var(--ink-muted);
+}
+.light {
+  color: var(--ivory);
+}
+.callGrid {
+  display: grid;
+  gap: 40px;
+}
+@media (min-width: 960px) {
+  .callGrid {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 56px;
+  }
+}
+.host {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+}
+.hostImg {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.twoCards {
+  display: grid;
+  gap: 20px;
+}
+@media (min-width: 640px) {
+  .twoCards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.card {
+  background: var(--ivory-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.ticks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+.ticks li {
+  padding-left: 30px;
+  position: relative;
+}
+.ticks li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--gold-text);
+  font-weight: 700;
+}
+
+.how {
+  padding-left: 1.3em;
+  display: grid;
+  gap: 14px;
+  font-size: 1.08rem;
+}
+.how li::marker {
+  font-family: var(--font-heading);
+  color: var(--gold-text);
+}
+
+/* Data room */
+.drHead {
+  margin-bottom: 36px;
+}
+.drGrid {
+  display: grid;
+  gap: 18px;
+}
+@media (min-width: 720px) {
+  .drGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1040px) {
+  .drGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.drCard {
+  background: var(--ivory-raised);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.drCard h3 {
+  margin-bottom: 6px;
+}
+.docs {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid var(--hairline);
+  padding-top: 14px;
+}
+.docLink {
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--gold-text);
+}
+.docPending {
+  color: var(--ink-muted);
+}
+.locked {
+  background: var(--ivory-raised);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: clamp(28px, 4vw, 44px);
+  max-width: 760px;
+}
+.lockedList {
+  padding-left: 1.2em;
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 28px;
+  color: var(--ink-muted);
+}
+.lockedList strong {
+  color: var(--ink);
+}
+
+/* Resources */
+.resGrid {
+  display: grid;
+  gap: 36px 28px;
+}
+@media (min-width: 720px) {
+  .resGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1040px) {
+  .resGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.res h3 {
+  margin: 18px 0 6px;
+}
+.res p {
+  margin: 0;
+}
+.deck {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  background: var(--vault-navy) url("https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af759ef76f20d2ef49fde40_et-hero-collage.webp") center / cover;
+  display: grid;
+  place-items: end start;
+  padding: 20px;
+}
+.deckLink {
+  background: var(--gold);
+  color: var(--charcoal-deep);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.testimonialNote {
+  margin-top: 40px;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+}

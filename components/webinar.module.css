@@ -1,0 +1,35 @@
+.formSlot {
+  width: 100%;
+}
+.embed {
+  width: 100%;
+  min-height: 120px;
+}
+.mock {
+  display: grid;
+  gap: 14px;
+}
+.mockFields {
+  display: grid;
+  gap: 12px;
+  opacity: 0.55;
+}
+.mockField {
+  display: block;
+  border: 1px solid var(--hairline);
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  color: var(--ink-muted);
+  font-size: 1.05rem;
+}
+.mockButton {
+  display: block;
+  text-align: center;
+  background: var(--gold);
+  color: var(--charcoal-deep);
+  border-radius: 999px;
+  padding: 18px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}

@@ -1,0 +1,51 @@
+.registerCard {
+  display: grid;
+  gap: 4px;
+}
+.registerTitle {
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  margin-bottom: 6px;
+}
+.registerMeta {
+  color: var(--ink-muted);
+  margin-bottom: 18px;
+}
+.privacy {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  margin: 14px 0 0;
+}
+
+.tour {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+}
+.tour h2 {
+  color: var(--ivory);
+}
+@media (min-width: 900px) {
+  .tour {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 56px;
+  }
+}
+
+.final {
+  display: grid;
+  gap: 28px;
+}
+.finalTitle {
+  color: var(--ivory);
+  text-align: center;
+}
+
+.stickySpace {
+  height: 88px;
+  background: var(--charcoal-deep);
+}
+@media (min-width: 960px) {
+  .stickySpace {
+    display: none;
+  }
+}

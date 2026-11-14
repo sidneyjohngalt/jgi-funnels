@@ -1,0 +1,53 @@
+.wrap {
+  display: grid;
+  gap: 28px;
+}
+.doc {
+  max-height: 360px;
+  overflow-y: auto;
+  background: var(--white);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: clamp(20px, 3vw, 32px);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+.docTitle {
+  font-size: 1.5rem;
+}
+.draftFlag {
+  display: inline-block;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  background: var(--gold-text);
+  color: var(--white);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.sig {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1.35rem;
+}
+.dialog {
+  border: none;
+  border-radius: var(--radius);
+  padding: clamp(24px, 4vw, 40px);
+  max-width: min(560px, calc(100vw - 32px));
+  background: var(--ivory-raised);
+  color: var(--ink);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+}
+.dialog::backdrop {
+  background: rgba(28, 27, 25, 0.6);
+}
+.dialogTitle {
+  font-size: 2rem;
+}
+.dialogActions {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
