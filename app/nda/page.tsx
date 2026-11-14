@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import FunnelShell from "@/components/FunnelShell";
 import NdaForm from "@/components/NdaForm";
-import { Card } from "@/components/ui";
 import { NDA_IS_PLACEHOLDER, NDA_PARAGRAPHS, NDA_TITLE } from "@/content/nda";
 import { getSession } from "@/lib/session";
 import { formatCallTime } from "@/lib/format";
@@ -13,12 +12,12 @@ export const dynamic = "force-dynamic";
 export default async function NdaPage() {
   const s = await getSession();
   if (!s) redirect("/apply");
-  if (!s.booking) redirect("/book");
+  if (!s.booking) redirect("/apply");
   if (s.step === "nda-signed") redirect("/confirmed");
 
   return (
     <FunnelShell
-      step={2}
+      step={1}
       eyebrow="Your call is booked"
       title="One last step: open the data room."
       intro={
@@ -27,15 +26,15 @@ export default async function NdaPage() {
             Your call with Michael is set for <strong>{formatCallTime(s.booking.start, s.booking.timezone)}</strong>.
           </p>
           <p>
-            Sign this short agreement to see the full data room before you talk: the proforma, cap table, prospectus
-            and more.
+            This short agreement is the key to the data room: the proforma, cap table, prospectus and more, ready to
+            read before you talk. Signing takes about a minute.
           </p>
         </>
       }
     >
-      <Card>
+      <div className="panel">
         <NdaForm title={NDA_TITLE} paragraphs={NDA_PARAGRAPHS} placeholder={NDA_IS_PLACEHOLDER} />
-      </Card>
+      </div>
     </FunnelShell>
   );
 }

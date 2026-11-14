@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import RawEmbed from "./RawEmbed";
 import s from "./webinar.module.css";
-import { Placeholder } from "./ui";
 
 /**
  * WebinarKit registration form slot. Renders WebinarKit's Step 1 HTML when supplied.
@@ -17,15 +16,16 @@ export function WebinarKitForm({ html, id }: { html: string | null; id?: string 
         <RawEmbed html={html} className={s.embed} />
       ) : (
         <div className={s.mock} aria-label="Registration form preview">
-          <Placeholder
-            title="Registration form"
-            note="The live registration form appears here once the embed code is added. This preview does not collect anything."
-          />
           <div className={s.mockFields} aria-hidden="true">
             <span className={s.mockField}>First name</span>
             <span className={s.mockField}>Email address</span>
+            <span className={s.mockField}>Mobile number</span>
             <span className={s.mockButton}>Save my seat</span>
           </div>
+          <p className={s.mockNote} role="note">
+            Placeholder: the live registration form goes here once the embed code is added. This preview collects
+            nothing.
+          </p>
         </div>
       )}
     </div>

@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/components/Chrome";
+import { Chapter, EmailTip, QuestionVideos } from "@/components/sections";
 import { TrackedDoc, TrackedSection } from "@/components/Tracked";
-import { ButtonLink, DryRunBanner, Eyebrow, FunnelSteps, Placeholder, Section } from "@/components/ui";
+import { ButtonLink, DryRunBanner, FunnelSteps, Placeholder } from "@/components/ui";
 import Video from "@/components/Video";
 import { BOOKING } from "@/config/investor";
-import { DATA_ROOM, MEDIA, PITCH_DECK_URL } from "@/content/investor";
+import { CONTACT, DATA_ROOM, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL, RISK_STATEMENT } from "@/content/investor";
 import { formatCallParts } from "@/lib/format";
 import { ghlIsLive } from "@/lib/ghl";
 import { getSession } from "@/lib/session";
@@ -15,10 +16,18 @@ import c from "./confirmed.module.css";
 export const metadata: Metadata = { title: "Your call is confirmed" };
 export const dynamic = "force-dynamic";
 
+const MICHAEL =
+  "https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af36f443a10b9a7d7c26390_team-michael-gegelman.webp";
+
+/**
+ * Confirmation page. Booked is not sold: between booking and the call the investor researches us,
+ * so this page answers them first. Order: confirm, email tip, Michael's main video, what the call
+ * is for, short answers, data room, risk, films, who will contact you.
+ */
 export default async function ConfirmedPage() {
   const s = await getSession();
   if (!s) redirect("/apply");
-  if (!s.booking) redirect("/book");
+  if (!s.booking) redirect("/apply");
   const signed = s.step === "nda-signed" || !!s.nda;
   const when = formatCallParts(s.booking.start, s.booking.timezone);
 
@@ -27,124 +36,115 @@ export default async function ConfirmedPage() {
       <DryRunBanner live={ghlIsLive()} />
       <SiteHeader minimal />
       <main id="main">
-        {/* ---------- Confirmation + welcome ---------- */}
-        <section className={`${c.hero} dark`} aria-labelledby="conf-title">
-          <div className={c.heroInner}>
-            <FunnelSteps current={3} />
-            <Eyebrow>Your call is confirmed</Eyebrow>
-            <h1 id="conf-title" className={c.heroTitle}>
-              See you on {when.date.split(",")[0]}, {s.firstName}.
-            </h1>
-            <div className={c.when}>
+        {/* ---------- Confirmation ---------- */}
+        <section className={c.head} aria-labelledby="conf-title">
+          <div className={c.headInner}>
+            <FunnelSteps current={2} />
+            <p className={c.kicker}>Your call is confirmed</p>
+            <div className={c.headGrid}>
               <div>
-                <span className={c.whenLabel}>Date</span>
-                <span className={c.whenValue}>{when.date}</span>
+                <h1 id="conf-title">
+                  See you on {when.date.split(",")[0]}, <em>{s.firstName}.</em>
+                </h1>
+                <dl className={c.when}>
+                  <div>
+                    <dt>Date</dt>
+                    <dd>{when.date}</dd>
+                  </div>
+                  <div>
+                    <dt>Time</dt>
+                    <dd>{when.time}</dd>
+                  </div>
+                  <div>
+                    <dt>With</dt>
+                    <dd>{BOOKING.hostName}</dd>
+                  </div>
+                  <div>
+                    <dt>Length</dt>
+                    <dd>About {BOOKING.durationMinutes} minutes</dd>
+                  </div>
+                </dl>
+                <ButtonLink href="/api/calendar" variant="ink">
+                  Add to my calendar
+                </ButtonLink>
               </div>
-              <div>
-                <span className={c.whenLabel}>Time</span>
-                <span className={c.whenValue}>{when.time}</span>
-              </div>
-              <div>
-                <span className={c.whenLabel}>With</span>
-                <span className={c.whenValue}>{BOOKING.hostName}</span>
-              </div>
+              <figure className={c.portrait}>
+                <Image src={MICHAEL} alt="Michael Gegelman" width={480} height={480} sizes="(max-width: 980px) 40vw, 320px" />
+                <figcaption>Michael Gegelman, Founder and CEO</figcaption>
+              </figure>
             </div>
-            <div className={c.heroActions}>
-              <ButtonLink href="/api/calendar" variant="gold">
-                Add to my calendar
-              </ButtonLink>
+            <div className={c.tip}>
+              <EmailTip sender={CONTACT.emailSender ?? undefined} />
             </div>
-            <TrackedSection label="Welcome video from Michael" className={c.welcome}>
-              <Video
-                src={MEDIA.welcomeFromMichael}
-                title="A welcome from Michael"
-                placeholderNote="A short welcome video from Michael goes here."
-                trackLabel="Welcome video from Michael"
-              />
-            </TrackedSection>
           </div>
         </section>
 
+        {/* ---------- Michael's main video ---------- */}
+        <Chapter
+          label="Start here"
+          id="start"
+          title="What you will find if you look us up."
+          intro={<p>Michael, in a few minutes, on the questions most people research before a call like this.</p>}
+        >
+          <TrackedSection label="Main video from Michael">
+            <Video
+              src={MEDIA.welcomeFromMichael}
+              title="Michael before your call"
+              placeholderNote="Main video from Michael: due diligence (what search and AI tools say about us, and what we did when things went wrong) or a dated, outside reason why now. Opens with a 60 second summary, then chapters."
+              trackLabel="Main video from Michael"
+            />
+          </TrackedSection>
+        </Chapter>
+
         {/* ---------- What the call is for ---------- */}
-        <Section tone="ivory" labelledBy="call-title">
+        <Chapter label="Your first call" id="call" title="What the call is for.">
           <TrackedSection label="What the call is for">
-            <div className={c.callGrid}>
+            <p className={c.big}>
+              A relaxed conversation to meet the team, answer your questions, and see together whether you are a good
+              fit to become a collaborator.
+            </p>
+            <div className={c.cols}>
               <div>
-                <Eyebrow>Your first call</Eyebrow>
-                <h2 id="call-title">What the call is for</h2>
-                <p className={c.big}>
-                  A relaxed conversation to meet the team, answer your questions, and see together whether you are a
-                  good fit to become a collaborator.
-                </p>
-                <div className={c.host}>
-                  <Image src="https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af36f443a10b9a7d7c26390_team-michael-gegelman.webp" alt="" width={72} height={72} className={c.hostImg} />
-                  <span>
-                    <strong>Michael Gegelman</strong>
-                    <br />
-                    <span className={c.muted}>CEO, John Galt Institute</span>
-                  </span>
-                </div>
+                <h3>What to expect</h3>
+                <ul className={c.list}>
+                  <li>About {BOOKING.durationMinutes} minutes, at an unhurried pace.</li>
+                  <li>A short introduction to the team and how we got here.</li>
+                  <li>Plenty of time for your questions.</li>
+                  <li>A clear picture of the next steps, if you would like to go further.</li>
+                </ul>
               </div>
-              <div className={c.twoCards}>
-                <div className={c.card}>
-                  <h3>What to expect</h3>
-                  <ul className={c.ticks}>
-                    <li>About {BOOKING.durationMinutes} minutes, at an unhurried pace.</li>
-                    <li>A short introduction to the team and how we got here.</li>
-                    <li>Plenty of time for your questions.</li>
-                    <li>A clear picture of the next steps, if you would like to go further.</li>
-                  </ul>
-                </div>
-                <div className={c.card}>
-                  <h3>Come prepared with</h3>
-                  <ul className={c.ticks}>
-                    <li>Your questions, written down so none get lost.</li>
-                    <li>A sense of how you would like to take part.</li>
-                    <li>Anything from the data room you would like to talk through.</li>
-                  </ul>
-                </div>
+              <div>
+                <h3>Come prepared with</h3>
+                <ul className={c.list}>
+                  <li>Your questions, written down so none get lost.</li>
+                  <li>A sense of how you would like to take part.</li>
+                  <li>Anything from the data room you would like to talk through.</li>
+                </ul>
               </div>
             </div>
           </TrackedSection>
-        </Section>
+        </Chapter>
 
-        {/* ---------- How to use this page ---------- */}
-        <Section tone="raised" width="narrow" tight labelledBy="how-title">
-          <h2 id="how-title">How to use this page before the call</h2>
-          <ol className={c.how}>
-            <li>
-              <strong>Watch Michael&apos;s welcome</strong> at the top. It is short.
-            </li>
-            <li>
-              <strong>{signed ? "Open the data room" : "Sign the NDA"}</strong>{" "}
-              {signed
-                ? "below and start with Opportunity. Take each section at your own pace."
-                : "to open the data room, then start with Opportunity."}
-            </li>
-            <li>
-              <strong>Watch the films and the deck</strong> further down when you have a quiet moment.
-            </li>
-            <li>
-              <strong>Note your questions</strong> as you go, and bring them to the call.
-            </li>
-          </ol>
-          <p className={c.muted}>You can come back to this page at any time from the same device.</p>
-        </Section>
+        {/* ---------- Short answers ---------- */}
+        <Chapter
+          label="Short answers"
+          id="answers"
+          title="The questions Michael is asked most."
+          intro={<p>One or two minutes each. Watch the ones that matter to you.</p>}
+        >
+          <QuestionVideos items={QUESTIONS_BEFORE_CALL} tracked />
+        </Chapter>
 
         {/* ---------- Data room ---------- */}
-        <Section tone="navy" id="data-room" labelledBy="dr-title">
-          <div className={c.drHead}>
-            <Eyebrow>Data room</Eyebrow>
-            <h2 id="dr-title" className={c.light}>
-              Everything behind the plan
-            </h2>
-          </div>
+        <Chapter label="Data room" id="data-room" tone="dark" title="Everything behind the plan.">
           {signed ? (
-            <div className={c.drGrid}>
+            <div className={c.drList}>
               {DATA_ROOM.map((sec) => (
-                <TrackedSection key={sec.id} label={`Data room: ${sec.title}`} className={c.drCard}>
-                  <h3>{sec.title}</h3>
-                  <p className={c.muted}>{sec.explainer}</p>
+                <TrackedSection key={sec.id} label={`Data room: ${sec.title}`} className={c.drRow}>
+                  <div>
+                    <h3>{sec.title}</h3>
+                    <p className={c.drNote}>{sec.explainer}</p>
+                  </div>
                   <ul className={c.docs}>
                     {sec.docs.map((d) => (
                       <li key={d.id}>
@@ -157,15 +157,14 @@ export default async function ConfirmedPage() {
             </div>
           ) : (
             <div className={c.locked}>
-              <h3>Sign the NDA to open the data room</h3>
-              <p>
-                Signing the NDA gives you access to the full data room: proforma, cap table, prospectus and more. It
-                takes about a minute.
+              <p className={c.lockedLead}>
+                Sign the NDA to open the full data room: proforma, cap table, prospectus and more. It takes about a
+                minute.
               </p>
               <ul className={c.lockedList}>
                 {DATA_ROOM.map((sec) => (
                   <li key={sec.id}>
-                    <strong>{sec.title}:</strong> {sec.explainer}
+                    <strong>{sec.title}.</strong> {sec.explainer}
                   </li>
                 ))}
               </ul>
@@ -174,14 +173,22 @@ export default async function ConfirmedPage() {
               </ButtonLink>
             </div>
           )}
-        </Section>
+        </Chapter>
 
-        {/* ---------- Resources ---------- */}
-        <Section tone="ivory" labelledBy="res-title">
-          <div className={c.drHead}>
-            <Eyebrow>Watch and read</Eyebrow>
-            <h2 id="res-title">Films and resources</h2>
-          </div>
+        {/* ---------- Risk ---------- */}
+        <Chapter label="In plain words" id="risk" title="What could go wrong.">
+          {RISK_STATEMENT ? (
+            <p className={c.big}>{RISK_STATEMENT}</p>
+          ) : (
+            <Placeholder
+              title="Risk statement"
+              note="A short, counsel-approved statement of the main risks, in plain words."
+            />
+          )}
+        </Chapter>
+
+        {/* ---------- Films and resources ---------- */}
+        <Chapter label="Watch and read" id="films" title="Films and resources.">
           <div className={c.resGrid}>
             <TrackedSection label="App explainer video" className={c.res}>
               <Video
@@ -208,7 +215,7 @@ export default async function ConfirmedPage() {
                 <Video
                   src={t.src}
                   title={`${t.label} testimonial`}
-                  placeholderNote={`${t.label} testimonial video goes here.`}
+                  placeholderNote={`${t.label} testimonial video goes here, unedited.`}
                   trackLabel={`Testimonial: ${t.label}`}
                 />
                 <h3>{t.label}</h3>
@@ -237,8 +244,23 @@ export default async function ConfirmedPage() {
               <p className={c.muted}>The deck Michael uses in one to one meetings.</p>
             </TrackedSection>
           </div>
-          <p className={c.testimonialNote}>Individual experiences vary and are not a guarantee of future results.</p>
-        </Section>
+          <p className={c.note}>Individual experiences vary and are not a guarantee of future results.</p>
+        </Chapter>
+
+        {/* ---------- Who will contact you ---------- */}
+        <Chapter label="Before the call" id="contact" title="Who you will hear from.">
+          <p className={c.big}>
+            {CONTACT.textFromName ? `${CONTACT.textFromName} ` : "Someone from our team "}
+            will send you a short personal note before your call
+            {CONTACT.textFromNumber ? (
+              <>
+                , from <strong>{CONTACT.textFromNumber}</strong>
+              </>
+            ) : null}
+            . Reply any time with a question.
+          </p>
+          <p className={c.muted}>You can come back to this page at any time from the same device.</p>
+        </Chapter>
       </main>
       <SiteFooter />
     </>

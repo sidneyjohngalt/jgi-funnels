@@ -1,29 +1,43 @@
 import type { Metadata } from "next";
 import FunnelShell from "@/components/FunnelShell";
-import { ButtonLink, Card } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 
 export const metadata: Metadata = { title: "Thank you" };
 
-/** Shown to applicants who do not meet the qualification criteria. They get the nurture tag in GHL. */
+/**
+ * Shown to applicants who do not meet the qualification criteria. They get the nurture tag in GHL.
+ * No ad pixel fires here. Copy needs Sidney's approval.
+ */
 export default function NotQualified() {
   return (
     <FunnelShell
       eyebrow="Application received"
       title="Thank you for applying."
       intro={
-        <p>
-          We have your answers. Right now, calls with Michael are open to a small group whose plans fit this stage of
-          the raise. We will keep you up to date as things move, and you are welcome to get in touch at any time.
-        </p>
+        <>
+          <p>
+            We have your answers. Right now, calls with Michael are open to a small group whose plans fit this stage of
+            the raise.
+          </p>
+          <p>
+            We would like to keep you close. We will send you short updates on the raise and the app, about once a
+            month, and you can reply to any of them with a question.
+          </p>
+        </>
       }
     >
-      <Card>
+      <div className="panel">
         <h2>In the meantime</h2>
-        <p>Read the full story of Estate Transformation and the people behind it on our main site.</p>
-        <ButtonLink href="https://www.johngaltinstitute.com" variant="ink">
-          Visit johngaltinstitute.com
-        </ButtonLink>
-      </Card>
+        <p>Watch the full briefing again, or read the story of Estate Transformation and the people behind it.</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          <ButtonLink href="/replay" variant="ink">
+            Watch the replay
+          </ButtonLink>
+          <ButtonLink href="https://www.johngaltinstitute.com" variant="ghost">
+            Visit johngaltinstitute.com
+          </ButtonLink>
+        </div>
+      </div>
     </FunnelShell>
   );
 }

@@ -1,12 +1,12 @@
 .header {
   background: var(--charcoal-deep);
   color: var(--ivory);
-  border-bottom: 1px solid rgba(255, 192, 0, 0.18);
+
 }
 .headerInner {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 16px var(--pad);
+  padding: 12px var(--pad);
   display: flex;
   align-items: center;
   justify-content: space-between;

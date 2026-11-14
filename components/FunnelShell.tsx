@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { ghlIsLive } from "@/lib/ghl";
 import { SiteFooter, SiteHeader } from "./Chrome";
 import s from "./shell.module.css";
-import { DryRunBanner, Eyebrow, FunnelSteps } from "./ui";
+import { DryRunBanner, FunnelSteps } from "./ui";
 
 /** Shared frame for the application, booking, NDA and confirmation steps. */
 export default function FunnelShell({
@@ -13,8 +13,8 @@ export default function FunnelShell({
   children,
   wide,
 }: {
-  step?: 0 | 1 | 2 | 3;
-  eyebrow: string;
+  step?: 0 | 1 | 2;
+  eyebrow?: string;
   title: ReactNode;
   intro?: ReactNode;
   children: ReactNode;
@@ -27,7 +27,7 @@ export default function FunnelShell({
       <main id="main" className={s.main}>
         <div className={wide ? s.wide : s.narrow}>
           {step !== undefined ? <FunnelSteps current={step} /> : null}
-          <Eyebrow>{eyebrow}</Eyebrow>
+          {eyebrow ? <p className={s.kicker}>{eyebrow}</p> : null}
           <h1 className={s.title}>{title}</h1>
           {intro ? <div className={s.intro}>{intro}</div> : null}
           {children}

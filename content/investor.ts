@@ -23,10 +23,28 @@
 export const WEBINARKIT: {
   registration: { html: string; script: string } | null;
   thankYou: { html: string; script: string } | null;
+  replay: { html: string; script: string } | null;
 } = {
   registration: null, // TODO(Sidney): paste WebinarKit registration embed (Step 1 html, Step 2 script)
   thankYou: null, // TODO(Sidney): paste WebinarKit thank you embed
+  replay: null, // TODO(Sidney): paste WebinarKit replay embed for /replay
 };
+
+/** Replay page (/replay). The closing date must be real: no fake countdowns. */
+export const REPLAY = {
+  closesOn: null as string | null, // e.g. "Friday, November 20". TODO(Sidney): how many days the replay stays open
+  nextSession: null as string | null, // e.g. "Tuesday, December 1 at 7 pm Eastern". TODO(Sidney)
+};
+
+/** Shown on the registered and confirmation pages. Leave null to hide the line. */
+export const CONTACT = {
+  emailSender: null as string | null, // e.g. "michael@johngaltinstitute.com". TODO(Sidney)
+  textFromNumber: null as string | null, // TODO(Sidney): number reminders and personal texts come from (after A2P approval)
+  textFromName: null as string | null, // e.g. "Sidney Pengilly". TODO(Sidney)
+};
+
+/** TODO(counsel): approved plain-words risk statement for the confirmation page. */
+export const RISK_STATEMENT: string | null = null;
 
 /** Shown under the form. Keep in step with the WebinarKit event schedule. */
 export const WEBINAR = {
@@ -43,7 +61,9 @@ export const MEDIA = {
     src: "https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af7553ebf2872059d170fea_et-tour-1080.mp4",
     poster: "https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af7553f6f2b70c745c3a01e_et-tour-poster.webp",
   },
-  welcomeFromMichael: null as string | null, // TODO(Sidney): Michael's welcome video URL (MP4 or embed)
+  landerIntro: null as string | null, // TODO(Sidney): 60 to 90 second video, Michael on what the briefing covers and who it is for
+  registeredMain: null as string | null, // TODO(Sidney): main video on /registered: due diligence or "why now"
+  welcomeFromMichael: null as string | null, // TODO(Sidney): main video on /confirmed: due diligence or "why now", not a general welcome
   founderFilm: null as string | null, // TODO(Sidney): founder film URL (live on the main site)
   appExplainer: null as string | null, // TODO(Sidney): final app explainer MP4 URL (Bunny jgi-media/et-film/)
   proformaExplainer: null as string | null, // TODO(Sidney)
@@ -110,3 +130,22 @@ export const DATA_ROOM: DataRoomSection[] = [
   },
 ];
 // TODO(Sidney): data room links for every document above.
+
+/* ------------------------------------------------------------------ */
+/* Question videos: one short answer per question Michael gets asked.  */
+/* Draft topics only. Michael should replace them with the questions   */
+/* he actually hears most. TODO(Michael)                               */
+/* ------------------------------------------------------------------ */
+export const QUESTIONS_BEFORE_BRIEFING: { question: string; src: string | null; minutes?: number }[] = [
+  { question: "What is Estate Transformation, in two minutes?", src: null },
+  { question: "Why is Michael the person to build this?", src: null },
+  { question: "What will I hear at the briefing, and what will I not be asked to do?", src: null },
+];
+
+export const QUESTIONS_BEFORE_CALL: { question: string; src: string | null; minutes?: number }[] = [
+  { question: "How do contractual participation units work?", src: null },
+  { question: "What does the raise pay for, and how is it going?", src: null },
+  { question: "What are the risks, in plain words?", src: null },
+  { question: "What is the timeline from here?", src: null },
+  { question: "What happens after our call?", src: null },
+];

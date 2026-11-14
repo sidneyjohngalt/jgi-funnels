@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Choice } from "@/config/investor";
 import f from "./forms.module.css";
 import { Button } from "./ui";
+import SlotPicker from "./SlotPicker";
 
 type Answers = {
   firstName: string;
@@ -20,7 +21,9 @@ type Answers = {
   questions: string;
 };
 
-const STEP_TITLES = ["Your details", "About you", "Your interest", "Anything else"];
+const STEP_TITLES = ["Your details", "About you", "Your interest", "Anything else", "Pick a time with Michael"];
+const LAST_QUESTION = 3;
+const CALENDAR = 4;
 const ATTR_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src"];
 
 export default function ApplicationForm({
@@ -28,14 +31,16 @@ export default function ApplicationForm({
   investorTypes,
   participation,
   timing,
+  initialStep = 0,
 }: {
+  initialStep?: number;
   prefill: Partial<Answers>;
   investorTypes: Choice[];
   participation: Choice[];
   timing: Choice[];
 }) {
   const router = useRouter();
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(initialStep);
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
@@ -127,14 +132,19 @@ export default function ApplicationForm({
         setStep(1);
         return;
       }
-      const final = step === 3;
+      const final = step === LAST_QUESTION;
       const r = await post("/api/apply/update", { ...a, final });
       if (!r.ok) {
         setFormError(r.data.message || "Something went wrong. Please try again.");
         return;
       }
       if (final) {
-        router.push(r.data.next || "/book");
+        // Qualified applicants pick a time on this same page; everyone else moves on.
+        if (!r.data.next || r.data.next === "/book") {
+          setStep(CALENDAR);
+          return;
+        }
+        router.push(r.data.next);
         return;
       }
       setStep(step + 1);
@@ -191,6 +201,26 @@ export default function ApplicationForm({
       {err(k)}
     </fieldset>
   );
+
+  if (step === CALENDAR) {
+    return (
+      <div className={f.form}>
+        <div>
+          <span className={f.stepCount}>
+            Step {CALENDAR + 1} of {STEP_TITLES.length}
+          </span>
+          <h2 ref={headingRef} tabIndex={-1} style={{ marginTop: 8, outline: "none" }}>
+            {STEP_TITLES[CALENDAR]}
+          </h2>
+          <p className={f.hint} style={{ marginTop: 0 }}>
+            Thank you{a.firstName ? `, ${a.firstName}` : ""}. Pick a time that leaves you room to go through the
+            resources first. You will get them straight after you book.
+          </p>
+        </div>
+        <SlotPicker />
+      </div>
+    );
+  }
 
   return (
     <form className={f.form} onSubmit={next} noValidate>
@@ -261,7 +291,7 @@ export default function ApplicationForm({
           <span />
         )}
         <Button type="submit" variant="ink" disabled={busy}>
-          {busy ? "Saving..." : step === 3 ? "Submit my application" : "Continue"}
+          {busy ? "Saving..." : step === LAST_QUESTION ? "Continue to pick a time" : "Continue"}
         </Button>
       </div>
     </form>

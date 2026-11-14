@@ -12,6 +12,11 @@
   font-size: 1.02rem;
   line-height: 1.7;
 }
+@media (max-width: 640px) {
+  .doc {
+    max-height: 240px;
+  }
+}
 .docTitle {
   font-size: 1.5rem;
 }
@@ -23,8 +28,8 @@
   font-size: 0.8rem;
   background: var(--gold-text);
   color: var(--white);
-  padding: 4px 10px;
-  border-radius: 999px;
+  padding: 3px 8px;
+  border-radius: 2px;
 }
 .sig {
   font-family: var(--font-heading);

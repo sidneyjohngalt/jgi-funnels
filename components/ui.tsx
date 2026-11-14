@@ -120,10 +120,10 @@ export function Placeholder({
 /* ---------------- Raise progress ---------------- */
 export const RAISE = { total: 7_140_000, raised: 2_417_000, remaining: 4_719_984 };
 
-export function RaiseProgress() {
+export function RaiseProgress({ light }: { light?: boolean } = {}) {
   const pct = Math.round((RAISE.raised / RAISE.total) * 100);
   return (
-    <div className={s.raise} aria-label={`$2.417M raised of $7.14M, ${pct} percent committed`}>
+    <div className={cx(s.raise, light && s.lightRaise)} aria-label={`$2.417M raised of $7.14M, ${pct} percent committed`}>
       <div className={s.raiseNums}>
         <span>
           <strong>$2.417M</strong> raised
@@ -143,9 +143,9 @@ export function RaiseProgress() {
 }
 
 /* ---------------- Funnel steps ---------------- */
-const FUNNEL_STEPS = ["Apply", "Book your call", "Sign the NDA", "Prepare"] as const;
+const FUNNEL_STEPS = ["Apply and book", "Sign the NDA", "Prepare for the call"] as const;
 
-export function FunnelSteps({ current }: { current: 0 | 1 | 2 | 3 }) {
+export function FunnelSteps({ current }: { current: 0 | 1 | 2 }) {
   return (
     <ol className={s.steps} aria-label="Your progress">
       {FUNNEL_STEPS.map((label, i) => (
@@ -154,7 +154,7 @@ export function FunnelSteps({ current }: { current: 0 | 1 | 2 | 3 }) {
           className={cx(s.step, i === current && s.stepActive, i < current && s.stepDone)}
           aria-current={i === current ? "step" : undefined}
         >
-          <span className={s.stepNum}>{i < current ? "✓" : i + 1}</span>
+          <span className={s.stepNum}>{i + 1}</span>
           <span>{label}</span>
         </li>
       ))}

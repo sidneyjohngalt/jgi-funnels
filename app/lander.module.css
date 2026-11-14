@@ -1,50 +1,65 @@
-.registerCard {
-  display: grid;
-  gap: 4px;
+.panel {
+  background: var(--ivory-raised);
+  border: 1px solid var(--hairline);
+  border-top: 3px solid var(--ink);
+  padding: clamp(22px, 3vw, 32px);
+  color: var(--ink);
 }
-.registerTitle {
-  font-size: clamp(1.8rem, 3vw, 2.2rem);
-  margin-bottom: 6px;
-}
-.registerMeta {
-  color: var(--ink-muted);
+.panelHead {
   margin-bottom: 18px;
 }
+.panelTitle {
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  margin: 0 0 6px;
+}
+.panelWhen {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 1rem;
+}
 .privacy {
+  margin: 14px 0 0;
   font-size: 0.9rem;
   color: var(--ink-muted);
-  margin: 14px 0 0;
+}
+.forLine {
+  font-weight: 600;
+}
+.hostGrid {
+  display: grid;
+  gap: clamp(28px, 4vw, 44px);
 }
 
-.tour {
+.final {
+  background: var(--charcoal-deep);
+  color: var(--ivory);
+  padding: clamp(56px, 8vw, 104px) var(--pad);
+}
+.finalInner {
+  max-width: var(--max);
+  margin: 0 auto;
   display: grid;
   gap: 32px;
   align-items: center;
 }
-.tour h2 {
+.finalTitle {
   color: var(--ivory);
+  max-width: 14em;
 }
-@media (min-width: 900px) {
-  .tour {
-    grid-template-columns: 0.8fr 1.2fr;
-    gap: 56px;
+.finalNote {
+  color: rgba(246, 241, 231, 0.75);
+}
+@media (min-width: 980px) {
+  .finalInner {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 72px;
   }
 }
 
-.final {
-  display: grid;
-  gap: 28px;
-}
-.finalTitle {
-  color: var(--ivory);
-  text-align: center;
-}
-
 .stickySpace {
-  height: 88px;
-  background: var(--charcoal-deep);
+  height: 84px;
 }
-@media (min-width: 960px) {
+@media (min-width: 980px) {
   .stickySpace {
     display: none;
   }

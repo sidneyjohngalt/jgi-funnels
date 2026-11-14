@@ -7,13 +7,14 @@ Landing pages and funnels for the John Galt Institute. Next.js on Vercel. The fi
 | Step | Route | What it does |
 | --- | --- | --- |
 | 1. Lander | `/` | Webinar registration. WebinarKit's inline form shows in the hero and again near the bottom, and its script loads once. On phones, a sticky "Save my seat" bar shows until a form is on screen. |
-| 1b. Registered | `/registered` | Custom thank you page. It holds WebinarKit's thank you embed (countdown and watch room link), plus the app tour. |
+| 1b. Registered | `/registered` | Custom thank you page. WebinarKit's thank you embed (countdown and watch room link), a Gmail tip, one main video from Michael, short question videos, the app tour and what to have ready. |
 | 2. Webinar | WebinarKit | WebinarKit runs the webinar, sends every webinar email and tags people in GHL. This codebase sends no email. |
-| 3. Application | `/apply` | Four short steps. Step 1 (name, email, phone) goes to GHL straight away: it upserts the contact, adds the opportunity in **Application Started** and tags `investor-application-started`. Steps 2 and 3 update the contact. Step 4 runs qualification. |
+| 2b. Replay | `/replay` | Replay embed with the full application (and calendar) on the same page. Link it from the replay email. Real closing date only. |
+| 3. Application and booking | `/apply` | Four short question steps, then the calendar as step 5 on the same page. Step 1 (name, email, phone) goes to GHL straight away: it upserts the contact, adds the opportunity in **Application Started** and tags `investor-application-started`. Steps 2 and 3 update the contact. Step 4 runs qualification; qualified people pick a time straight away, others go to the thank you page. |
 | 3b. Not qualified | `/apply/thank-you` | Thank you page. The contact gets the `investor-nurture` tag and no booking. |
-| 4. Book | `/book` | Our own slot picker, open 48 hours to 7 days ahead (enforced on the server). Qualified people sit in **Qualified, Not Booked**; after booking they move to **Call Booked** and get the `investor-call-booked` tag. |
+| 4. Booking | step 5 of `/apply` (`/book` now redirects there) | Our own slot picker, open 48 hours to 7 days ahead (enforced on the server). Qualified people sit in **Qualified, Not Booked**; after booking they move to **Call Booked** and get the `investor-call-booked` tag. |
 | 5. NDA | `/nda` | Scrollable NDA with click-to-sign: a tick box plus a typed full name. The timestamp, IP address, browser and NDA version go to a GHL note, the contact moves to **NDA Signed** and gets the `nda-signed` tag. "Continue without NDA" opens the confirm modal, and skippers get `nda-skipped`. |
-| 6. Confirmed | `/confirmed` | Call date and time, an add-to-calendar file, Michael's welcome video, what the call is for, how to use the page, the data room (NDA signers only; skippers see a prompt to sign) and the films and resources. Each section viewed, video played and document opened becomes a note on the GHL contact, so Michael has a pre-call brief. |
+| 6. Confirmed | `/confirmed` | Call date and time, add to calendar, a Gmail tip, Michael's main video, what the call is for, short question videos, the data room (NDA signers only; skippers see a prompt to sign), a risk statement, films and resources, and who will contact them. Each section viewed, video played and document opened becomes a note on the GHL contact, so Michael has a pre-call brief. |
 
 GHL moves the stages after the call (Call Held onwards), not this code.
 
@@ -62,7 +63,15 @@ Keep this list current. Each item shows a dashed **Placeholder** box on the page
 | GHL calendar | `GHL_CALENDAR_ID` env var; set 48 hour minimum notice and a 7 day range in GHL | To be created |
 | Call length | `config/investor.ts` > `BOOKING.durationMinutes` (45 for now) | Confirm |
 | NDA text | `content/nda.ts` (bump `NDA_VERSION` when it changes) | Waiting on counsel |
-| Michael's welcome video | `content/investor.ts` > `MEDIA.welcomeFromMichael` | Waiting |
+| Lander intro video (60 to 90 s) | `content/investor.ts` > `MEDIA.landerIntro` | Waiting |
+| Main video on /registered (due diligence or "why now") | `content/investor.ts` > `MEDIA.registeredMain` | Waiting |
+| Main video on /confirmed (due diligence or "why now") | `content/investor.ts` > `MEDIA.welcomeFromMichael` | Waiting |
+| Question videos and their topics | `content/investor.ts` > `QUESTIONS_BEFORE_BRIEFING`, `QUESTIONS_BEFORE_CALL` (draft topics) | Michael to list his real top questions |
+| WebinarKit replay embed | `content/investor.ts` > `WEBINARKIT.replay` | Waiting on Sidney |
+| Replay closing date and next session | `content/investor.ts` > `REPLAY` | Waiting on Sidney |
+| Email sender, text-from number and name | `content/investor.ts` > `CONTACT` (lines hide while empty) | Waiting on Sidney (texts after A2P) |
+| Risk statement | `content/investor.ts` > `RISK_STATEMENT` | Waiting on counsel |
+| "Live" wording | Lander says "Online briefing" until Sidney decides live vs recorded | Decision |
 | Pitch deck | `content/investor.ts` > `PITCH_DECK_URL` | Waiting |
 | Data room links (10 documents) | `content/investor.ts` > `DATA_ROOM` | Waiting |
 | Proforma explainer | `content/investor.ts` > `MEDIA.proformaExplainer` | Waiting |

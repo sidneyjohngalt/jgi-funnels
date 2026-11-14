@@ -11,7 +11,8 @@
   margin: 0 auto;
 }
 .title {
-  font-size: clamp(2.1rem, 4.6vw, 3.2rem);
+  font-size: clamp(2.2rem, 4.8vw, 3.4rem);
+  line-height: 1.08;
 }
 .intro {
   font-size: clamp(1.1rem, 1.6vw, 1.25rem);
@@ -21,4 +22,14 @@
 }
 .intro p:last-child {
   margin-bottom: 0;
+}
+.kicker {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.85rem;
+  color: var(--gold-text);
+  margin: 0 0 14px;
+  padding-top: 14px;
+  border-top: 2px solid var(--ink);
 }
