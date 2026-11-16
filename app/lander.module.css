@@ -1,59 +1,126 @@
-.panel {
-  background: var(--ivory-raised);
-  border: 1px solid var(--hairline);
-  border-top: 3px solid var(--ink);
-  padding: clamp(22px, 3vw, 32px);
-  color: var(--ink);
+.heroActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 36px;
 }
-.panelHead {
-  margin-bottom: 18px;
+.meta {
+  font: 500 13px var(--font-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #cfc6b5;
 }
-.panelTitle {
-  font-size: clamp(1.6rem, 2.6vw, 2rem);
-  margin: 0 0 6px;
+
+.host {
+  padding: clamp(80px, 11vw, 130px) var(--pad);
 }
-.panelWhen {
+.hostInner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(36px, 5vw, 64px);
+  align-items: center;
+}
+.portrait {
+  margin: 0 auto;
+  max-width: 380px;
+  width: 100%;
+}
+.portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+}
+.hostTitle {
   margin: 0;
+}
+.hostBio {
+  color: #cfc6b5;
+  font-size: 1.12rem;
+  max-width: 34em;
+  margin: 18px 0 28px;
+}
+.film {
+  max-width: 560px;
+}
+@media (min-width: 900px) {
+  .hostInner {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+.register {
+  background: var(--ivory-raised);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  padding: clamp(72px, 10vw, 120px) var(--pad);
+}
+.registerInner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(36px, 5vw, 64px);
+  align-items: start;
+}
+.registerCopy h2 {
+  margin: 0;
+  max-width: 12em;
+}
+.registerLead {
   color: var(--ink-muted);
-  font-size: 1rem;
+  font-size: 1.12rem;
+  margin: 18px 0 28px;
+}
+.units {
+  margin: 16px 0 0;
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+}
+.registerForm {
+  position: relative;
+}
+.registerForm :global(.panel) {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+}
+.registerPhone {
+  display: none;
 }
 .privacy {
   margin: 14px 0 0;
   font-size: 0.9rem;
   color: var(--ink-muted);
 }
-.forLine {
-  font-weight: 600;
-}
-.hostGrid {
-  display: grid;
-  gap: clamp(28px, 4vw, 44px);
+@media (min-width: 1100px) {
+  .registerInner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  .registerPhone {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    z-index: 0;
+    transform: rotate(4deg);
+  }
 }
 
 .final {
-  background: var(--charcoal-deep);
-  color: var(--ivory);
-  padding: clamp(56px, 8vw, 104px) var(--pad);
-}
-.finalInner {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: grid;
-  gap: 32px;
-  align-items: center;
+  text-align: center;
+  padding: clamp(88px, 12vw, 140px) var(--pad) clamp(64px, 8vw, 96px);
 }
 .finalTitle {
-  color: var(--ivory);
-  max-width: 14em;
+  max-width: 15em;
+  margin: 0 auto 32px;
 }
-.finalNote {
-  color: rgba(246, 241, 231, 0.75);
-}
-@media (min-width: 980px) {
-  .finalInner {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    gap: 72px;
-  }
+.disclaimer {
+  max-width: 640px;
+  margin: 48px auto 0;
+  font-size: 0.9rem;
+  color: rgba(246, 241, 231, 0.6);
 }
 
 .stickySpace {

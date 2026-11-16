@@ -1,6 +1,7 @@
 @import "@fontsource-variable/playfair-display";
 @import "@fontsource-variable/manrope";
 @import "@fontsource-variable/oswald";
+@import "@fontsource/ibm-plex-mono/500.css";
 
 /* Brand tokens: from the live site's Webflow variables (14 Nov). Do not change without checking the site. */
 :root {
@@ -22,9 +23,11 @@
   --font-body: "Manrope Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-label: "Oswald Variable", "Arial Narrow", sans-serif;
 
-  --radius: 4px;
-  --radius-sm: 3px;
+  --radius: 14px;
+  --radius-sm: 10px;
   --shadow: 0 1px 0 rgba(30, 28, 25, 0.06);
+  --gold-grad: linear-gradient(135deg, #a97e00 0%, #ffc400 55%, #d5a400 100%);
+  --charcoal-2: #161513;
   --max: 1160px;
   --narrow: 760px;
   --pad: clamp(20px, 5vw, 40px);
@@ -77,13 +80,14 @@ h4 {
 }
 
 h1 {
-  font-size: clamp(2.5rem, 6vw, 4.6rem);
-  font-weight: 450;
+  font-size: clamp(2.5rem, 5.6vw, 4.4rem);
+  font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.05;
 }
 h2 {
-  font-size: clamp(1.9rem, 3.8vw, 2.7rem);
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-weight: 400;
   letter-spacing: -0.015em;
 }
 em {
@@ -157,11 +161,73 @@ p {
   }
 }
 
-/* Form panel: a ruled sheet rather than a floating card. */
+/* Ledger card: reads as a document, not a pop-up. */
 .panel {
   background: var(--ivory-raised);
-  border: 1px solid var(--hairline);
-  border-top: 3px solid var(--ink);
+  border: 2px solid var(--hairline);
   padding: clamp(22px, 3.5vw, 36px);
   color: var(--ink);
+}
+/* Gold glow ground: the main site's signature dark section. Keep it subtle. */
+.glow {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #1a1916;
+  background-image: radial-gradient(60% 75% at 50% 0, rgba(255, 196, 0, 0.22) 0%, rgba(255, 196, 0, 0.06) 45%, rgba(255, 196, 0, 0) 70%),
+    radial-gradient(40% 60% at 0 100%, rgba(169, 126, 0, 0.2) 0%, rgba(169, 126, 0, 0) 70%),
+    radial-gradient(40% 60% at 100% 100%, rgba(213, 164, 0, 0.16) 0%, rgba(213, 164, 0, 0) 70%);
+  color: var(--ivory);
+}
+.glow > * {
+  position: relative;
+  z-index: 1;
+}
+.backdrop {
+  position: absolute !important;
+  inset: -6% -2%;
+  z-index: 0 !important;
+  pointer-events: none;
+  background-position: center 52%;
+  background-size: auto 118%;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  -webkit-mask-image: radial-gradient(ellipse 46% 60% at 50% 48%, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.35) 55%, #000 90%);
+  mask-image: radial-gradient(ellipse 46% 60% at 50% 48%, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.35) 55%, #000 90%);
+  animation: jgiDrift 70s linear infinite alternate;
+}
+@keyframes jgiDrift {
+  to {
+    transform: translate3d(0, -4%, 0);
+  }
+}
+.eyebrow {
+  display: block;
+  font: 500 13px/16px var(--font-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+  margin: 0 0 18px;
+}
+.dark .eyebrow,
+.glow .eyebrow {
+  color: var(--champagne);
+}
+.glow h1,
+.glow h2 {
+  color: var(--ivory);
+}
+.glow h1 em,
+.glow h2 em {
+  color: var(--champagne);
+}
+@media (max-width: 700px) {
+  .backdrop {
+    opacity: 0.16;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
 }

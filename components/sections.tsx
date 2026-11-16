@@ -6,50 +6,46 @@ import Video from "./Video";
 import { TrackedSection } from "./Tracked";
 
 /**
- * Reusable page sections. Each takes its copy as props so later funnels can reuse them.
- * Look: a printed briefing paper more than a web template. Hairline rules, a label column,
- * plain type, very few boxes.
+ * Reusable page sections, styled from the main site's design kit (gold glow ground, Playfair
+ * headlines, gold pills, real photography). Each takes its copy as props so later funnels can reuse them.
  */
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
 
-/** Light hero with a masthead line, copy on the left and the form panel on the right. */
-export function BriefingHero({
-  kicker,
-  meta,
+/** Dark hero on the gold glow, with an optional faint drifting backdrop image. */
+export function GlowHero({
+  eyebrow,
   title,
-  intro,
-  aside,
-  footnote,
+  lead,
+  children,
+  backdrop,
+  align = "center",
+  id,
 }: {
-  kicker: string;
-  meta?: string;
+  eyebrow?: string;
   title: ReactNode;
-  intro: ReactNode;
-  aside: ReactNode;
-  footnote?: ReactNode;
+  lead?: ReactNode;
+  children?: ReactNode;
+  backdrop?: string;
+  align?: "center" | "left";
+  id?: string;
 }) {
   return (
-    <section className={s.hero} aria-labelledby="hero-title">
-      <div className={s.heroInner}>
-        <div className={s.masthead}>
-          <span>{kicker}</span>
-          {meta ? <span className={s.mastMeta}>{meta}</span> : null}
-        </div>
-        <div className={s.heroGrid}>
-          <div className={s.heroCopy}>
-            <h1 id="hero-title">{title}</h1>
-            <div className={s.heroIntro}>{intro}</div>
-          </div>
-          <div className={s.heroAside}>{aside}</div>
-          {footnote ? <div className={s.heroFootnote}>{footnote}</div> : null}
-        </div>
+    <section id={id} className={cx("glow", s.glowHero, align === "left" && s.left)} aria-labelledby="hero-title">
+      {backdrop ? <div className="backdrop" style={{ backgroundImage: `url(${backdrop})` }} aria-hidden="true" /> : null}
+      <div className={s.glowInner}>
+        {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
+        <h1 id="hero-title" className={s.glowTitle}>
+          {title}
+        </h1>
+        {lead ? <div className={s.glowLead}>{lead}</div> : null}
+        {children}
       </div>
     </section>
   );
 }
 
-/** A section laid out like a report page: a short label in the margin, content beside it. */
+/** A section with the kit's type stack: eyebrow, headline, lead, then content. */
 export function Chapter({
   label,
   title,
@@ -57,26 +53,105 @@ export function Chapter({
   tone = "ivory",
   children,
   intro,
+  center,
 }: {
-  label: string;
+  label?: string;
   title?: ReactNode;
   id?: string;
-  tone?: "ivory" | "raised" | "dark";
+  tone?: "ivory" | "raised" | "dark" | "glow";
   intro?: ReactNode;
   children?: ReactNode;
+  center?: boolean;
 }) {
   const hid = id ? `${id}-title` : undefined;
   return (
-    <section id={id} className={cx(s.chapter, s[tone], tone === "dark" && "dark")} aria-labelledby={hid}>
+    <section
+      id={id}
+      className={cx(s.chapter, tone === "glow" ? "glow" : s[tone], tone === "dark" && "dark", center && s.center)}
+      aria-labelledby={hid}
+    >
       <div className={s.chapterInner}>
-        <div className={s.label}>{label}</div>
-        <div className={s.body}>
-          {title ? <h2 id={hid}>{title}</h2> : null}
-          {intro ? <div className={s.chapterIntro}>{intro}</div> : null}
-          {children}
-        </div>
+        {label ? <p className="eyebrow">{label}</p> : null}
+        {title ? (
+          <h2 id={hid} className={s.chapterTitle}>
+            {title}
+          </h2>
+        ) : null}
+        {intro ? <div className={s.chapterIntro}>{intro}</div> : null}
+        {children}
       </div>
     </section>
+  );
+}
+
+/** Circle-and-arrow cue that bridges a heading into the next block. */
+export function ScrollCue({ href, label }: { href: string; label: string }) {
+  return (
+    <a className={s.cue} href={href} aria-label={label}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 5v14M6 13l6 6 6-6" />
+      </svg>
+    </a>
+  );
+}
+
+/** Numbered agenda with a gold rail. Optional media sits beside it on desktop. */
+export function Agenda({
+  items,
+  aside,
+}: {
+  items: { label: string; title: string; body: ReactNode }[];
+  aside?: ReactNode;
+}) {
+  return (
+    <div className={cx(s.agendaWrap, !!aside && s.agendaWithAside)}>
+      <ol className={s.agenda}>
+        {items.map((it, i) => (
+          <li key={it.title}>
+            <p className={s.agendaN}>
+              <b>{String(i + 1).padStart(2, "0")}</b>
+              {it.label}
+            </p>
+            <h3>{it.title}</h3>
+            <div className={s.agendaBody}>{it.body}</div>
+          </li>
+        ))}
+      </ol>
+      {aside ? <div className={s.agendaAside}>{aside}</div> : null}
+    </div>
+  );
+}
+
+/** Titanium-edged phone holding an app screen. */
+export function PhoneFrame({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className={s.phone}>
+      <div>
+        <Image src={src} alt={alt} width={540} height={1214} sizes="240px" />
+      </div>
+    </div>
+  );
+}
+
+/** Full-bleed photo cards with a dark shade rising from the bottom. */
+export function PhotoCards({
+  cards,
+}: {
+  cards: { kicker: string; title: string; body: string; img: string; alt: string; position?: string }[];
+}) {
+  return (
+    <div className={s.cards}>
+      {cards.map((c) => (
+        <figure key={c.title} className={s.card}>
+          <Image src={c.img} alt={c.alt} fill sizes="(max-width: 860px) 100vw, 540px" style={{ objectPosition: c.position ?? "50% 50%" }} />
+          <figcaption className={s.cardBody}>
+            <span className={s.kicker}>{c.kicker}</span>
+            <span className={s.cardTitle}>{c.title}</span>
+            <span className={s.cardText}>{c.body}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
   );
 }
 
@@ -86,7 +161,7 @@ export function RuledList({ items }: { items: { title: string; body: ReactNode }
     <ol className={s.ruled}>
       {items.map((it, i) => (
         <li key={it.title}>
-          <span className={s.ruledNum}>{i + 1}</span>
+          <span className={s.ruledNum}>{String(i + 1).padStart(2, "0")}</span>
           <div>
             <h3>{it.title}</h3>
             <div className={s.ruledBody}>{it.body}</div>
@@ -94,70 +169,6 @@ export function RuledList({ items }: { items: { title: string; body: ReactNode }
         </li>
       ))}
     </ol>
-  );
-}
-
-/** Who it is for, and who it is not for, side by side. */
-export function ForWhom({ yes, no }: { yes: string[]; no: string[] }) {
-  return (
-    <div className={s.forWhom}>
-      <div>
-        <h3>It is for</h3>
-        <ul className={s.plainList}>
-          {yes.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h3>It is not for</h3>
-        <ul className={s.plainList}>
-          {no.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-}
-
-/** Host block: portrait, a few lines, and a short track record. */
-export function Host({
-  name,
-  role,
-  photo,
-  body,
-  timeline,
-}: {
-  name: string;
-  role: string;
-  photo: string;
-  body: ReactNode;
-  timeline?: { when: string; what: string }[];
-}) {
-  return (
-    <div className={s.host}>
-      <figure className={s.hostPhoto}>
-        <Image src={photo} alt={name} width={640} height={640} sizes="(max-width: 860px) 60vw, 300px" />
-        <figcaption>
-          <strong>{name}</strong>
-          <span>{role}</span>
-        </figcaption>
-      </figure>
-      <div className={s.hostBody}>
-        {body}
-        {timeline ? (
-          <dl className={s.timeline}>
-            {timeline.map((t) => (
-              <div key={t.when}>
-                <dt>{t.when}</dt>
-                <dd>{t.what}</dd>
-              </div>
-            ))}
-          </dl>
-        ) : null}
-      </div>
-    </div>
   );
 }
 
@@ -180,14 +191,15 @@ export type QuestionVideo = { question: string; src: string | null; minutes?: nu
 export function QuestionVideos({ items, tracked }: { items: QuestionVideo[]; tracked?: boolean }) {
   return (
     <ol className={s.qv}>
-      {items.map((v) => {
+      {items.map((v, i) => {
         const inner = (
           <>
             <div className={s.qvText}>
+              <span className={s.qvN}>{String(i + 1).padStart(2, "0")}</span>
               <h3>{v.question}</h3>
               {v.minutes ? <span className={s.qvLen}>{v.minutes} min</span> : null}
             </div>
-            <div className={s.qvMedia}>
+            <div>
               {v.src ? (
                 <Video src={v.src} title={v.question} trackLabel={tracked ? `Question video: ${v.question}` : undefined} />
               ) : (
@@ -224,20 +236,23 @@ export function EmailTip({ sender }: { sender?: string }) {
         <p>
           Our emails come from {sender ?? "the John Galt Institute team"}. If you use Gmail and see{" "}
           <em>&ldquo;Be careful with this message&rdquo;</em> or the email lands in Promotions, choose{" "}
-          <em>&ldquo;Looks safe&rdquo;</em> or drag it to your Primary tab. Your reminders and links will then arrive
-          where you expect them.
+          <em>&ldquo;Looks safe&rdquo;</em> or drag it to your Primary tab.
         </p>
       </div>
     </aside>
   );
 }
 
-/** A big, plain statement used between sections. */
-export function Statement({ children, cite }: { children: ReactNode; cite?: string }) {
+/** Raise progress and other small facts in a single ledger line. */
+export function Facts({ items }: { items: { k: string; v: string }[] }) {
   return (
-    <figure className={s.statement}>
-      <blockquote>{children}</blockquote>
-      {cite ? <figcaption>{cite}</figcaption> : null}
-    </figure>
+    <dl className={s.facts}>
+      {items.map((f) => (
+        <div key={f.k}>
+          <dt>{f.k}</dt>
+          <dd>{f.v}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }

@@ -34,9 +34,10 @@
   display: block;
   text-decoration: none;
   text-align: center;
-  background: var(--ink);
-  color: var(--ivory);
-  border-radius: var(--radius-sm);
+  background: var(--gold-grad);
+  color: var(--charcoal-deep);
+  border-radius: 999px;
+  box-shadow: 0 12px 30px -12px rgba(255, 196, 0, 0.7);
   padding: 18px;
   font-weight: 700;
   font-size: 1.1rem;

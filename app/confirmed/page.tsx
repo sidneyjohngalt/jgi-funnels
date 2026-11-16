@@ -7,7 +7,8 @@ import { TrackedDoc, TrackedSection } from "@/components/Tracked";
 import { ButtonLink, DryRunBanner, FunnelSteps, Placeholder } from "@/components/ui";
 import Video from "@/components/Video";
 import { BOOKING } from "@/config/investor";
-import { CONTACT, DATA_ROOM, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL, RISK_STATEMENT } from "@/content/investor";
+import { CONTACT, DATA_ROOM, FOUNDER_FILM, IMAGES, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL, RISK_STATEMENT } from "@/content/investor";
+import FounderFilm from "@/components/FounderFilm";
 import { formatCallParts } from "@/lib/format";
 import { ghlIsLive } from "@/lib/ghl";
 import { getSession } from "@/lib/session";
@@ -16,8 +17,6 @@ import c from "./confirmed.module.css";
 export const metadata: Metadata = { title: "Your call is confirmed" };
 export const dynamic = "force-dynamic";
 
-const MICHAEL =
-  "https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af36f443a10b9a7d7c26390_team-michael-gegelman.webp";
 
 /**
  * Confirmation page. Booked is not sold: between booking and the call the investor researches us,
@@ -37,7 +36,8 @@ export default async function ConfirmedPage() {
       <SiteHeader minimal />
       <main id="main">
         {/* ---------- Confirmation ---------- */}
-        <section className={c.head} aria-labelledby="conf-title">
+        <section className={`glow ${c.head}`} aria-labelledby="conf-title">
+          <div className="backdrop" style={{ backgroundImage: `url(${IMAGES.appCollage})` }} aria-hidden="true" />
           <div className={c.headInner}>
             <FunnelSteps current={2} />
             <p className={c.kicker}>Your call is confirmed</p>
@@ -64,13 +64,18 @@ export default async function ConfirmedPage() {
                     <dd>About {BOOKING.durationMinutes} minutes</dd>
                   </div>
                 </dl>
-                <ButtonLink href="/api/calendar" variant="ink">
-                  Add to my calendar
-                </ButtonLink>
+                <div className={c.calRow}>
+                  <ButtonLink href="/api/calendar" variant="gold">
+                    Add to my calendar
+                  </ButtonLink>
+                  <ButtonLink href="#start" variant="ghost">
+                    Prepare for the call
+                  </ButtonLink>
+                </div>
               </div>
               <figure className={c.portrait}>
-                <Image src={MICHAEL} alt="Michael Gegelman" width={480} height={480} sizes="(max-width: 980px) 40vw, 320px" />
-                <figcaption>Michael Gegelman, Founder and CEO</figcaption>
+                <Image src={IMAGES.michaelOffice} alt="CEO Michael J. Gegelman" width={831} height={1352} sizes="(max-width: 980px) 40vw, 320px" />
+                <figcaption>CEO Michael J. Gegelman, Founder</figcaption>
               </figure>
             </div>
             <div className={c.tip}>
@@ -136,7 +141,7 @@ export default async function ConfirmedPage() {
         </Chapter>
 
         {/* ---------- Data room ---------- */}
-        <Chapter label="Data room" id="data-room" tone="dark" title="Everything behind the plan.">
+        <Chapter label="Data room" id="data-room" tone="glow" title="Everything behind the plan.">
           {signed ? (
             <div className={c.drList}>
               {DATA_ROOM.map((sec) => (
@@ -201,12 +206,7 @@ export default async function ConfirmedPage() {
               <p className={c.muted}>How version 4.0 helps people organize, inventory and value what they own.</p>
             </TrackedSection>
             <TrackedSection label="Founder film" className={c.res}>
-              <Video
-                src={MEDIA.founderFilm}
-                title="The founder film"
-                placeholderNote="The founder film goes here."
-                trackLabel="Founder film"
-              />
+              <FounderFilm {...FOUNDER_FILM} />
               <h3>The founder film</h3>
               <p className={c.muted}>Why Michael has spent 25 years on this.</p>
             </TrackedSection>

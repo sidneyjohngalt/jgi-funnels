@@ -64,8 +64,8 @@ export const MEDIA = {
   landerIntro: null as string | null, // TODO(Sidney): 60 to 90 second video, Michael on what the briefing covers and who it is for
   registeredMain: null as string | null, // TODO(Sidney): main video on /registered: due diligence or "why now"
   welcomeFromMichael: null as string | null, // TODO(Sidney): main video on /confirmed: due diligence or "why now", not a general welcome
-  founderFilm: null as string | null, // TODO(Sidney): founder film URL (live on the main site)
-  appExplainer: null as string | null, // TODO(Sidney): final app explainer MP4 URL (Bunny jgi-media/et-film/)
+  founderFilm: "https://jgi-media.b-cdn.net/founder-story-1080.mp4" as string | null,
+  appExplainer: "https://jgi-media.b-cdn.net/et-film/ET-App-Explainer-1080p.mp4" as string | null,
   proformaExplainer: null as string | null, // TODO(Sidney)
   testimonials: [
     { label: "Version 2.0 advisor", src: null as string | null },
@@ -149,3 +149,36 @@ export const QUESTIONS_BEFORE_CALL: { question: string; src: string | null; minu
   { question: "What is the timeline from here?", src: null },
   { question: "What happens after our call?", src: null },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Design kit assets (main site CDN), 16 Nov.                          */
+/* ------------------------------------------------------------------ */
+const CDN = "https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/";
+export const FOUNDER_FILM = {
+  src: "https://jgi-media.b-cdn.net/founder-story-1080.mp4",
+  mobileSrc: "https://jgi-media.b-cdn.net/founder-story-720.mp4",
+  poster: "https://jgi-media.b-cdn.net/founder-poster.webp",
+  captions: "https://jgi-media.b-cdn.net/founder-story.vtt",
+};
+export const IMAGES = {
+  appCollage: CDN + "6af759ef76f20d2ef49fde40_et-hero-collage.webp",
+  michaelOffice: CDN + "6ad0e64e4bb32dd82d96409a_Michael_Gegelman_Office_Portrait.webp",
+  michaelHeadshot: CDN + "6acebf69d88ec909625d3b61_michael-gegelman.jpg",
+  canoe: CDN + "6acfaaab550b1f58c3bd9018_home-estate-photo.jpg",
+  advisorCouple: CDN + "6acfb6b6bc1e15523d83b38b_Warm%20Consultation%20with%20an%20Elderly%20Couple.webp",
+  desk2001: CDN + "6ad10ebccce7d13b211d0b22_pv-story-desk-2001.webp",
+  appDashboard: CDN + "6af7553d13141bcdfdbfdce3_et-app2-dashboard.webp",
+  appWho: CDN + "6af757ff7cae1e3e722ce4d7_et-app4-who.webp",
+  skyline: CDN + "6acebf6a6031ec58aec527c3_jgi-epicenter-wide-p-1600.jpg",
+};
+
+/** The briefing in four parts, in order. */
+export const AGENDA = [
+  { label: "The problem", title: "Why settlement breaks down.", body: "Transfer is the easy part. Settlement is where estates stall, and families pay for it in months." },
+  { label: "The story", title: "The estate that changed everything.", body: "From the first organizer in 2001 to the 18 months Michael spent settling his own parents' estate." },
+  { label: "The platforms", title: "One living record, on the phone.", body: "Estate Transformation for families and Advisor Transformation for financial advisors: what version 4.0 does and who it is for." },
+  { label: "The Venture Studio", title: "How the raise works.", body: "What the raise funds, how contractual participation units work, and how you can take part. Then your questions, live." },
+];
+
+export const DISCLAIMER =
+  "This webinar is for information only. It is not an offer to sell, or a solicitation of an offer to buy, any security.";

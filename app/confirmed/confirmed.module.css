@@ -1,7 +1,11 @@
 /* ---------- Confirmation head ---------- */
 .head {
-  background: var(--ivory);
-  padding: clamp(28px, 4vw, 48px) var(--pad) clamp(48px, 7vw, 88px);
+  padding: clamp(40px, 6vw, 64px) var(--pad) clamp(64px, 9vw, 104px);
+}
+.calRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 .headInner {
   max-width: var(--max);
@@ -12,10 +16,8 @@
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.85rem;
-  color: var(--gold-text);
+  color: var(--champagne);
   margin: 0;
-  padding-bottom: 14px;
-  border-bottom: 2px solid var(--ink);
 }
 .headGrid {
   display: grid;
@@ -27,18 +29,18 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 28px 0 32px;
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid rgba(240, 220, 155, 0.35);
 }
 .when > div {
   padding: 14px 16px 14px 0;
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid rgba(240, 220, 155, 0.18);
 }
 .when dt {
   font-family: var(--font-label);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   font-size: 0.8rem;
-  color: var(--ink-muted);
+  color: var(--champagne);
 }
 .when dd {
   margin: 4px 0 0;
@@ -52,16 +54,20 @@
 .portrait img {
   width: 100%;
   height: auto;
-  filter: grayscale(1) contrast(1.05);
+  border-radius: 18px;
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
 }
 .portrait figcaption {
   margin-top: 10px;
   font-size: 0.95rem;
-  color: var(--ink-muted);
+  color: #cfc6b5;
 }
 .tip {
-  margin-top: clamp(28px, 4vw, 44px);
+  margin-top: clamp(36px, 5vw, 56px);
   max-width: 760px;
+}
+.headInner > * {
+  position: relative;
 }
 @media (min-width: 980px) {
   .headGrid {
