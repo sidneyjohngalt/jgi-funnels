@@ -17,16 +17,22 @@ export function WebinarKitForm({ html, id }: { html: string | null; id?: string 
       ) : (
         <div className={s.mock} aria-label="Registration form preview">
           <div className={s.mockFields} aria-hidden="true">
-            <span className={s.mockField}>First name</span>
+            <div className={s.mockRow}>
+              <span className={s.mockField}>First name</span>
+              <span className={s.mockField}>Last name</span>
+            </div>
             <span className={s.mockField}>Email address</span>
             <span className={s.mockField}>Mobile number</span>
-                      </div>
+            <span className={s.mockConsent}>
+              <span className={s.mockBox} />
+              Yes, text me reminders about this briefing. Message and data rates may apply. Reply STOP to opt out.
+            </span>
+          </div>
           <a className={s.mockButton} href="/registered">
             Save my seat
           </a>
           <p className={s.mockNote} role="note">
-            Placeholder: the live registration form goes here once the embed code is added. In this preview the
-            button skips to the next page and collects nothing.
+            Preview: the live form replaces this. The button skips ahead and saves nothing.
           </p>
         </div>
       )}

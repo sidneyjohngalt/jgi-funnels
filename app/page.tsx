@@ -1,185 +1,165 @@
 import Image from "next/image";
-import { SiteFooter, SiteHeader } from "@/components/Chrome";
+import { SiteHeader } from "@/components/Chrome";
+import Countdown from "@/components/Countdown";
 import FounderFilm from "@/components/FounderFilm";
-import { Agenda, Chapter, Facts, Faq, GlowHero, PhoneFrame, PhotoCards, ScrollCue } from "@/components/sections";
 import StickyCta from "@/components/StickyCtaSmart";
 import { ButtonLink } from "@/components/ui";
 import { WebinarKitForm, WebinarKitScript } from "@/components/WebinarKit";
 import { AGENDA, DISCLAIMER, FOUNDER_FILM, IMAGES, WEBINAR, WEBINARKIT } from "@/content/investor";
+import { ghlIsLive } from "@/lib/ghl";
 import p from "./lander.module.css";
 
 const WATCH = ["register"];
 
 /**
- * Investor funnel, step 1: briefing registration. Built from the main site's design kit:
- * glow hero, agenda with a gold rail, founder block, photo cards, ledger form, glow CTA band.
+ * Investor funnel, step 1: webinar opt-in page, built to Jeremy Haynes's opt-in structure
+ * (The Most Valuable Webinar Training, 22:58 to 28:24): a headline that alone tells them what they
+ * will learn, a short video, a countdown, a floating opt-in box, two to three scrolls of supporting
+ * text at most, and on phones, buttons that jump back to the form. Three colours: charcoal, ivory, gold.
  */
 export default function Lander() {
+  const jump = (
+    <div className={p.jump}>
+      <ButtonLink href="#register" variant="gold">
+        Save my free seat
+      </ButtonLink>
+    </div>
+  );
   return (
-    <>
-      <SiteHeader />
-      <main id="main">
-        <GlowHero
-          backdrop={IMAGES.appCollage}
-          eyebrow="Live briefing with the founder"
-          title={
-            <>
-              Preparing America&apos;s wealth <em>for transfer.</em>
-            </>
-          }
-          lead={
-            <p>
-              An hour with CEO Michael Gegelman on why estates stall, the app built to fix it, and how advisors and
-              investors can take part.
+    <div className={p.page}>
+      <SiteHeader minimal />
+      <main id="main" className={p.main}>
+        <div className={p.glowTop} aria-hidden="true" />
+        <div className={p.layout}>
+          {/* Scroll 1: headline, promise, video */}
+          <header className={p.head}>
+            <p className={p.theme}>
+              <span className={p.live}>Live</span> The Wealth Transfer Briefing · with CEO Michael Gegelman
             </p>
-          }
-        >
-          <div className={p.heroActions}>
-            <ButtonLink href="#register" variant="gold">
-              Save my seat
-            </ButtonLink>
-            <span className={p.meta}>About {WEBINAR.lengthMinutes} minutes · Online · Free</span>
+            <h1 className={p.h1}>
+              Preparing America&apos;s wealth <em>for transfer.</em>
+            </h1>
+            <p className={p.promise}>
+              In 60 minutes, see why estates stall at settlement, the phone-first platform built to fix it, and how
+              advisors and investors can take part in the raise behind it.
+            </p>
+            <ul className={p.meta}>
+              <li>About {WEBINAR.lengthMinutes} minutes</li>
+              <li>Online</li>
+              <li>Free</li>
+              <li>Replay for every registrant</li>
+            </ul>
+          </header>
+
+          <div className={p.video}>
+            <FounderFilm {...FOUNDER_FILM} label="Watch first: the estate that changed everything" />
           </div>
-          <ScrollCue href="#agenda" label="See what you will hear" />
-        </GlowHero>
 
-        <Chapter
-          id="agenda"
-          label="What you will hear"
-          title="Sixty minutes, four parts."
-          intro={<p>The problem, the story, the platforms and the Venture Studio, with live questions at the end.</p>}
-        >
-          <Agenda
-            items={AGENDA.map((a) => ({ label: a.label, title: a.title, body: <p>{a.body}</p> }))}
-            aside={<PhoneFrame src={IMAGES.appDashboard} alt="Estate Transformation app, dashboard" />}
-          />
-        </Chapter>
+          {/* Floating opt-in box */}
+          <aside id="register" className={p.formCol} aria-labelledby="register-title">
+            <div className={p.form}>
+              <p className={p.formKicker}>Free live briefing</p>
+              <h2 id="register-title" className={p.formTitle}>
+                Save your seat
+              </h2>
+              <Countdown iso={WEBINAR.nextSessionIso} />
+              <div className={p.formBody}>
+                <WebinarKitForm html={WEBINARKIT.registration?.html ?? null} id="register-form" />
+              </div>
+              <p className={p.privacy}>
+                Your details are used only for your link, reminders and the replay. Unsubscribe at any time.
+              </p>
+            </div>
+          </aside>
 
-        <section className={`glow ${p.host}`} aria-labelledby="host-title">
-          <div className={p.hostInner}>
-            <figure className={p.portrait}>
-              <Image
-                src={IMAGES.michaelOffice}
-                alt="CEO Michael J. Gegelman in his office"
-                width={831}
-                height={1352}
-                sizes="(max-width: 900px) 70vw, 380px"
-              />
-            </figure>
+          {/* Scroll 2: what they will learn, host */}
+          <section className={p.learn} aria-labelledby="learn-title">
+            <h2 id="learn-title" className={p.h2}>
+              What you will learn
+            </h2>
+            <ol className={p.points}>
+              {AGENDA.map((a, i) => (
+                <li key={a.title}>
+                  <span className={p.n}>{String(i + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3>{a.title}</h3>
+                    <p>{a.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            {jump}
+          </section>
+
+          <section className={p.host} aria-labelledby="host-title">
+            <Image
+              className={p.hostImg}
+              src={IMAGES.michaelOffice}
+              alt="CEO Michael J. Gegelman"
+              width={831}
+              height={1352}
+              sizes="(max-width: 900px) 40vw, 200px"
+            />
             <div>
-              <p className="eyebrow">Your host</p>
-              <h2 id="host-title" className={p.hostTitle}>
+              <p className={p.formKicker}>Your host</p>
+              <h2 id="host-title" className={p.hostName}>
                 CEO Michael J. Gegelman, <em>Founder</em>
               </h2>
               <p className={p.hostBio}>
                 Michael built the first organizer in 2001 and took it to about 400 advisor offices. In 2021 he spent 18
                 months settling his own parents&apos; estate. Version 4.0 is what he wished they had.
               </p>
-              <div className={p.film}>
-                <FounderFilm {...FOUNDER_FILM} />
-              </div>
+              <dl className={p.facts}>
+                <div>
+                  <dt>Raised so far</dt>
+                  <dd>$2.417M</dd>
+                </div>
+                <div>
+                  <dt>Raise total</dt>
+                  <dd>$7.14M</dd>
+                </div>
+                <div>
+                  <dt>Offered as</dt>
+                  <dd>Contractual participation units</dd>
+                </div>
+              </dl>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <Chapter
-          id="who"
-          label="Who it is for"
-          title="For the people who carry an estate."
-          intro={
-            <p>
-              Financial advisors, family offices, angel investors and private individuals. Not for anyone looking for
-              quick or promised returns.
+          {/* Scroll 3: who it is for, final call */}
+          <section className={p.close} aria-labelledby="close-title">
+            <h2 id="close-title" className={p.h2}>
+              Who should attend
+            </h2>
+            <p className={p.closeText}>
+              Financial advisors, family offices, angel investors and private individuals who want the facts from the
+              founder. Not for anyone looking for quick or promised returns.
             </p>
-          }
-        >
-          <PhotoCards
-            cards={[
-              {
-                kicker: "For families",
-                title: "Estate Transformation",
-                body: "One living record of what you own and who it goes to, so your family inherits a finished file.",
-                img: IMAGES.canoe,
-                alt: "A canoe on a still lake at dawn",
-              },
-              {
-                kicker: "For financial advisors",
-                title: "Advisor Transformation",
-                body: "Bring the same record to your clients, and be the advisor the next generation keeps.",
-                img: IMAGES.advisorCouple,
-                alt: "An advisor in a warm consultation with an older couple",
-                position: "62% 50%",
-              },
-            ]}
-          />
-        </Chapter>
-
-        <section id="register" className={p.register} aria-labelledby="register-title">
-          <div className={p.registerInner}>
-            <div className={p.registerCopy}>
-              <p className="eyebrow">Save your seat</p>
-              <h2 id="register-title">One hour. Your questions answered live.</h2>
-              <p className={p.registerLead}>
-                {WEBINAR.scheduleNote ?? "Pick the session that suits you. Everyone who registers gets the replay."}
-              </p>
-              <Facts
-                items={[
-                  { k: "Raised so far", v: "$2.417M" },
-                  { k: "Raise total", v: "$7.14M" },
-                  { k: "Length", v: `${WEBINAR.lengthMinutes} minutes` },
-                ]}
-              />
-              <p className={p.units}>Participation is offered in contractual participation units.</p>
-            </div>
-            <div className={p.registerForm}>
-              <div className="panel">
-                <WebinarKitForm html={WEBINARKIT.registration?.html ?? null} id="register-form" />
-                <p className={p.privacy}>We use your details only to send your link, reminders and the replay.</p>
-              </div>
-              <div className={p.registerPhone} aria-hidden="true">
-                <PhoneFrame src={IMAGES.appWho} alt="" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <Chapter id="faq" label="Before you register" title="Fair questions." center>
-          <Faq
-            items={[
-              {
-                q: "Will I be asked to commit to anything?",
-                a: <p>No. It is a briefing. If you want to go further afterwards, you can apply for a call with Michael.</p>,
-              },
-              { q: "What if I cannot make the time?", a: <p>Register anyway. Everyone who registers gets the replay.</p> },
-              { q: "Where are the terms?", a: <p>Terms and eligibility are shared at the briefing and in the private data room.</p> },
-              {
-                q: "Is this advice?",
-                a: (
-                  <p>
-                    No. John Galt Institute does not give legal, tax or investment advice. Please speak with your own
-                    advisors before you decide anything.
-                  </p>
-                ),
-              },
-            ]}
-          />
-        </Chapter>
-
-        <section className={`glow ${p.final}`} aria-labelledby="final-title">
-          <p className="eyebrow">Live briefing with the founder</p>
-          <h2 id="final-title" className={p.finalTitle}>
-            An hour with the founder. <em>No obligation after it.</em>
-          </h2>
-          <ButtonLink href="#register" variant="gold">
-            Save my seat
-          </ButtonLink>
-          <p className={p.disclaimer}>{DISCLAIMER}</p>
-        </section>
+            {jump}
+            <p className={p.disclaimer}>{DISCLAIMER}</p>
+          </section>
+        </div>
       </main>
-      <SiteFooter />
-      <div className={p.stickySpace} aria-hidden="true" />
-      <StickyCta href="#register" label="Save my seat" watch={WATCH} />
+      <footer className={p.footer}>
+        <p>
+          © {new Date().getFullYear()} John Galt Institute, Inc. · Charlotte, North Carolina ·{" "}
+          <a href="https://www.johngaltinstitute.com" rel="noopener">
+            johngaltinstitute.com
+          </a>
+        </p>
+        <p>
+          John Galt Institute, Inc. does not provide legal, tax or investment advice. Participation is available only
+          through the private application process and definitive agreements.
+        </p>
+        {ghlIsLive() ? null : (
+        <p className={p.preview}>
+          Preview pages: <a href="/registered">Registered</a> · <a href="/replay">Replay</a> ·{" "}
+          <a href="/apply">Apply and book</a> · <a href="/nda">NDA</a> · <a href="/confirmed">Confirmation</a>
+        </p>
+        )}
+      </footer>
+      <StickyCta href="#register" label="Save my free seat" watch={WATCH} />
       <WebinarKitScript script={WEBINARKIT.registration?.script ?? null} />
-    </>
+    </div>
   );
 }

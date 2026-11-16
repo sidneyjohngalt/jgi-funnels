@@ -50,7 +50,8 @@ export const RISK_STATEMENT: string | null = null;
 export const WEBINAR = {
   title: "The Stakeholder Webinar",
   lengthMinutes: 60,
-  scheduleNote: null as string | null, // e.g. "Every Tuesday at 7 pm Eastern". TODO(Sidney)
+  scheduleNote: null as string | null,
+  nextSessionIso: null as string | null, // e.g. "2026-12-01T19:00:00-05:00". TODO(Sidney): next session; until then a labelled sample date shows
 };
 
 /* ------------------------------------------------------------------ */

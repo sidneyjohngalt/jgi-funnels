@@ -1,133 +1,321 @@
-.heroActions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-top: 36px;
+/* Webinar opt-in page: one dark ground, three colours (charcoal, ivory, gold). */
+.page {
+  background: var(--charcoal-2);
+  color: var(--ivory);
+  min-height: 100vh;
 }
-.meta {
-  font: 500 13px var(--font-label);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #cfc6b5;
+.main {
+  position: relative;
+  overflow-x: clip;
+  isolation: isolate;
+  padding: clamp(36px, 6vw, 72px) var(--pad) clamp(56px, 8vw, 96px);
+}
+.glowTop {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1100px;
+  z-index: -1;
+  background-image: radial-gradient(55% 60% at 30% 0, rgba(255, 196, 0, 0.2) 0%, rgba(255, 196, 0, 0.05) 45%, rgba(255, 196, 0, 0) 70%),
+    radial-gradient(35% 45% at 100% 20%, rgba(213, 164, 0, 0.12) 0%, rgba(213, 164, 0, 0) 70%);
+  pointer-events: none;
 }
 
-.host {
-  padding: clamp(80px, 11vw, 130px) var(--pad);
-}
-.hostInner {
-  max-width: 1080px;
+/* Layout: content on the left, the opt-in box floats on the right through every scroll. */
+.layout {
+  max-width: 1160px;
   margin: 0 auto;
   display: grid;
-  gap: clamp(36px, 5vw, 64px);
+  gap: clamp(32px, 5vw, 48px);
+  grid-template-areas: "head" "video" "form" "learn" "host" "close";
+}
+.head {
+  grid-area: head;
+}
+.video {
+  grid-area: video;
+}
+.formCol {
+  grid-area: form;
+}
+.learn {
+  grid-area: learn;
+}
+.host {
+  grid-area: host;
+}
+.close {
+  grid-area: close;
+}
+@media (min-width: 1000px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 400px;
+    grid-template-areas: "head form" "video form" "learn form" "host form" "close form";
+    column-gap: clamp(48px, 5vw, 72px);
+    row-gap: 56px;
+  }
+  .formCol {
+    align-self: start;
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* Scroll 1 */
+.theme {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 10px 12px;
+  margin: 0 0 22px;
+  font: 500 13px/1.4 var(--font-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--champagne);
 }
-.portrait {
-  margin: 0 auto;
-  max-width: 380px;
-  width: 100%;
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 196, 0, 0.45);
+  color: var(--gold);
 }
-.portrait img {
+.live::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: livePulse 1.8s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+.h1 {
+  font-size: clamp(2.7rem, 6.2vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 0;
+  color: var(--ivory);
+  max-width: 11em;
+}
+.h1 em {
+  color: var(--gold);
+}
+.promise {
+  font-size: clamp(1.15rem, 1.7vw, 1.32rem);
+  line-height: 1.6;
+  color: #ddd4c4;
+  max-width: 34em;
+  margin: 24px 0 0;
+}
+.meta {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.meta li {
+  font-size: 0.95rem;
+  color: #ddd4c4;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 241, 231, 0.18);
+}
+.video {
+  max-width: 760px;
+}
+
+/* Floating opt-in box */
+.form {
+  background: var(--ivory-raised);
+  color: var(--ink);
+  border-radius: 20px;
+  padding: clamp(22px, 3vw, 30px);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 196, 0, 0.25);
+  position: relative;
+}
+.form::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 0;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--gold-grad);
+}
+.formKicker {
+  margin: 0 0 6px;
+  font: 500 12px var(--font-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+}
+.host .formKicker {
+  color: var(--champagne);
+}
+.formTitle {
+  font-size: clamp(1.8rem, 2.6vw, 2.1rem);
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+.formBody {
+  margin-top: 18px;
+}
+.privacy {
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+/* Scroll 2 */
+.h2 {
+  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+  color: var(--ivory);
+  margin: 0 0 24px;
+}
+.points {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid rgba(240, 220, 155, 0.3);
+}
+.points li {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 8px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(246, 241, 231, 0.12);
+}
+.n {
+  font: 500 15px "IBM Plex Mono", ui-monospace, monospace;
+  color: var(--gold);
+  padding-top: 6px;
+}
+.points h3 {
+  font-size: clamp(1.35rem, 2.2vw, 1.6rem);
+  font-weight: 400;
+  color: var(--ivory);
+  margin: 0 0 6px;
+}
+.points p {
+  margin: 0;
+  color: #cfc6b5;
+}
+.host {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+  align-items: start;
+  padding: clamp(24px, 3vw, 32px);
+  border-radius: 20px;
+  background: rgba(246, 241, 231, 0.04);
+  border: 1px solid rgba(240, 220, 155, 0.18);
+}
+.hostImg {
   width: 100%;
   height: auto;
-  border-radius: 18px;
-  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+  border-radius: 14px;
 }
-.hostTitle {
+.hostName {
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  color: var(--ivory);
   margin: 0;
+}
+.hostName em {
+  color: var(--champagne);
 }
 .hostBio {
   color: #cfc6b5;
-  font-size: 1.12rem;
-  max-width: 34em;
-  margin: 18px 0 28px;
+  margin: 12px 0 20px;
 }
-.film {
-  max-width: 560px;
-}
-@media (min-width: 900px) {
-  .hostInner {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  }
-}
-
-.register {
-  background: var(--ivory-raised);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
-  padding: clamp(72px, 10vw, 120px) var(--pad);
-}
-.registerInner {
-  max-width: 1080px;
-  margin: 0 auto;
+.facts {
   display: grid;
-  gap: clamp(36px, 5vw, 64px);
-  align-items: start;
-}
-.registerCopy h2 {
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0 16px;
   margin: 0;
-  max-width: 12em;
+  border-top: 1px solid rgba(240, 220, 155, 0.25);
 }
-.registerLead {
-  color: var(--ink-muted);
-  font-size: 1.12rem;
-  margin: 18px 0 28px;
+.facts > div {
+  padding: 12px 0;
 }
-.units {
-  margin: 16px 0 0;
-  font-size: 0.95rem;
-  color: var(--ink-muted);
+.facts dt {
+  font: 500 11px var(--font-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--champagne);
 }
-.registerForm {
-  position: relative;
+.facts dd {
+  margin: 4px 0 0;
+  font: 400 1.3rem/1.25 var(--font-heading);
+  color: var(--ivory);
 }
-.registerForm :global(.panel) {
-  position: relative;
-  z-index: 1;
-  max-width: 480px;
-}
-.registerPhone {
-  display: none;
-}
-.privacy {
-  margin: 14px 0 0;
-  font-size: 0.9rem;
-  color: var(--ink-muted);
-}
-@media (min-width: 1100px) {
-  .registerInner {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  }
-  .registerPhone {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 40px;
-    z-index: 0;
-    transform: rotate(4deg);
+@media (max-width: 560px) {
+  .host {
+    grid-template-columns: 96px minmax(0, 1fr);
   }
 }
 
-.final {
-  text-align: center;
-  padding: clamp(88px, 12vw, 140px) var(--pad) clamp(64px, 8vw, 96px);
-}
-.finalTitle {
-  max-width: 15em;
-  margin: 0 auto 32px;
+/* Scroll 3 */
+.closeText {
+  color: #ddd4c4;
+  font-size: 1.15rem;
+  max-width: 34em;
+  margin: 0;
 }
 .disclaimer {
-  max-width: 640px;
-  margin: 48px auto 0;
-  font-size: 0.9rem;
-  color: rgba(246, 241, 231, 0.6);
+  margin: 40px 0 0;
+  font-size: 0.88rem;
+  color: rgba(246, 241, 231, 0.55);
+  max-width: 40em;
 }
 
-.stickySpace {
-  height: 84px;
+/* Phone only: buttons that jump back to the form. */
+.jump {
+  margin-top: 28px;
+}
+@media (min-width: 1000px) {
+  .jump {
+    display: none;
+  }
+}
+
+.footer {
+  border-top: 1px solid rgba(246, 241, 231, 0.1);
+  padding: 28px var(--pad) calc(28px + 84px);
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(246, 241, 231, 0.55);
+}
+.footer p {
+  max-width: 760px;
+  margin: 0 auto 8px;
+}
+.footer a {
+  color: rgba(246, 241, 231, 0.8);
+}
+.preview {
+  color: var(--champagne);
 }
 @media (min-width: 980px) {
-  .stickySpace {
-    display: none;
+  .footer {
+    padding-bottom: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .live::before {
+    animation: none;
   }
 }

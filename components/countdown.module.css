@@ -1,0 +1,46 @@
+.wrap {
+  display: grid;
+  gap: 12px;
+}
+.when {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.sample {
+  font: 500 11px var(--font-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--gold-text);
+  color: var(--white);
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.cell {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px 4px 8px;
+  background: var(--charcoal-deep);
+  border-radius: 10px;
+}
+.num {
+  font: 500 1.6rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.label {
+  font: 500 10px var(--font-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #cfc6b5;
+}
