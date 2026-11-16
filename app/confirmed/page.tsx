@@ -208,7 +208,7 @@ export default async function ConfirmedPage() {
             <TrackedSection label="Founder film" className={c.res}>
               <FounderFilm {...FOUNDER_FILM} />
               <h3>The founder film</h3>
-              <p className={c.muted}>Why Michael has spent 25 years on this.</p>
+              <p className={c.muted}>Why Michael built this, in his own words.</p>
             </TrackedSection>
             {MEDIA.testimonials.map((t) => (
               <TrackedSection key={t.label} label={`Testimonial: ${t.label}`} className={c.res}>
