@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import RawEmbed from "./RawEmbed";
 import s from "./webinar.module.css";
 
 /**
  * WebinarKit registration form slot. Renders WebinarKit's Step 1 HTML when supplied.
- * Until then it shows a clearly marked, non-working preview of the form.
+ * Until then it shows a working test form that saves nothing and moves on to /registered.
  * Place <WebinarKitScript> once, at the bottom of the page, after every form.
  */
 export function WebinarKitForm({ html, id }: { html: string | null; id?: string }) {
@@ -15,26 +16,7 @@ export function WebinarKitForm({ html, id }: { html: string | null; id?: string 
       {html ? (
         <RawEmbed html={html} className={s.embed} />
       ) : (
-        <div className={s.mock} aria-label="Registration form preview">
-          <div className={s.mockFields} aria-hidden="true">
-            <div className={s.mockRow}>
-              <span className={s.mockField}>First name</span>
-              <span className={s.mockField}>Last name</span>
-            </div>
-            <span className={s.mockField}>Email address</span>
-            <span className={s.mockField}>Mobile number</span>
-            <span className={s.mockConsent}>
-              <span className={s.mockBox} />
-              Yes, text me reminders about this briefing. Message and data rates may apply. Reply STOP to opt out.
-            </span>
-          </div>
-          <a className={s.mockButton} href="/registered">
-            Save my seat
-          </a>
-          <p className={s.mockNote} role="note">
-            Preview: the live form replaces this. The button skips ahead and saves nothing.
-          </p>
-        </div>
+        <PreviewForm />
       )}
     </div>
   );
@@ -57,4 +39,64 @@ export function WebinarKitScript({ script }: { script: string | null }) {
     });
   }, [script]);
   return null;
+}
+
+/**
+ * Test stand-in for the WebinarKit form. Checks the fields like the real one would,
+ * keeps the details in this browser tab only (to prefill the application), and saves nothing.
+ */
+function PreviewForm() {
+  const router = useRouter();
+  const [v, setV] = useState({ firstName: "", lastName: "", email: "", phone: "", consent: false });
+  const [error, setError] = useState("");
+  const set = (k: "firstName" | "lastName" | "email" | "phone") => (e: { target: { value: string } }) => {
+    setError("");
+    setV((p) => ({ ...p, [k]: e.target.value }));
+  };
+
+  function submit(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    const digits = v.phone.replace(/[^0-9]/g, "");
+    if (!v.firstName.trim() || !v.lastName.trim()) return setError("Please enter your first and last name.");
+    if (!/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(v.email.trim())) return setError("Please enter a valid email address.");
+    if (digits.length < 10) return setError("Please enter a mobile number with area code.");
+    setError("");
+    try {
+      sessionStorage.setItem(
+        "jgi_reg",
+        JSON.stringify({ firstName: v.firstName.trim(), lastName: v.lastName.trim(), email: v.email.trim(), phone: v.phone.trim() }),
+      );
+    } catch {
+      /* ignore */
+    }
+    router.push("/registered");
+  }
+
+  return (
+    <form className={s.mock} onSubmit={submit} noValidate aria-label="Register for the briefing">
+      <div className={s.mockFields}>
+        <div className={s.mockRow}>
+          <input className={s.mockField} aria-label="First name" placeholder="First name" autoComplete="given-name" value={v.firstName} onChange={set("firstName")} />
+          <input className={s.mockField} aria-label="Last name" placeholder="Last name" autoComplete="family-name" value={v.lastName} onChange={set("lastName")} />
+        </div>
+        <input className={s.mockField} type="email" aria-label="Email address" placeholder="Email address" autoComplete="email" value={v.email} onChange={set("email")} />
+        <input className={s.mockField} type="tel" aria-label="Mobile number" placeholder="Mobile number" autoComplete="tel" value={v.phone} onChange={set("phone")} />
+        <label className={s.mockConsent}>
+          <input className={s.mockBox} type="checkbox" checked={v.consent} onChange={(e) => setV((p) => ({ ...p, consent: e.target.checked }))} />
+          Yes, text me reminders about this briefing. Message and data rates may apply. Reply STOP to opt out.
+        </label>
+      </div>
+      {error ? (
+        <p className={s.mockError} role="alert">
+          {error}
+        </p>
+      ) : null}
+      <button className={s.mockButton} type="submit">
+        Save my seat
+      </button>
+      <p className={s.mockNote} role="note">
+        Test form: nothing is saved or sent. The live sign-up form replaces it.
+      </p>
+    </form>
+  );
 }

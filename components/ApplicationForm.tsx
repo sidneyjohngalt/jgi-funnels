@@ -72,6 +72,22 @@ export default function ApplicationForm({
     }
   }, []);
 
+  // Carry over details typed on the sign-up page (same browser tab only), without overwriting anything.
+  useEffect(() => {
+    try {
+      const r = JSON.parse(sessionStorage.getItem("jgi_reg") || "{}");
+      setA((p) => ({
+        ...p,
+        firstName: p.firstName || r.firstName || "",
+        lastName: p.lastName || r.lastName || "",
+        email: p.email || r.email || "",
+        phone: p.phone || r.phone || "",
+      }));
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   useEffect(() => {
     if (step > 0) headingRef.current?.focus();
   }, [step]);
