@@ -16,12 +16,13 @@ export default function NotQualified() {
       intro={
         <>
           <p>
-            We have your answers. Right now, calls with Michael are open to a small group whose plans fit this stage of
-            the raise.
+            We have your answers. Right now, calls with Michael are open to a small group of stakeholders whose plans
+            fit this stage of the Venture Studio.
           </p>
           <p>
-            We would like to keep you close. We will send you short updates on the raise and the app, about once a
-            month, and you can reply to any of them with a question.
+            We would like to keep you close. We will send you short updates on the Venture Studio and the app, about
+            once a month, and you can reply to any of them with a question. As version 4.0 moves toward launch, a seat
+            may open that fits you.
           </p>
         </>
       }

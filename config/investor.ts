@@ -71,13 +71,14 @@ export const INVESTOR_TYPES: Choice[] = [
   { value: "family-office", label: "Family office" },
   { value: "angel", label: "Angel investor" },
   { value: "hnwi", label: "Private individual" },
+  { value: "executive", label: "C-Suite or senior executive" },
   { value: "other", label: "Something else" },
 ];
 
 export const PARTICIPATION_INTEREST: Choice[] = [
-  { value: "silver", label: "Silver Collaborator: contribute expertise and capital" },
-  { value: "gold", label: "Gold Advisor: offer Advisor Transformation to my clients" },
-  { value: "platinum", label: "Platinum Capital Partner: fund the launch stage" },
+  { value: "silver", label: "Silver Collaborator: put my expertise and capital behind the build" },
+  { value: "gold", label: "Gold Advisor: offer Advisor Transformation to my own clients" },
+  { value: "platinum", label: "Platinum Capital Partner: fund the Assembly to Launch stage" },
   { value: "unsure", label: "Not sure yet, I would like to talk it through" },
 ];
 

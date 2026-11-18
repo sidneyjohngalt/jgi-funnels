@@ -7,8 +7,9 @@ import { TrackedDoc, TrackedSection } from "@/components/Tracked";
 import { ButtonLink, DryRunBanner, FunnelSteps, Placeholder } from "@/components/ui";
 import Video from "@/components/Video";
 import { BOOKING } from "@/config/investor";
-import { CONTACT, DATA_ROOM, FOUNDER_FILM, IMAGES, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL, RISK_STATEMENT } from "@/content/investor";
+import { CONTACT, DATA_ROOM, FOUNDER_FILM, IMAGES, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL, RISK_STATEMENT, WHY_NOW } from "@/content/investor";
 import FounderFilm from "@/components/FounderFilm";
+import { RaiseBox, Seats, StakeholderPath } from "@/components/Pitch";
 import { formatCallParts } from "@/lib/format";
 import { ghlIsLive } from "@/lib/ghl";
 import { getSession } from "@/lib/session";
@@ -19,7 +20,7 @@ export const dynamic = "force-dynamic";
 
 
 /**
- * Confirmation page. Booked is not sold: between booking and the call the investor researches us,
+ * Confirmation page. Booked is not sold: between booking and the call the stakeholder researches us,
  * so this page answers them first. Order: confirm, email tip, Michael's main video, what the call
  * is for, short answers, data room, risk, films, who will contact you.
  */
@@ -88,8 +89,13 @@ export default async function ConfirmedPage() {
         <Chapter
           label="Start here"
           id="start"
-          title="What you will find if you look us up."
-          intro={<p>Michael, in a few minutes, on the questions most people research before a call like this.</p>}
+          title="Why now, and what you will find if you look us up."
+          intro={
+            <>
+              <p>{WHY_NOW}</p>
+              <p>Michael, in a few minutes, on the questions most people research before a call like this.</p>
+            </>
+          }
         >
           <TrackedSection label="Main video from Michael">
             <Video
@@ -105,8 +111,8 @@ export default async function ConfirmedPage() {
         <Chapter label="Your first call" id="call" title="What the call is for.">
           <TrackedSection label="What the call is for">
             <p className={c.big}>
-              A relaxed conversation to meet the team, answer your questions, and see together whether you are a good
-              fit to become a collaborator.
+              A relaxed conversation to meet the team, answer your questions, and see together whether one of the three
+              seats in the Venture Studio fits you.
             </p>
             <div className={c.cols}>
               <div>
@@ -122,12 +128,31 @@ export default async function ConfirmedPage() {
                 <h3>Come prepared with</h3>
                 <ul className={c.list}>
                   <li>Your questions, written down so none get lost.</li>
-                  <li>A sense of how you would like to take part.</li>
+                  <li>A sense of which seat fits you, and how you would like to take an active part.</li>
                   <li>Anything from the data room you would like to talk through.</li>
                 </ul>
               </div>
             </div>
           </TrackedSection>
+        </Chapter>
+
+        {/* ---------- Your seat ---------- */}
+        <Chapter
+          label="Your seat"
+          id="seat"
+          tone="glow"
+          title="Where you are on the path to a seat."
+          intro={
+            <p>
+              You are applying for a seat in the FinTech Transformation Venture Studio: the build and launch of version
+              4.0, and the infrastructure for the $124 trillion wealth transfer.
+            </p>
+          }
+        >
+          <StakeholderPath current={1} />
+          <div className={c.seatGap} />
+          <Seats />
+          <RaiseBox />
         </Chapter>
 
         {/* ---------- Short answers ---------- */}

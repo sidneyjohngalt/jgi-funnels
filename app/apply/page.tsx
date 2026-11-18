@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ApplicationForm from "@/components/ApplicationForm";
 import FunnelShell from "@/components/FunnelShell";
+import { ApplyingFor } from "@/components/Pitch";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { DECISION_TIMING, INVESTOR_TYPES, PARTICIPATION_INTEREST } from "@/config/investor";
@@ -12,7 +13,7 @@ type SP = Promise<Record<string, string | string[] | undefined>>;
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
 
 /**
- * Investor application. GHL emails after the webinar can link here with merge fields to prefill step 1:
+ * Stakeholder application. GHL emails after the webinar can link here with merge fields to prefill step 1:
  *   /apply?first_name={{contact.first_name}}&last_name={{contact.last_name}}&email={{contact.email}}&phone={{contact.phone}}&utm_source=webinar
  */
 export default async function ApplyPage({ searchParams }: { searchParams: SP }) {
@@ -31,14 +32,19 @@ export default async function ApplyPage({ searchParams }: { searchParams: SP }) 
   return (
     <FunnelShell
       step={0}
-      eyebrow="Investor application"
-      title="Apply for a call with Michael."
+      eyebrow="Stakeholder application"
+      title={
+        <>
+          Apply for your seat in the <em>Venture Studio.</em>
+        </>
+      }
       intro={
         <p>
-          Four short questions, then pick a time on the same page. About three minutes. CEO Michael Gegelman reads
-          every answer before your call.
+          Four short questions, then pick a time with CEO Michael Gegelman on the same page. About three minutes.
+          Michael reads every answer before your call.
         </p>
       }
+      aside={<ApplyingFor pathCurrent={1} />}
     >
       <div className="panel">
         <ApplicationForm

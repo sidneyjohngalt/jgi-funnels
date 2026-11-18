@@ -223,3 +223,7 @@
   font-size: 0.92rem;
   color: var(--ink-muted);
 }
+
+.seatGap {
+  height: 32px;
+}

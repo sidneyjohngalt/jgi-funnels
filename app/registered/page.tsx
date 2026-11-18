@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import FounderFilm from "@/components/FounderFilm";
+import { KeyFigures, RaiseBox, Seats, StakeholderPath } from "@/components/Pitch";
 import RawEmbed from "@/components/RawEmbed";
 import { Agenda, Chapter, EmailTip, GlowHero, QuestionVideos, RuledList } from "@/components/sections";
 import { Placeholder } from "@/components/ui";
 import Video from "@/components/Video";
 import {
   AGENDA,
+  BIG_IDEA,
   CONTACT,
   FOUNDER_FILM,
   IMAGES,
@@ -37,7 +39,13 @@ export default function Registered() {
               You&apos;re in. <em>Here is what happens next.</em>
             </>
           }
-          lead={<p>Your private link is on its way by email. Add the briefing to your calendar now so it is not missed.</p>}
+          lead={
+            <p>
+              Your private link is on its way by email. Add the briefing to your calendar now so it is not missed. In
+              about an hour, CEO Michael Gegelman shows where the $124 trillion wealth transfer stalls, the platform
+              built to fix it, and how you can take a seat.
+            </p>
+          }
         >
           <div className={p.embed}>
             <div className="panel">
@@ -64,6 +72,14 @@ export default function Registered() {
           </div>
         </section>
 
+        <Chapter label="Why it matters" id="why" tone="glow" title={BIG_IDEA}>
+          <p className={p.why}>
+            A will says who inherits. It does not say where anything is. So the hardest work of an estate waits until
+            after the funeral, and lands on the family. That is the problem the briefing is about.
+          </p>
+          <KeyFigures />
+        </Chapter>
+
         <Chapter
           label="Start here"
           id="main-video"
@@ -81,8 +97,26 @@ export default function Registered() {
           <QuestionVideos items={QUESTIONS_BEFORE_BRIEFING} />
         </Chapter>
 
-        <Chapter label="What you will hear" id="agenda" title="Sixty minutes, four parts.">
+        <Chapter label="What you will hear" id="agenda" title="In 60 minutes, you will see">
           <Agenda items={AGENDA.map((a) => ({ label: a.label, title: a.title, body: <p>{a.body}</p> }))} />
+        </Chapter>
+
+        <Chapter
+          label="Before the briefing"
+          id="seats"
+          tone="glow"
+          title="Come thinking about which seat fits you."
+          intro={
+            <p>
+              FinTech Transformation is the Venture Studio funding the build and launch of version 4.0. At the end of the
+              briefing, you can apply for a one to one call with Michael about any of these three seats.
+            </p>
+          }
+        >
+          <Seats />
+          <RaiseBox />
+          <p className={p.pathLabel}>Your path to a seat</p>
+          <StakeholderPath current={0} />
         </Chapter>
 
         <Chapter

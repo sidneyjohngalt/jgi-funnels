@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ApplicationForm from "@/components/ApplicationForm";
+import { RaiseBox, Seats } from "@/components/Pitch";
 import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import RawEmbed from "@/components/RawEmbed";
 import { Chapter, QuestionVideos } from "@/components/sections";
@@ -48,9 +49,25 @@ export default function ReplayPage() {
         </section>
 
         <Chapter
+          label="The opportunity"
+          id="seats"
+          tone="glow"
+          title="Three ways to take a seat."
+          intro={
+            <p>
+              FinTech Transformation is the Venture Studio funding the build and launch of version 4.0. Help build the
+              infrastructure for the $124 trillion wealth transfer.
+            </p>
+          }
+        >
+          <Seats />
+          <RaiseBox />
+        </Chapter>
+
+        <Chapter
           label="Next step"
           id="apply"
-          title="Want to look closer? Apply for a call."
+          title="Ready to look closer? Apply for your seat."
           intro={
             <p>
               Four short questions, then pick a time with CEO Michael Gegelman. Michael reads every answer before you

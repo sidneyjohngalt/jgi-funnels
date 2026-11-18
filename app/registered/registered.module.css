@@ -19,3 +19,17 @@
   margin-top: 24px;
   color: var(--ink-muted);
 }
+
+.why {
+  font-size: clamp(1.1rem, 1.6vw, 1.25rem);
+  color: #ddd4c4;
+  max-width: 38em;
+  margin: 0 0 28px;
+}
+.pathLabel {
+  font: 500 13px/1.4 var(--font-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin: 32px 0 12px;
+}

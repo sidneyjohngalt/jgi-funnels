@@ -38,9 +38,9 @@ export async function POST(req: Request) {
       contactId,
       pipelineId: INVESTOR_PIPELINE.id,
       stageId: INVESTOR_PIPELINE.stages.applicationStarted,
-      name: `${firstName} ${lastName} (investor application)`,
+      name: `${firstName} ${lastName} (stakeholder application)`,
     });
-    if (attrLine) await addNote(contactId, `Investor application started. Source: ${attrLine}`);
+    if (attrLine) await addNote(contactId, `Stakeholder application started. Source: ${attrLine}`);
 
     await setSession({
       v: 1,

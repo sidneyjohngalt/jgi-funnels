@@ -69,7 +69,7 @@ export async function upsertContact(input: {
     lastName: input.lastName,
     email: input.email,
     phone: input.phone,
-    source: input.source ?? "JGI Funnels: investor application",
+    source: input.source ?? "JGI Funnels: stakeholder application",
   };
   if (input.tags?.length) body.tags = input.tags;
   const cf = (input.customFields ?? []).filter((f) => f.key);

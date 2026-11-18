@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     if (!final) return NextResponse.json({ ok: true });
 
     const lines = [
-      "Investor application completed.",
+      "Stakeholder application completed.",
       `Describes themselves as: ${labelOf(INVESTOR_TYPES, a.investorType) || "not given"}`,
       `Organization: ${a.organization || "not given"}`,
       `State or country: ${a.state || "not given"}`,

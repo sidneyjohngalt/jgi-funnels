@@ -183,3 +183,54 @@ export const AGENDA = [
 
 export const DISCLAIMER =
   "This webinar is for information only. It is not an offer to sell, or a solicitation of an offer to buy, any security.";
+
+/* ------------------------------------------------------------------ */
+/* Shared pitch: the same message on every page of the funnel          */
+/* Figures come only from the brief and johngaltinstitute.com/claims.   */
+/* ------------------------------------------------------------------ */
+
+/** One line, matching the site's Venture Studio page. */
+export const BIG_IDEA = "Help build the infrastructure for the $124 trillion wealth transfer.";
+
+export const KEY_FIGURES = [
+  { value: "$124T", label: "US wealth expected to change hands through 2048" },
+  { value: "30M+", label: "US estates expected to open by 2035" },
+  { value: "16 months", label: "average time to settle an estate" },
+];
+
+/** Why now, for the confirmation page's urgency line. */
+export const WHY_NOW =
+  "About 4.1 million Americans turn 65 each year through 2027, the most ever, and more than 30 million US estates are expected to open by 2035. Each of those estates needs someone to find, list and value everything in it.";
+
+export const STAKEHOLDER_CLASSES = [
+  {
+    id: "silver",
+    name: "Silver Collaborator",
+    who: "Professionals and partners",
+    what: "Put your expertise and capital behind the build and launch.",
+  },
+  {
+    id: "gold",
+    name: "Gold Advisor",
+    who: "Established financial advisors",
+    what: "Offer Advisor Transformation to your own clients, subject to eligibility.",
+  },
+  {
+    id: "platinum",
+    name: "Platinum Capital Partner",
+    who: "Capital partners",
+    what: "Fund the Assembly to Launch stage that takes version 4.0 to market.",
+  },
+];
+
+/** The site's "Five steps, at your own pace", so every page shows the same road. */
+export const STAKEHOLDER_PATH = [
+  "Attend the briefing",
+  "Meet the CEO one to one",
+  "Open the data room",
+  "Review with your own attorney or CPA",
+  "Sign the Stakeholder Agreement",
+];
+
+export const ACTIVE_PARTICIPATION =
+  "Participation is through contractual participation units, for participants who take an active part. Terms, eligibility and seat availability are shared only in the briefing and the private data room.";

@@ -1,0 +1,185 @@
+/* Shared pitch pieces, for dark grounds. Matches the lander. */
+.figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 20px;
+  margin: 0;
+  border-top: 1px solid rgba(240, 220, 155, 0.3);
+}
+.figures > div {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0 0;
+}
+.figures dt {
+  order: 2;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #cfc6b5;
+  margin-top: 6px;
+}
+.figures dd {
+  order: 1;
+  margin: 0;
+  font: 500 clamp(1.5rem, 2.6vw, 2rem) / 1.1 "IBM Plex Mono", ui-monospace, monospace;
+  color: var(--gold);
+}
+@media (max-width: 560px) {
+  .figures {
+    grid-template-columns: 1fr;
+  }
+  .figures > div {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(246, 241, 231, 0.1);
+  }
+}
+
+.seats {
+  display: grid;
+  gap: 14px;
+}
+.seat {
+  padding: clamp(22px, 2.6vw, 28px);
+  border-radius: 20px;
+  background: rgba(246, 241, 231, 0.04);
+  border: 1px solid rgba(255, 196, 0, 0.35);
+  color: var(--ivory);
+}
+.chosen {
+  border-color: var(--gold);
+  background: rgba(255, 196, 0, 0.08);
+}
+.tag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font: 600 12px/1.3 var(--font-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 10px;
+}
+.yours {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--charcoal-deep);
+  letter-spacing: 0.1em;
+}
+.seat h3 {
+  font-size: clamp(1.4rem, 2.2vw, 1.65rem);
+  font-weight: 400;
+  color: var(--ivory);
+  margin: 0 0 8px;
+}
+.what {
+  margin: 0;
+  color: #cfc6b5;
+}
+@media (min-width: 640px) {
+  .seats:not(.compact) .seat {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    column-gap: 24px;
+    align-items: baseline;
+  }
+  .seats:not(.compact) .tag {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .seats:not(.compact) .seat h3 {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+  }
+  .seats:not(.compact) .what {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+}
+.compact .seat {
+  padding: 18px 20px;
+}
+.compact .seat h3 {
+  font-size: 1.3rem;
+}
+
+.raiseBox {
+  margin-top: 18px;
+  padding: clamp(20px, 2.6vw, 26px);
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(246, 241, 231, 0.12);
+  color: var(--ivory);
+}
+.raiseBox span {
+  color: #cfc6b5;
+}
+.note {
+  font-size: 0.85rem;
+  color: rgba(246, 241, 231, 0.6);
+  margin: 14px 0 0;
+  max-width: 44em;
+}
+
+.path {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  border-top: 1px solid rgba(240, 220, 155, 0.3);
+}
+.path li {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(246, 241, 231, 0.1);
+  color: rgba(246, 241, 231, 0.7);
+  font-size: 1.05rem;
+}
+.n {
+  font: 500 13px/1.6 "IBM Plex Mono", ui-monospace, monospace;
+  color: rgba(246, 241, 231, 0.55);
+  text-transform: uppercase;
+}
+.done {
+  color: rgba(246, 241, 231, 0.55);
+}
+.done .n {
+  color: var(--champagne);
+}
+.now {
+  color: var(--ivory);
+  font-weight: 700;
+}
+.now .n {
+  color: var(--gold);
+}
+
+.asideTitle {
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  line-height: 1.15;
+  color: var(--ivory);
+  margin: 0 0 12px;
+}
+.asideTitle em {
+  color: var(--gold);
+}
+.asideText {
+  color: #cfc6b5;
+  margin: 0 0 18px;
+}
+.label {
+  font: 500 13px/1.4 var(--font-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin: 28px 0 12px;
+}
+.label:first-child {
+  margin-top: 0;
+}

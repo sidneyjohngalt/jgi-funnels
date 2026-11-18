@@ -5,18 +5,20 @@ import FounderFilm from "@/components/FounderFilm";
 import StickyCta from "@/components/StickyCtaSmart";
 import { ButtonLink, RaiseProgress } from "@/components/ui";
 import { WebinarKitForm, WebinarKitScript } from "@/components/WebinarKit";
-import { AGENDA, DISCLAIMER, FOUNDER_FILM, IMAGES, WEBINAR, WEBINARKIT } from "@/content/investor";
+import {
+  AGENDA,
+  DISCLAIMER,
+  FOUNDER_FILM,
+  IMAGES,
+  KEY_FIGURES as HEAD_STATS,
+  STAKEHOLDER_CLASSES as CLASSES,
+  WEBINAR,
+  WEBINARKIT,
+} from "@/content/investor";
 import { ghlIsLive } from "@/lib/ghl";
 import p from "./lander.module.css";
 
 const WATCH = ["register"];
-
-/* Figures come only from the brief and johngaltinstitute.com/claims. */
-const HEAD_STATS = [
-  { value: "$124T", label: "US wealth expected to change hands through 2048" },
-  { value: "30M+", label: "US estates expected to open by 2035" },
-  { value: "16 months", label: "average time to settle an estate" },
-];
 
 const PROBLEM_STATS = [
   { value: "570 hours", label: "of executor work to settle an average estate" },
@@ -32,23 +34,6 @@ const TIMELINE = [
   { year: "Now", text: "Version 4.0: phone first, built for families and their advisors." },
 ];
 
-const CLASSES = [
-  {
-    name: "Silver Collaborator",
-    who: "Professionals and partners",
-    what: "Put your expertise and capital behind the build and launch.",
-  },
-  {
-    name: "Gold Advisor",
-    who: "Established financial advisors",
-    what: "Offer Advisor Transformation to your own clients, subject to eligibility.",
-  },
-  {
-    name: "Platinum Capital Partner",
-    who: "Capital partners",
-    what: "Fund the Assembly to Launch stage that takes version 4.0 to market.",
-  },
-];
 
 /**
  * Stakeholder funnel, step 1: webinar opt-in page. Haynes's opt-in layout (headline, short video,

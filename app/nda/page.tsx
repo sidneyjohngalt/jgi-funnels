@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import FunnelShell from "@/components/FunnelShell";
+import { ApplyingFor } from "@/components/Pitch";
 import NdaForm from "@/components/NdaForm";
 import { NDA_IS_PLACEHOLDER, NDA_PARAGRAPHS, NDA_TITLE } from "@/content/nda";
 import { getSession } from "@/lib/session";
@@ -31,6 +32,7 @@ export default async function NdaPage() {
           </p>
         </>
       }
+      aside={<ApplyingFor pathCurrent={2} />}
     >
       <div className="panel">
         <NdaForm title={NDA_TITLE} paragraphs={NDA_PARAGRAPHS} placeholder={NDA_IS_PLACEHOLDER} />

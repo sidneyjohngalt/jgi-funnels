@@ -3,11 +3,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "The Stakeholder Webinar | John Galt Institute",
+    default: "Free live briefing with CEO Michael Gegelman | John Galt Institute",
     template: "%s | John Galt Institute",
   },
   description:
-    "Meet CEO Michael Gegelman, see the plan for version 4.0 of Estate Transformation, and ask your questions at a live briefing.",
+    "Help build the infrastructure for the $124 trillion wealth transfer. A free live briefing with CEO Michael Gegelman on the problem, the platform built to fix it, and how to take a seat in the Venture Studio.",
   icons: { icon: "https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af494b5ec5271f2e876f9e9_jgi-galt-icon-512.png", apple: "https://s3.amazonaws.com/webflow-prod-assets/6ace6cba9e3d2ce35f9649e8/6af494b5ec5271f2e876f9e9_jgi-galt-icon-512.png" },
   // Preview builds must not be indexed. Flip when the production domain is approved.
   robots: { index: false, follow: false },

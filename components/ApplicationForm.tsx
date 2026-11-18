@@ -281,7 +281,7 @@ export default function ApplicationForm({
 
       {step === 2 ? (
         <>
-          {radios("participationInterest", "Which way of taking part interests you most?", participation)}
+          {radios("participationInterest", "Which seat interests you most?", participation)}
           {radios("decisionTiming", "When would you like to make a decision?", timing)}
         </>
       ) : null}
