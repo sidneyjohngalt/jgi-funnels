@@ -7,9 +7,10 @@ import { TrackedDoc, TrackedSection } from "@/components/Tracked";
 import { ButtonLink, DryRunBanner, FunnelSteps, Placeholder } from "@/components/ui";
 import Video from "@/components/Video";
 import { BOOKING } from "@/config/investor";
-import { CONTACT, DATA_ROOM, FOUNDER_FILM, IMAGES, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL, RISK_STATEMENT, WHY_NOW } from "@/content/investor";
+import { CONTACT, DATA_ROOM, FOUNDER_FILM, IMAGES, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL, WHY_NOW } from "@/content/investor";
 import FounderFilm from "@/components/FounderFilm";
 import { RaiseBox, Seats, StakeholderPath } from "@/components/Pitch";
+import SectionNav from "@/components/SectionNav";
 import { formatCallParts } from "@/lib/format";
 import { ghlIsLive } from "@/lib/ghl";
 import { getSession } from "@/lib/session";
@@ -18,11 +19,23 @@ import c from "./confirmed.module.css";
 export const metadata: Metadata = { title: "Your call is confirmed" };
 export const dynamic = "force-dynamic";
 
+/** The page's sections, in order, for the sticky progress bar. */
+const PREP_STEPS = [
+  { id: "start", label: "Start here" },
+  { id: "call", label: "The call" },
+  { id: "seat", label: "Your seat" },
+  { id: "answers", label: "Short answers" },
+  { id: "data-room", label: "Data room" },
+  { id: "films", label: "Resources" },
+  { id: "contact", label: "Before the call" },
+];
+
 
 /**
  * Confirmation page. Booked is not sold: between booking and the call the stakeholder researches us,
  * so this page answers them first. Order: confirm, email tip, Michael's main video, what the call
- * is for, short answers, data room, risk, films, who will contact you.
+ * is for, your seat, short answers, data room, films, who will contact you. A sticky bar tracks
+ * progress through those sections so nobody stops at the data room thinking the page has ended.
  */
 export default async function ConfirmedPage() {
   const s = await getSession();
@@ -84,6 +97,8 @@ export default async function ConfirmedPage() {
             </div>
           </div>
         </section>
+
+        <SectionNav label="Your preparation, step by step" items={PREP_STEPS} />
 
         {/* ---------- Michael's main video ---------- */}
         <Chapter
@@ -202,18 +217,6 @@ export default async function ConfirmedPage() {
                 Sign the NDA
               </ButtonLink>
             </div>
-          )}
-        </Chapter>
-
-        {/* ---------- Risk ---------- */}
-        <Chapter label="In plain words" id="risk" title="What could go wrong.">
-          {RISK_STATEMENT ? (
-            <p className={c.big}>{RISK_STATEMENT}</p>
-          ) : (
-            <Placeholder
-              title="Risk statement"
-              note="A short, counsel-approved statement of the main risks, in plain words."
-            />
           )}
         </Chapter>
 

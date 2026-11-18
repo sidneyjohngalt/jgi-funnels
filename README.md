@@ -14,7 +14,7 @@ Landing pages and funnels for the John Galt Institute. Next.js on Vercel. The fi
 | 3b. Not qualified | `/apply/thank-you` | Thank you page. The contact gets the `investor-nurture` tag and no booking. |
 | 4. Booking | step 5 of `/apply` (`/book` now redirects there) | Our own slot picker, open 48 hours to 7 days ahead (enforced on the server). Qualified people sit in **Qualified, Not Booked**; after booking they move to **Call Booked** and get the `investor-call-booked` tag. |
 | 5. NDA | `/nda` | Scrollable NDA with click-to-sign: a tick box plus a typed full name. The timestamp, IP address, browser and NDA version go to a GHL note, the contact moves to **NDA Signed** and gets the `nda-signed` tag. "Continue without NDA" opens the confirm modal, and skippers get `nda-skipped`. |
-| 6. Confirmed | `/confirmed` | Call date and time, add to calendar, a Gmail tip, Michael's main video, what the call is for, short question videos, the data room (NDA signers only; skippers see a prompt to sign), a risk statement, films and resources, and who will contact them. Each section viewed, video played and document opened becomes a note on the GHL contact, so Michael has a pre-call brief. |
+| 6. Confirmed | `/confirmed` | Call date and time, add to calendar, a Gmail tip, Michael's main video, what the call is for, short question videos, your seat (path, three seats, raise), the data room (NDA signers only; skippers see a prompt to sign), films and resources, and who will contact them. A sticky bar at the top shows every section, highlights the one in view and fills as they scroll. Each section viewed, video played and document opened becomes a note on the GHL contact, so Michael has a pre-call brief. |
 
 GHL moves the stages after the call (Call Held onwards), not this code.
 
@@ -70,7 +70,6 @@ Keep this list current. Each item shows a dashed **Placeholder** box on the page
 | WebinarKit replay embed | `content/investor.ts` > `WEBINARKIT.replay` | Waiting on Sidney |
 | Replay closing date and next session | `content/investor.ts` > `REPLAY` | Waiting on Sidney |
 | Email sender, text-from number and name | `content/investor.ts` > `CONTACT` (lines hide while empty) | Waiting on Sidney (texts after A2P) |
-| Risk statement | `content/investor.ts` > `RISK_STATEMENT` | Waiting on counsel |
 | "Live" wording | Lander says "Online briefing" until Sidney decides live vs recorded | Decision |
 | Pitch deck | `content/investor.ts` > `PITCH_DECK_URL` | Waiting |
 | Data room links (10 documents) | `content/investor.ts` > `DATA_ROOM` | Waiting |

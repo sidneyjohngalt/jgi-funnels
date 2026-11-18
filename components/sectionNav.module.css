@@ -1,0 +1,129 @@
+/* Sticky page progress bar: dark, gold accents, readable at 16px+. */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(22, 21, 19, 0.96);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid rgba(240, 220, 155, 0.18);
+  color: var(--ivory);
+}
+.inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.count {
+  flex: none;
+  margin: 0;
+  font: 500 15px/1 "IBM Plex Mono", ui-monospace, monospace;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.countLabel {
+  font: 500 12px/1 var(--font-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  margin-right: 2px;
+}
+.of {
+  color: rgba(246, 241, 231, 0.6);
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+  mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 24px), transparent 100%);
+}
+.list::-webkit-scrollbar {
+  display: none;
+}
+.item {
+  flex: none;
+}
+.item a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 48px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: rgba(246, 241, 231, 0.7);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s, background-color 0.2s;
+}
+.item a:hover {
+  color: var(--ivory);
+}
+.item a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.num {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(246, 241, 231, 0.35);
+  font: 500 13px/1 "IBM Plex Mono", ui-monospace, monospace;
+  flex: none;
+}
+.done a {
+  color: rgba(246, 241, 231, 0.85);
+}
+.done .num {
+  border-color: var(--champagne);
+  color: var(--champagne);
+}
+.now a {
+  color: var(--charcoal-deep);
+  background: var(--gold-grad);
+  font-weight: 700;
+}
+.now .num {
+  border-color: var(--charcoal-deep);
+  color: var(--charcoal-deep);
+}
+.track {
+  height: 3px;
+  background: rgba(246, 241, 231, 0.12);
+}
+.fill {
+  height: 100%;
+  background: var(--gold);
+  transform-origin: left center;
+  transition: transform 0.15s linear;
+}
+@media (max-width: 640px) {
+  .inner {
+    gap: 10px;
+  }
+  .countLabel {
+    display: none;
+  }
+  .item a {
+    padding: 8px 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .item a {
+    transition: none;
+  }
+}
