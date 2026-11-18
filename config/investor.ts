@@ -43,7 +43,6 @@ export const TAGS = {
 export const CUSTOM_FIELDS = {
   investorType: "", // e.g. "contact.investor_type"
   participationInterest: "",
-  decisionTiming: "",
   ndaSignedAt: "",
   ndaSignedIp: "",
   ndaSignedName: "",
@@ -82,12 +81,6 @@ export const PARTICIPATION_INTEREST: Choice[] = [
   { value: "unsure", label: "Not sure yet, I would like to talk it through" },
 ];
 
-export const DECISION_TIMING: Choice[] = [
-  { value: "30d", label: "In the next 30 days" },
-  { value: "90d", label: "In the next one to three months" },
-  { value: "exploring", label: "I am still exploring" },
-];
-
 export type ApplicationAnswers = {
   firstName: string;
   lastName: string;
@@ -97,7 +90,6 @@ export type ApplicationAnswers = {
   organization?: string;
   state?: string;
   participationInterest?: string;
-  decisionTiming?: string;
   heardFrom?: string;
   questions?: string;
 };
@@ -114,7 +106,7 @@ export const QUALIFICATION: {
   enabled: false,
   rules: [
     // Example, not active:
-    // { id: "not-exploring", description: "Ready to decide within 90 days", test: (a) => a.decisionTiming !== "exploring" },
+    // { id: "advisors-only", description: "Financial advisors only", test: (a) => a.investorType === "advisor" },
   ],
 };
 

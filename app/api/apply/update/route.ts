@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import {
   CUSTOM_FIELDS,
-  DECISION_TIMING,
   INVESTOR_PIPELINE,
   INVESTOR_TYPES,
   PARTICIPATION_INTEREST,
@@ -26,7 +25,6 @@ export async function POST(req: Request) {
     organization: clean(body.organization, 160),
     state: clean(body.state, 80),
     participationInterest: clean(body.participationInterest, 40),
-    decisionTiming: clean(body.decisionTiming, 40),
     heardFrom: clean(body.heardFrom, 200),
     questions: clean(body.questions, 2000),
   };
@@ -39,7 +37,6 @@ export async function POST(req: Request) {
       customFields: [
         { key: CUSTOM_FIELDS.investorType, field_value: labelOf(INVESTOR_TYPES, a.investorType) },
         { key: CUSTOM_FIELDS.participationInterest, field_value: labelOf(PARTICIPATION_INTEREST, a.participationInterest) },
-        { key: CUSTOM_FIELDS.decisionTiming, field_value: labelOf(DECISION_TIMING, a.decisionTiming) },
       ].filter((f) => f.field_value),
     });
 
@@ -51,7 +48,6 @@ export async function POST(req: Request) {
       `Organization: ${a.organization || "not given"}`,
       `State or country: ${a.state || "not given"}`,
       `Interested in: ${labelOf(PARTICIPATION_INTEREST, a.participationInterest) || "not given"}`,
-      `Timing: ${labelOf(DECISION_TIMING, a.decisionTiming) || "not given"}`,
       `Heard about us from: ${a.heardFrom || "not given"}`,
       `Questions for the call: ${a.questions || "none"}`,
     ];

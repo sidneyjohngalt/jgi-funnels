@@ -4,7 +4,7 @@ import FunnelShell from "@/components/FunnelShell";
 import { ApplyingFor } from "@/components/Pitch";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
-import { DECISION_TIMING, INVESTOR_TYPES, PARTICIPATION_INTEREST } from "@/config/investor";
+import { INVESTOR_TYPES, PARTICIPATION_INTEREST } from "@/config/investor";
 
 export const metadata: Metadata = { title: "Apply for a call with Michael" };
 export const dynamic = "force-dynamic";
@@ -52,7 +52,6 @@ export default async function ApplyPage({ searchParams }: { searchParams: SP }) 
           prefill={prefill}
           investorTypes={INVESTOR_TYPES}
           participation={PARTICIPATION_INTEREST}
-          timing={DECISION_TIMING}
         />
       </div>
     </FunnelShell>

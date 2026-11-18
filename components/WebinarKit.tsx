@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RawEmbed from "./RawEmbed";
+import PhoneField from "./PhoneField";
+import { DEFAULT_COUNTRY, toE164, validLocalNumber } from "@/lib/countries";
 import s from "./webinar.module.css";
 
 /**
@@ -49,6 +51,7 @@ function PreviewForm() {
   const router = useRouter();
   const [v, setV] = useState({ firstName: "", lastName: "", email: "", phone: "", consent: false });
   const [error, setError] = useState("");
+  const [country, setCountry] = useState(DEFAULT_COUNTRY);
   const set = (k: "firstName" | "lastName" | "email" | "phone") => (e: { target: { value: string } }) => {
     setError("");
     setV((p) => ({ ...p, [k]: e.target.value }));
@@ -56,15 +59,14 @@ function PreviewForm() {
 
   function submit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    const digits = v.phone.replace(/[^0-9]/g, "");
     if (!v.firstName.trim() || !v.lastName.trim()) return setError("Please enter your first and last name.");
     if (!/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(v.email.trim())) return setError("Please enter a valid email address.");
-    if (digits.length < 10) return setError("Please enter a mobile number with area code.");
+    if (!validLocalNumber(country, v.phone)) return setError("Please enter your mobile number, with area code.");
     setError("");
     try {
       sessionStorage.setItem(
         "jgi_reg",
-        JSON.stringify({ firstName: v.firstName.trim(), lastName: v.lastName.trim(), email: v.email.trim(), phone: v.phone.trim() }),
+        JSON.stringify({ firstName: v.firstName.trim(), lastName: v.lastName.trim(), email: v.email.trim(), phone: toE164(country, v.phone) }),
       );
     } catch {
       /* ignore */
@@ -80,7 +82,16 @@ function PreviewForm() {
           <input className={s.mockField} aria-label="Last name" placeholder="Last name" autoComplete="family-name" value={v.lastName} onChange={set("lastName")} />
         </div>
         <input className={s.mockField} type="email" aria-label="Email address" placeholder="Email address" autoComplete="email" value={v.email} onChange={set("email")} />
-        <input className={s.mockField} type="tel" aria-label="Mobile number" placeholder="Mobile number" autoComplete="tel" value={v.phone} onChange={set("phone")} />
+        <PhoneField
+          id="reg-phone"
+          stacked
+          country={country}
+          number={v.phone}
+          onCountry={setCountry}
+          onNumber={(x) => set("phone")({ target: { value: x } })}
+          selectClassName={s.mockField}
+          inputClassName={s.mockField}
+        />
         <label className={s.mockConsent}>
           <input className={s.mockBox} type="checkbox" checked={v.consent} onChange={(e) => setV((p) => ({ ...p, consent: e.target.checked }))} />
           Yes, text me reminders about this briefing. Message and data rates may apply. Reply STOP to opt out.

@@ -5,7 +5,7 @@ import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import RawEmbed from "@/components/RawEmbed";
 import { Chapter, QuestionVideos } from "@/components/sections";
 import { ButtonLink, DryRunBanner, Placeholder } from "@/components/ui";
-import { DECISION_TIMING, INVESTOR_TYPES, PARTICIPATION_INTEREST } from "@/config/investor";
+import { INVESTOR_TYPES, PARTICIPATION_INTEREST } from "@/config/investor";
 import { QUESTIONS_BEFORE_BRIEFING, REPLAY, WEBINARKIT } from "@/content/investor";
 import { ghlIsLive } from "@/lib/ghl";
 import p from "./replay.module.css";
@@ -80,7 +80,6 @@ export default function ReplayPage() {
               prefill={{}}
               investorTypes={INVESTOR_TYPES}
               participation={PARTICIPATION_INTEREST}
-              timing={DECISION_TIMING}
             />
           </div>
         </Chapter>

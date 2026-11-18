@@ -6,6 +6,8 @@ import type { Choice } from "@/config/investor";
 import f from "./forms.module.css";
 import { Button } from "./ui";
 import SlotPicker from "./SlotPicker";
+import PhoneField from "./PhoneField";
+import { splitPhone, toE164, validLocalNumber } from "@/lib/countries";
 
 type Answers = {
   firstName: string;
@@ -16,7 +18,6 @@ type Answers = {
   organization: string;
   state: string;
   participationInterest: string;
-  decisionTiming: string;
   heardFrom: string;
   questions: string;
 };
@@ -30,14 +31,12 @@ export default function ApplicationForm({
   prefill,
   investorTypes,
   participation,
-  timing,
   initialStep = 0,
 }: {
   initialStep?: number;
   prefill: Partial<Answers>;
   investorTypes: Choice[];
   participation: Choice[];
-  timing: Choice[];
 }) {
   const router = useRouter();
   const [step, setStep] = useState(initialStep);
@@ -45,16 +44,16 @@ export default function ApplicationForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const [phoneCountry, setPhoneCountry] = useState(() => splitPhone(prefill.phone ?? "").iso);
   const [a, setA] = useState<Answers>({
     firstName: prefill.firstName ?? "",
     lastName: prefill.lastName ?? "",
     email: prefill.email ?? "",
-    phone: prefill.phone ?? "",
+    phone: splitPhone(prefill.phone ?? "").number,
     investorType: "",
     organization: "",
     state: "",
     participationInterest: "",
-    decisionTiming: "",
     heardFrom: "",
     questions: "",
   });
@@ -81,8 +80,9 @@ export default function ApplicationForm({
         firstName: p.firstName || r.firstName || "",
         lastName: p.lastName || r.lastName || "",
         email: p.email || r.email || "",
-        phone: p.phone || r.phone || "",
+        phone: p.phone || (r.phone ? splitPhone(r.phone).number : ""),
       }));
+      if (r.phone && !prefill.phone) setPhoneCountry(splitPhone(r.phone).iso);
     } catch {
       /* ignore */
     }
@@ -106,13 +106,10 @@ export default function ApplicationForm({
       if (!a.firstName.trim()) e.firstName = "Please enter your first name.";
       if (!a.lastName.trim()) e.lastName = "Please enter your last name.";
       if (!/^[^ @]+@[^ @]+[.][^ @]{2,}$/.test(a.email.trim())) e.email = "Please enter a valid email address.";
-      if (a.phone.replace(/[^0-9]/g, "").length < 7) e.phone = "Please enter a phone number we can reach you on.";
+      if (!validLocalNumber(phoneCountry, a.phone)) e.phone = "Please enter your mobile number, with area code.";
     }
     if (step === 1 && !a.investorType) e.investorType = "Please choose the closest match.";
-    if (step === 2) {
-      if (!a.participationInterest) e.participationInterest = "Please choose one.";
-      if (!a.decisionTiming) e.decisionTiming = "Please choose one.";
-    }
+    if (step === 2 && !a.participationInterest) e.participationInterest = "Please choose one.";
     return e;
   }
 
@@ -137,7 +134,7 @@ export default function ApplicationForm({
           firstName: a.firstName,
           lastName: a.lastName,
           email: a.email,
-          phone: a.phone,
+          phone: toE164(phoneCountry, a.phone),
           attribution,
         });
         if (!r.ok) {
@@ -267,7 +264,20 @@ export default function ApplicationForm({
             {input("lastName", "Last name", "text", "family-name")}
           </div>
           {input("email", "Email address", "email", "email")}
-          {input("phone", "Phone number", "tel", "tel")}
+          <div className={f.field}>
+            <PhoneField
+              country={phoneCountry}
+              number={a.phone}
+              onCountry={setPhoneCountry}
+              onNumber={(v) => setA((p) => ({ ...p, phone: v }))}
+              showLabels={{ country: "Country", labelClassName: f.label }}
+              selectClassName={f.input}
+              inputClassName={`${f.input} ${errors.phone ? f.invalid : ""}`}
+              invalid={!!errors.phone}
+              describedBy={errors.phone ? "e-phone" : undefined}
+            />
+            {err("phone")}
+          </div>
         </>
       ) : null}
 
@@ -282,7 +292,6 @@ export default function ApplicationForm({
       {step === 2 ? (
         <>
           {radios("participationInterest", "Which seat interests you most?", participation)}
-          {radios("decisionTiming", "When would you like to make a decision?", timing)}
         </>
       ) : null}
 
