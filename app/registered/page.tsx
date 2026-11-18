@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import FounderFilm from "@/components/FounderFilm";
 import { KeyFigures, RaiseBox, Seats, StakeholderPath } from "@/components/Pitch";
+import SectionNav from "@/components/SectionNav";
 import RawEmbed from "@/components/RawEmbed";
 import { Agenda, Chapter, EmailTip, GlowHero, QuestionVideos, RuledList } from "@/components/sections";
 import { Placeholder } from "@/components/ui";
@@ -20,6 +21,17 @@ import {
 import p from "./registered.module.css";
 
 export const metadata: Metadata = { title: "You are registered" };
+
+/** The page's sections, in order, for the sticky progress bar. */
+const WAIT_STEPS = [
+  { id: "why", label: "Why it matters" },
+  { id: "main-video", label: "Start here" },
+  { id: "questions", label: "Short answers" },
+  { id: "agenda", label: "The briefing" },
+  { id: "seats", label: "Your seat" },
+  { id: "tour", label: "The app" },
+  { id: "ready", label: "On the day" },
+];
 
 /**
  * Custom thank you page. Set the event's thank you page URL in WebinarKit to /registered.
@@ -42,8 +54,8 @@ export default function Registered() {
           lead={
             <p>
               Your private link is on its way by email. Add the briefing to your calendar now so it is not missed. In
-              about an hour, CEO Michael Gegelman shows where the $124 trillion wealth transfer stalls, the platform
-              built to fix it, and how you can take a seat.
+              the live briefing, CEO Michael Gegelman shows where the $124 trillion wealth transfer stalls, the
+              platform built to fix it, and how you can take a seat.
             </p>
           }
         >
@@ -71,6 +83,8 @@ export default function Registered() {
             <EmailTip sender={CONTACT.emailSender ?? undefined} />
           </div>
         </section>
+
+        <SectionNav label="Before the briefing, step by step" items={WAIT_STEPS} />
 
         <Chapter label="Why it matters" id="why" tone="glow" title={BIG_IDEA}>
           <p className={p.why}>

@@ -59,7 +59,8 @@ export default function SectionNav({ items, label = "On this page" }: { items: N
     const list = listRef.current;
     const li = list?.children[active] as HTMLElement | undefined;
     if (!list || !li) return;
-    const target = li.offsetLeft - list.clientWidth / 2 + li.offsetWidth / 2;
+    // Start the current step just inside the left edge, so its number is never under the fade.
+    const target = li.offsetLeft - 16;
     list.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
   }, [active]);
 

@@ -9,7 +9,7 @@
 }
 .tipBand {
   background: var(--ivory);
-  padding: clamp(40px, 6vw, 56px) var(--pad) 0;
+  padding: clamp(32px, 5vw, 48px) var(--pad);
 }
 .tipInner {
   max-width: 1080px;
