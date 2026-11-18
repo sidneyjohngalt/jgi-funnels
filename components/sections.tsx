@@ -185,7 +185,7 @@ export function Faq({ items }: { items: { q: string; a: ReactNode }[] }) {
   );
 }
 
-export type QuestionVideo = { question: string; src: string | null; minutes?: number };
+export type QuestionVideo = { question: string; answer?: string; src: string | null; minutes?: number };
 
 /** One short video per question, one per row, so each can be measured on its own. */
 export function QuestionVideos({ items, tracked }: { items: QuestionVideo[]; tracked?: boolean }) {
@@ -197,6 +197,7 @@ export function QuestionVideos({ items, tracked }: { items: QuestionVideo[]; tra
             <div className={s.qvText}>
               <span className={s.qvN}>{String(i + 1).padStart(2, "0")}</span>
               <h3>{v.question}</h3>
+              {v.answer ? <p className={s.qvAnswer}>{v.answer}</p> : null}
               {v.minutes ? <span className={s.qvLen}>{v.minutes} min</span> : null}
             </div>
             <div>

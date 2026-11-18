@@ -137,18 +137,77 @@ export const DATA_ROOM: DataRoomSection[] = [
 /* Draft topics only. Michael should replace them with the questions   */
 /* he actually hears most. TODO(Michael)                               */
 /* ------------------------------------------------------------------ */
-export const QUESTIONS_BEFORE_BRIEFING: { question: string; src: string | null; minutes?: number }[] = [
-  { question: "What is Estate Transformation, in two minutes?", src: null },
-  { question: "Why is Michael the person to build this?", src: null },
-  { question: "What will I hear at the briefing, and what will I not be asked to do?", src: null },
+/**
+ * Short written answers sit beside each video so the page is complete before the videos exist.
+ * Facts come only from the brief, the prospectus and the investor teaser.
+ * TODO(Sidney, counsel): approve the wording, especially "What are the risks".
+ */
+export type QA = { question: string; answer: string; src: string | null; minutes?: number };
+
+export const QUESTIONS_BEFORE_BRIEFING: QA[] = [
+  {
+    question: "What is Estate Transformation, in two minutes?",
+    answer:
+      "A phone-first app that helps people organize, inventory and value everything they own during their lifetime, so their family inherits a finished file, not a project. Advisor Transformation is the version financial advisors offer to their clients.",
+    src: null,
+  },
+  {
+    question: "Why is Michael the person to build this?",
+    answer:
+      "He has worked on this problem since 2001. Version 2.0 reached about 400 advisor offices and thousands of estates. In 2021 he spent 18 months as personal representative of his own parents' estate, and that experience shaped version 4.0.",
+    src: null,
+  },
+  {
+    question: "What will I hear at the briefing, and what will I not be asked to do?",
+    answer:
+      "The problem, Michael's story, the two platforms and how the Venture Studio raise works, then your questions, live. No payment is taken at the briefing. At the end, you can apply for a one to one call if you would like to look closer.",
+    src: null,
+  },
+  {
+    question: "Who is the briefing for?",
+    answer:
+      "Financial advisors and RIAs, family offices, private capital partners and professionals who want to take an active part in building version 4.0. It is not for anyone looking for quick or promised returns.",
+    src: null,
+  },
 ];
 
-export const QUESTIONS_BEFORE_CALL: { question: string; src: string | null; minutes?: number }[] = [
-  { question: "How do contractual participation units work?", src: null },
-  { question: "What does the raise pay for, and how is it going?", src: null },
-  { question: "What are the risks, in plain words?", src: null },
-  { question: "What is the timeline from here?", src: null },
-  { question: "What happens after our call?", src: null },
+export const QUESTIONS_BEFORE_CALL: QA[] = [
+  {
+    question: "How do contractual participation units work?",
+    answer:
+      "Participation is set out in the Venture Studio Stakeholder Agreement. Depending on your seat, it can include revenue, project and acquisition participation. Units are not stock and carry only the rights the signed agreement gives them. The full terms are in the data room.",
+    src: null,
+  },
+  {
+    question: "What does the raise pay for, and how is it going?",
+    answer:
+      "It funds the Assembly to Launch stage: building and launching version 4.0 of Estate Transformation and Advisor Transformation, advisor onboarding, reaching families directly, the referral engine, legal and compliance readiness, and working capital. $2.417M of $7.14M is raised so far.",
+    src: null,
+  },
+  {
+    question: "Where is the app today?",
+    answer:
+      "Version 4.0 is in build as a phone-first app, and Michael will show you where it stands on the call. It builds on versions used in about 400 advisor offices on thousands of estates.",
+    src: null,
+  },
+  {
+    question: "Who can take a seat?",
+    answer:
+      "People who will take an active part, in one of three seats: Silver Collaborator, Gold Advisor or Platinum Capital Partner. Every seat is subject to company approval and a signed agreement.",
+    src: null,
+  },
+  {
+    question: "What are the risks, in plain words?",
+    answer:
+      "This is an early-stage venture. Taking part involves significant risk, including the possible loss of all capital contributed. Units are illiquid, and any forward-looking figures are estimates, not guarantees. The prospectus in the data room sets out the risk factors in full; please review them with your own attorney or CPA.",
+    src: null,
+  },
+  {
+    question: "What happens after our call?",
+    answer:
+      "Only if you would like to go further: read the data room, review the Stakeholder Agreement with your own attorney or CPA, sign it electronically, then send your contribution by wire. You then receive a welcome pack and your onboarding.",
+    src: null,
+  },
 ];
 
 /* ------------------------------------------------------------------ */

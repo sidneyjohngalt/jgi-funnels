@@ -95,6 +95,11 @@ export default async function ConfirmedPage() {
             <div className={c.tip}>
               <EmailTip sender={CONTACT.emailSender ?? undefined} />
             </div>
+            <p className={c.howTo}>
+              <strong>How to use this page:</strong> before your call, work down the seven steps in the bar at the
+              top, at your own pace. Nothing here is held back: the plan, the people, the risks and the documents are
+              all on this page. Bring anything that is still unclear to Michael.
+            </p>
           </div>
         </section>
 
@@ -174,8 +179,8 @@ export default async function ConfirmedPage() {
         <Chapter
           label="Short answers"
           id="answers"
-          title="The questions Michael is asked most."
-          intro={<p>One or two minutes each. Watch the ones that matter to you.</p>}
+          title="Straight answers to the questions people ask."
+          intro={<p>Read the short answer, or watch Michael answer it himself. Nothing you ask will be off limits on the call.</p>}
         >
           <QuestionVideos items={QUESTIONS_BEFORE_CALL} tracked />
         </Chapter>

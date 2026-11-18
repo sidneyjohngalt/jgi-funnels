@@ -227,3 +227,14 @@
 .seatGap {
   height: 32px;
 }
+
+.howTo {
+  max-width: 760px;
+  margin: 20px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #ddd4c4;
+}
+.howTo strong {
+  color: var(--champagne);
+}

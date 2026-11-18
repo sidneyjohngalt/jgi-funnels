@@ -55,6 +55,7 @@ Keep this list current. Each item shows a dashed **Placeholder** box on the page
 
 | Placeholder | Where to fill it | Status |
 | --- | --- | --- |
+| Written answers to the question lists | `content/investor.ts` > `QUESTIONS_BEFORE_BRIEFING`, `QUESTIONS_BEFORE_CALL` | Drafted from the brief, prospectus and teaser; Sidney and counsel to approve (especially the risks answer) |
 | Domain (likely fintechtransformation.info) | Vercel project domains, plus `NEXT_PUBLIC_SITE_URL` | Waiting on Sidney |
 | WebinarKit registration embed | `content/investor.ts` > `WEBINARKIT.registration` | Waiting on Sidney |
 | WebinarKit thank you embed | `content/investor.ts` > `WEBINARKIT.thankYou` | Waiting on Sidney |

@@ -72,12 +72,12 @@ export default function Registered() {
               )}
             </div>
           </div>
-          <div className={p.tip}>
-            <EmailTip sender={CONTACT.emailSender ?? undefined} />
-          </div>
           <div className={p.film}>
             <p className="eyebrow">While you wait</p>
             <FounderFilm {...FOUNDER_FILM} />
+          </div>
+          <div className={p.tip}>
+            <EmailTip sender={CONTACT.emailSender ?? undefined} />
           </div>
         </GlowHero>
 
@@ -104,7 +104,13 @@ export default function Registered() {
           />
         </Chapter>
 
-        <Chapter label="Short answers" id="questions" tone="raised" title="Questions people ask before the briefing.">
+        <Chapter
+          label="Short answers"
+          id="questions"
+          tone="raised"
+          title="Questions people ask before the briefing."
+          intro={<p>Read the short answer now. Michael answers each one in more depth at the briefing.</p>}
+        >
           <QuestionVideos items={QUESTIONS_BEFORE_BRIEFING} />
         </Chapter>
 
