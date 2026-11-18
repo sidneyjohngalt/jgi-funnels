@@ -72,17 +72,14 @@ export default function Registered() {
               )}
             </div>
           </div>
+          <div className={p.tip}>
+            <EmailTip sender={CONTACT.emailSender ?? undefined} />
+          </div>
           <div className={p.film}>
             <p className="eyebrow">While you wait</p>
             <FounderFilm {...FOUNDER_FILM} />
           </div>
         </GlowHero>
-
-        <section className={p.tipBand}>
-          <div className={p.tipInner}>
-            <EmailTip sender={CONTACT.emailSender ?? undefined} />
-          </div>
-        </section>
 
         <SectionNav label="Before the briefing, step by step" items={WAIT_STEPS} />
 
