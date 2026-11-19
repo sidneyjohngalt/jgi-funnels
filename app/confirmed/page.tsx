@@ -97,8 +97,8 @@ export default async function ConfirmedPage() {
             </div>
             <p className={c.howTo}>
               <strong>How to use this page:</strong> before your call, work down the seven steps in the bar at the
-              top, at your own pace. Nothing here is held back: the plan, the people, the risks and the documents are
-              all on this page. Bring anything that is still unclear to Michael.
+              top, at your own pace. Nothing here is held back: the plan, the people and the documents are all on
+              this page. Bring anything that is still unclear to Michael.
             </p>
           </div>
         </section>

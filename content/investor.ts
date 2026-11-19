@@ -140,7 +140,7 @@ export const DATA_ROOM: DataRoomSection[] = [
 /**
  * Short written answers sit beside each video so the page is complete before the videos exist.
  * Facts come only from the brief, the prospectus and the investor teaser.
- * TODO(Sidney, counsel): approve the wording, especially "What are the risks".
+ * TODO(Sidney): approve the wording.
  */
 export type QA = { question: string; answer: string; src: string | null; minutes?: number };
 
@@ -194,12 +194,6 @@ export const QUESTIONS_BEFORE_CALL: QA[] = [
     question: "Who can take a seat?",
     answer:
       "People who will take an active part, in one of three seats: Silver Collaborator, Gold Advisor or Platinum Capital Partner. Every seat is subject to company approval and a signed agreement.",
-    src: null,
-  },
-  {
-    question: "What are the risks, in plain words?",
-    answer:
-      "This is an early-stage venture. Taking part involves significant risk, including the possible loss of all capital contributed. Units are illiquid, and any forward-looking figures are estimates, not guarantees. The prospectus in the data room sets out the risk factors in full; please review them with your own attorney or CPA.",
     src: null,
   },
   {
