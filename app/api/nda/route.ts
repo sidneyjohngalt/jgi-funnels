@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { CUSTOM_FIELDS, INVESTOR_PIPELINE, TAGS } from "@/config/investor";
 import { NDA_VERSION } from "@/content/nda";
-import { addNote, addTags, moveOpportunity, updateContact } from "@/lib/ghl";
+import { addNote, addTags, moveOpportunity, removeTags, updateContact } from "@/lib/ghl";
 import { clean, clientIp, userAgent } from "@/lib/request";
 import { getSession, setSession } from "@/lib/session";
 
@@ -29,13 +29,15 @@ export async function POST(req: Request) {
       );
     }
     const signedAt = new Date().toISOString();
+    const lateSigner = s.step === "nda-skipped";
+    const where = body.source === "confirmed" ? "the confirmation page (after skipping)" : "the NDA step";
     const ip = await clientIp();
     const ua = await userAgent();
 
     await addNote(
       s.contactId,
       [
-        "NDA signed (click to sign).",
+        `NDA signed (click to sign) on ${where}.`,
         `Typed name: ${name}`,
         `Signed at (UTC): ${signedAt}`,
         `IP address: ${ip}`,
@@ -51,7 +53,9 @@ export async function POST(req: Request) {
         { key: CUSTOM_FIELDS.ndaSignedName, field_value: name },
       ],
     });
+    // The signed tag starts the NDA signer flows in GHL. A later signer leaves the skipped flows.
     await addTags(s.contactId, [TAGS.ndaSigned]);
+    if (lateSigner) await removeTags(s.contactId, [TAGS.ndaSkipped]).catch(() => undefined);
     if (s.opportunityId) await moveOpportunity(s.opportunityId, INVESTOR_PIPELINE.stages.ndaSigned);
 
     await setSession({ ...s, step: "nda-signed", nda: { signedAt, name } });

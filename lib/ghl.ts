@@ -95,6 +95,11 @@ export async function addTags(contactId: string, tags: string[]) {
   await call("POST", `/contacts/${contactId}/tags`, { tags });
 }
 
+export async function removeTags(contactId: string, tags: string[]) {
+  if (!tags.length) return;
+  await call("DELETE", `/contacts/${contactId}/tags`, { tags });
+}
+
 export async function addNote(contactId: string, body: string) {
   await call("POST", `/contacts/${contactId}/notes`, { body });
 }

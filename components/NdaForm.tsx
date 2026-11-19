@@ -6,7 +6,20 @@ import f from "./forms.module.css";
 import n from "./nda.module.css";
 import { Button, LinkButton } from "./ui";
 
-export default function NdaForm({ title, paragraphs, placeholder }: { title: string; paragraphs: string[]; placeholder: boolean }) {
+export default function NdaForm({
+  title,
+  paragraphs,
+  placeholder,
+  inline,
+  onSigned,
+}: {
+  title: string;
+  paragraphs: string[];
+  placeholder: boolean;
+  /** Pop-up on the confirmation page: no "continue without" option, stays on the page. */
+  inline?: boolean;
+  onSigned?: () => void;
+}) {
   const router = useRouter();
   const [agreed, setAgreed] = useState(false);
   const [name, setName] = useState("");
@@ -21,7 +34,7 @@ export default function NdaForm({ title, paragraphs, placeholder }: { title: str
       const res = await fetch("/api/nda", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, agreed, name }),
+        body: JSON.stringify({ action, agreed, name, source: inline ? "confirmed" : "nda" }),
       });
       const d = await res.json().catch(() => ({}));
       if (!res.ok || !d.ok) {
@@ -29,7 +42,8 @@ export default function NdaForm({ title, paragraphs, placeholder }: { title: str
         dialogRef.current?.close();
         return;
       }
-      router.push(d.next || "/confirmed");
+      if (onSigned) onSigned();
+      else router.push(d.next || "/confirmed");
     } catch {
       setError("We could not reach the server. Please try again.");
     } finally {
@@ -82,15 +96,20 @@ export default function NdaForm({ title, paragraphs, placeholder }: { title: str
         ) : null}
 
         <div className={f.actions}>
-          <LinkButton onClick={() => dialogRef.current?.showModal()} disabled={busy}>
-            Continue without NDA
-          </LinkButton>
+          {inline ? (
+            <span />
+          ) : (
+            <LinkButton onClick={() => dialogRef.current?.showModal()} disabled={busy}>
+              Continue without NDA
+            </LinkButton>
+          )}
           <Button type="submit" variant="ink" disabled={!canSign}>
             {busy ? "Signing..." : "Sign the NDA"}
           </Button>
         </div>
       </form>
 
+      {inline ? null : (
       <dialog ref={dialogRef} className={n.dialog} aria-labelledby="skip-title">
         <h2 id="skip-title" className={n.dialogTitle}>
           Are you sure?
@@ -107,6 +126,7 @@ export default function NdaForm({ title, paragraphs, placeholder }: { title: str
           </Button>
         </div>
       </dialog>
+      )}
     </div>
   );
 }

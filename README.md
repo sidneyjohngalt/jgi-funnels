@@ -14,7 +14,7 @@ Landing pages and funnels for the John Galt Institute. Next.js on Vercel. The fi
 | 3b. Not qualified | `/apply/thank-you` | Thank you page. The contact gets the `investor-nurture` tag and no booking. |
 | 4. Booking | step 5 of `/apply` (`/book` now redirects there) | Our own slot picker, open 48 hours to 7 days ahead (enforced on the server). Qualified people sit in **Qualified, Not Booked**; after booking they move to **Call Booked** and get the `investor-call-booked` tag. |
 | 5. NDA | `/nda` | Scrollable NDA with click-to-sign: a tick box plus a typed full name. The timestamp, IP address, browser and NDA version go to a GHL note, the contact moves to **NDA Signed** and gets the `nda-signed` tag. "Continue without NDA" opens the confirm modal, and skippers get `nda-skipped`. |
-| 6. Confirmed | `/confirmed` | Call date and time, add to calendar, a Gmail tip, Michael's main video, what the call is for, short question videos, your seat (path, three seats, raise), the data room (NDA signers only; skippers see a prompt to sign), films and resources, and who will contact them. A sticky bar at the top shows every section, highlights the one in view and fills as they scroll. Each section viewed, video played and document opened becomes a note on the GHL contact, so Michael has a pre-call brief. |
+| 6. Confirmed | `/confirmed` | Call date and time, add to calendar, a Gmail tip, Michael's main video, what the call is for, short question videos, your seat (path, three seats, raise), the data room and the NDA-only resources (proforma explainer, pitch deck), which stay locked for skippers until they sign the NDA in a pop-up on the same page, films and resources, and who will contact them. A sticky bar at the top shows every section, highlights the one in view and fills as they scroll. Each section viewed, video played and document opened becomes a note on the GHL contact, so Michael has a pre-call brief. |
 
 GHL moves the stages after the call (Call Held onwards), not this code.
 
@@ -104,3 +104,11 @@ The **copy audit** (`scripts/copy-audit.mjs`) runs on every build. It fails on e
 Brand tokens are in `app/globals.css`. They are the live site's Webflow variables, so do not change them without checking the site.
 
 Brand images load straight from the main site's asset host (`s3.amazonaws.com/webflow-prod-assets/...`), so a change on the site carries through here.
+
+
+## NDA gate and GHL tags
+
+- Signers (on `/nda` or later in the pop-up on `/confirmed`) get the tag `nda-signed`, move to **NDA Signed**, and get a note with the typed name, time, IP, browser, NDA version and where they signed.
+- Skippers get `nda-skipped`. If a skipper signs later from the confirmation page, `nda-skipped` is removed and `nda-signed` is added, so they leave the skipped flows and enter the signer flows.
+- For GHL workflows: start the signer flows on "tag added: nda-signed", and give the skipped flows an exit condition "contact has tag nda-signed".
+- Locked content (data room links, proforma explainer, pitch deck) is not sent to the browser until the person has signed.

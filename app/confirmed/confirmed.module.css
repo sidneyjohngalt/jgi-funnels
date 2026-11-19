@@ -176,6 +176,10 @@
   border-top: 1px solid rgba(246, 241, 231, 0.6);
 }
 .lockedList li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: baseline;
   padding: 12px 0;
   border-bottom: 1px solid rgba(246, 241, 231, 0.18);
   color: rgba(246, 241, 231, 0.78);
@@ -237,4 +241,65 @@
 }
 .howTo strong {
   color: var(--champagne);
+}
+
+/* ---------- NDA gate ---------- */
+.lockMark {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 196, 0, 0.55);
+  color: var(--gold);
+  font: 600 11px/1.6 var(--font-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.lockNotice {
+  max-width: 760px;
+  margin: 20px 0 0;
+  padding: 18px 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 196, 0, 0.45);
+  background: rgba(255, 196, 0, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  color: #ddd4c4;
+}
+.lockNotice p {
+  margin: 0;
+  flex: 1 1 320px;
+}
+.lockNotice strong {
+  color: var(--ivory);
+}
+.signedNote {
+  max-width: 760px;
+  margin: 0 0 24px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(246, 241, 231, 0.08);
+  color: var(--ivory);
+}
+.lockedTile {
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  border: 1px dashed var(--hairline);
+  background: var(--ivory);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 20px;
+}
+.lockedTile .lockMark {
+  color: var(--gold-text);
+  border-color: var(--gold-text);
+}
+.lockedTile p {
+  margin: 0;
+  color: var(--ink-muted);
 }

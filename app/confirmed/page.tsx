@@ -11,6 +11,8 @@ import { CONTACT, DATA_ROOM, FOUNDER_FILM, IMAGES, MEDIA, PITCH_DECK_URL, QUESTI
 import FounderFilm from "@/components/FounderFilm";
 import { RaiseBox, Seats, StakeholderPath } from "@/components/Pitch";
 import SectionNav from "@/components/SectionNav";
+import NdaUnlock from "@/components/NdaUnlock";
+import { NDA_IS_PLACEHOLDER, NDA_PARAGRAPHS, NDA_TITLE } from "@/content/nda";
 import { formatCallParts } from "@/lib/format";
 import { ghlIsLive } from "@/lib/ghl";
 import { getSession } from "@/lib/session";
@@ -42,6 +44,7 @@ export default async function ConfirmedPage() {
   if (!s) redirect("/apply");
   if (!s.booking) redirect("/apply");
   const signed = s.step === "nda-signed" || !!s.nda;
+  const ndaProps = { title: NDA_TITLE, paragraphs: NDA_PARAGRAPHS, placeholder: NDA_IS_PLACEHOLDER };
   const when = formatCallParts(s.booking.start, s.booking.timezone);
 
   return (
@@ -95,6 +98,15 @@ export default async function ConfirmedPage() {
             <div className={c.tip}>
               <EmailTip sender={CONTACT.emailSender ?? undefined} />
             </div>
+            {signed ? null : (
+              <div className={c.lockNotice} role="note">
+                <p>
+                  <strong>Your data room is locked.</strong> Sign the NDA here on this page to open the proforma, cap
+                  table, prospectus, pitch deck and the rest.
+                </p>
+                <NdaUnlock {...ndaProps} label="Sign the NDA" />
+              </div>
+            )}
             <p className={c.howTo}>
               <strong>How to use this page:</strong> before your call, work down the seven steps in the bar at the
               top, at your own pace. Nothing here is held back: the plan, the people and the documents are all on
@@ -188,6 +200,12 @@ export default async function ConfirmedPage() {
         {/* ---------- Data room ---------- */}
         <Chapter label="Data room" id="data-room" tone="glow" title="Everything behind the plan.">
           {signed ? (
+            <>
+            {s.nda ? (
+              <p className={c.signedNote}>
+                You signed the NDA as {s.nda.name}. Everything below is yours to review before the call.
+              </p>
+            ) : null}
             <div className={c.drList}>
               {DATA_ROOM.map((sec) => (
                 <TrackedSection key={sec.id} label={`Data room: ${sec.title}`} className={c.drRow}>
@@ -205,6 +223,7 @@ export default async function ConfirmedPage() {
                 </TrackedSection>
               ))}
             </div>
+            </>
           ) : (
             <div className={c.locked}>
               <p className={c.lockedLead}>
@@ -214,13 +233,14 @@ export default async function ConfirmedPage() {
               <ul className={c.lockedList}>
                 {DATA_ROOM.map((sec) => (
                   <li key={sec.id}>
-                    <strong>{sec.title}.</strong> {sec.explainer}
+                    <span className={c.lockMark} aria-hidden="true">Locked</span>
+                    <span>
+                      <strong>{sec.title}.</strong> {sec.explainer}
+                    </span>
                   </li>
                 ))}
               </ul>
-              <ButtonLink href="/nda" variant="gold">
-                Sign the NDA
-              </ButtonLink>
+              <NdaUnlock {...ndaProps} />
             </div>
           )}
         </Chapter>
@@ -255,6 +275,8 @@ export default async function ConfirmedPage() {
                 <p className={c.muted}>An advisor who used an earlier version, in their own words.</p>
               </TrackedSection>
             ))}
+            {signed ? (
+            <>
             <TrackedSection label="Proforma explainer" className={c.res}>
               <Video
                 src={MEDIA.proformaExplainer}
@@ -276,6 +298,25 @@ export default async function ConfirmedPage() {
               <h3>The pitch deck</h3>
               <p className={c.muted}>The deck Michael uses in one to one meetings.</p>
             </TrackedSection>
+            </>
+            ) : (
+              <>
+                {[
+                  { t: "The proforma explained", d: "A walk through the numbers, line by line." },
+                  { t: "The pitch deck", d: "The deck Michael uses in one to one meetings." },
+                ].map((x) => (
+                  <div key={x.t} className={c.res}>
+                    <div className={c.lockedTile}>
+                      <span className={c.lockMark}>Locked</span>
+                      <p>Opens when you sign the NDA</p>
+                      <NdaUnlock {...ndaProps} label="Sign the NDA" variant="ink" />
+                    </div>
+                    <h3>{x.t}</h3>
+                    <p className={c.muted}>{x.d}</p>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
           <p className={c.note}>Individual experiences vary and are not a guarantee of future results.</p>
         </Chapter>
