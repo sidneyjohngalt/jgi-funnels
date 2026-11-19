@@ -535,9 +535,33 @@
 /* reaches halfway into the gaps, so neighbouring bands meet cleanly. */
 /* The sign-up card keeps floating above them on desktop.             */
 /* ------------------------------------------------------------------ */
+/* Keep the sign-up card above the bands. Position stays sticky on desktop (set above). */
 .formCol {
-  position: relative;
   z-index: 2;
+}
+@media (max-width: 999px) {
+  .formCol {
+    position: relative;
+  }
+}
+/* Shorter laptop screens: tighten the card so the button stays in view while it follows you. */
+@media (min-width: 1000px) and (max-height: 880px) {
+  .formCol {
+    top: 12px;
+  }
+  .form {
+    padding: 18px 22px;
+  }
+  .formTitle {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+  .formBody {
+    margin-top: 12px;
+  }
+  .privacy {
+    display: none;
+  }
 }
 .band {
   position: relative;
