@@ -40,7 +40,7 @@ export default async function ApplyPage({ searchParams }: { searchParams: SP }) 
       }
       intro={
         <p>
-          Four short questions, then pick a time with CEO Michael Gegelman on the same page. About three minutes.
+          A few quick questions, then pick a time with CEO Michael Gegelman on the same page. About two minutes.
           Michael reads every answer before your call.
         </p>
       }

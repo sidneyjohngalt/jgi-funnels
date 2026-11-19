@@ -82,29 +82,73 @@
   margin-bottom: 10px;
   padding: 0;
 }
+/* Choice cards: big, calm, one tap. The native radio stays for keyboards and screen readers. */
 .choice {
+  position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 14px;
+  min-height: 64px;
   border: 1.5px solid var(--hairline);
   background: var(--white);
-  border-radius: var(--radius-sm);
-  padding: 16px 18px;
+  border-radius: 14px;
+  padding: 14px 18px;
   cursor: pointer;
-  font-size: 1.05rem;
-  line-height: 1.45;
+  font-size: 1.08rem;
+  line-height: 1.4;
+  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.choice:hover {
+  border-color: var(--gold-text);
 }
 .choice:has(input:checked) {
-  border-color: var(--ink);
-  background: #fffaf0;
-  box-shadow: inset 0 0 0 1px var(--ink);
+  border-color: var(--gold-text);
+  background: #fff8e6;
+  box-shadow: 0 0 0 1px var(--gold-text), 0 10px 24px -16px rgba(122, 90, 0, 0.6);
+}
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--gold-text);
+  outline-offset: 2px;
 }
 .choice input {
-  width: 22px;
-  height: 22px;
-  margin: 2px 0 0;
-  accent-color: var(--ink);
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.choiceText {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+}
+.choiceText strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+.choiceText span {
+  font-size: 0.98rem;
+  color: var(--ink-muted);
+}
+.tick {
   flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--control-border, #8c8273);
+  display: grid;
+  place-items: center;
+}
+.choice:has(input:checked) .tick {
+  border-color: var(--gold-text);
+  background: var(--gold-text);
+}
+.choice:has(input:checked) .tick::after {
+  content: "";
+  width: 7px;
+  height: 12px;
+  border: solid #fff;
+  border-width: 0 2.5px 2.5px 0;
+  transform: translateY(-1px) rotate(45deg);
 }
 
 /* Checkbox */
@@ -129,7 +173,7 @@
   gap: 14px 20px;
   align-items: center;
   justify-content: space-between;
-  margin-top: 6px;
+  margin-top: 26px;
 }
 .back {
   background: none;
@@ -148,4 +192,86 @@
   letter-spacing: 0.14em;
   font-size: 0.82rem;
   color: var(--ink-muted);
+}
+
+/* ---------- Step header: progress, question, reassurance ---------- */
+.head {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.progress {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.progressTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.timeLeft {
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+}
+.track {
+  height: 6px;
+  border-radius: 999px;
+  background: #ece5d6;
+  overflow: hidden;
+}
+.fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--gold-grad);
+  transition: width 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.q {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  line-height: 1.15;
+  margin: 4px 0 0;
+  outline: none;
+}
+.qSub {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 1.02rem;
+}
+.fields {
+  display: grid;
+  gap: 18px;
+}
+.reassure {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+}
+.autoNote {
+  margin: 10px 0 0;
+  text-align: right;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+}
+.stepAnim {
+  animation: stepIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stepAnim {
+    animation: none;
+  }
+  .fill,
+  .choice {
+    transition: none;
+  }
 }

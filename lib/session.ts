@@ -70,3 +70,8 @@ export async function setSession(s: FunnelSession) {
     maxAge: MAX_AGE,
   });
 }
+
+export async function clearSession() {
+  const jar = await cookies();
+  jar.delete(COOKIE);
+}

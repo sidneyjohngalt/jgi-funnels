@@ -48,7 +48,7 @@ function PreviewNav() {
     ["/", "1. Registration"],
     ["/registered", "2. Registered"],
     ["/replay", "3. Replay"],
-    ["/apply", "4. Apply and book"],
+    ["/api/session/reset?to=/apply", "4. Apply and book (fresh)"],
     ["/nda", "5. NDA"],
     ["/confirmed", "6. Confirmation"],
     ["/apply/thank-you", "Not qualified"],

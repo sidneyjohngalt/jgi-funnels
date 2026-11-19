@@ -78,7 +78,7 @@ export const PARTICIPATION_INTEREST: Choice[] = [
   { value: "silver", label: "Silver Collaborator: put my expertise and capital behind the build" },
   { value: "gold", label: "Gold Advisor: offer Advisor Transformation to my own clients" },
   { value: "platinum", label: "Platinum Capital Partner: fund the Assembly to Launch stage" },
-  { value: "unsure", label: "Not sure yet, I would like to talk it through" },
+  { value: "unsure", label: "Not sure yet: I would like to talk it through" },
 ];
 
 export type ApplicationAnswers = {

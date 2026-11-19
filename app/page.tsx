@@ -272,7 +272,7 @@ export default function Lander() {
         {ghlIsLive() ? null : (
         <p className={p.preview}>
           Preview pages: <a href="/registered">Registered</a> · <a href="/replay">Replay</a> ·{" "}
-          <a href="/apply">Apply and book</a> · <a href="/nda">NDA</a> · <a href="/confirmed">Confirmation</a>
+          <a href="/api/session/reset?to=/apply">Apply and book</a> · <a href="/nda">NDA</a> · <a href="/confirmed">Confirmation</a>
         </p>
         )}
       </footer>

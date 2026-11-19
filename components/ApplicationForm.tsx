@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import type { Choice } from "@/config/investor";
 import f from "./forms.module.css";
@@ -22,7 +22,9 @@ type Answers = {
   questions: string;
 };
 
-const STEP_TITLES = ["Your details", "About you", "Your interest", "Anything else", "Pick a time with Michael"];
+const STEP_COUNT = 5;
+/** Shown under the progress bar: a sense of how little is left keeps people going. */
+const TIME_LEFT = ["About 2 minutes", "About a minute left", "Under a minute left", "Nearly there", "Last step"];
 const LAST_QUESTION = 3;
 const CALENDAR = 4;
 const ATTR_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src"];
@@ -44,6 +46,8 @@ export default function ApplicationForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const advanceTimer = useRef<number | undefined>(undefined);
   const [phoneCountry, setPhoneCountry] = useState(() => splitPhone(prefill.phone ?? "").iso);
   const [a, setA] = useState<Answers>({
     firstName: prefill.firstName ?? "",
@@ -91,6 +95,28 @@ export default function ApplicationForm({
   useEffect(() => {
     if (step > 0) headingRef.current?.focus();
   }, [step]);
+
+  // Keep answers in this tab, so a refresh or a slip of the back button loses nothing.
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem("jgi_app") || "{}");
+      setA((p) => {
+        const out = { ...p };
+        for (const k of Object.keys(out) as (keyof Answers)[]) if (!out[k] && typeof saved[k] === "string") out[k] = saved[k];
+        return out;
+      });
+    } catch {
+      /* ignore */
+    }
+  }, []);
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("jgi_app", JSON.stringify(a));
+    } catch {
+      /* ignore */
+    }
+  }, [a]);
+  useEffect(() => () => window.clearTimeout(advanceTimer.current), []);
 
   const set = (k: keyof Answers) => (e: { target: { value: string } }) => setA((p) => ({ ...p, [k]: e.target.value }));
 
@@ -195,129 +221,178 @@ export default function ApplicationForm({
     </label>
   );
 
-  const radios = (k: keyof Answers, legend: string, options: Choice[]) => (
+  /** Choice cards. On one-question steps, picking an answer moves on by itself. */
+  const radios = (k: keyof Answers, legend: string, options: Choice[], autoAdvance = false) => (
     <fieldset className={f.fieldset} aria-describedby={errors[k] ? `e-${k}` : undefined}>
-      <legend className={f.legend}>{legend}</legend>
-      {options.map((o, i) => (
-        <label key={o.value} className={f.choice}>
-          <input
-            id={i === 0 ? `f-${k}` : undefined}
-            type="radio"
-            name={k}
-            value={o.value}
-            checked={a[k] === o.value}
-            onChange={set(k)}
-          />
-          <span>{o.label}</span>
-        </label>
-      ))}
+      <legend className="sr-only">{legend}</legend>
+      {options.map((o, i) => {
+        const [title, ...rest] = o.label.split(": ");
+        const sub = rest.join(": ");
+        return (
+          <label key={o.value} className={f.choice}>
+            <input
+              id={i === 0 ? `f-${k}` : undefined}
+              type="radio"
+              name={k}
+              value={o.value}
+              checked={a[k] === o.value}
+              onChange={(e) => {
+                set(k)(e);
+                setErrors((x) => ({ ...x, [k]: "" }));
+                if (autoAdvance) {
+                  window.clearTimeout(advanceTimer.current);
+                  advanceTimer.current = window.setTimeout(() => formRef.current?.requestSubmit(), 380);
+                }
+              }}
+            />
+            <span className={f.choiceText}>
+              <strong>{title}</strong>
+              {sub ? <span>{sub.charAt(0).toUpperCase() + sub.slice(1)}</span> : null}
+            </span>
+            <span className={f.tick} aria-hidden="true" />
+          </label>
+        );
+      })}
       {err(k)}
     </fieldset>
   );
 
+  const first = a.firstName.trim();
+  const heads: { title: ReactNode; sub: ReactNode }[] = [
+    {
+      title: "Let’s start with you.",
+      sub: "We use these only to reach you about your application and your call.",
+    },
+    {
+      title: first ? `Thanks, ${first}. Which best describes you?` : "Which best describes you?",
+      sub: "Pick the closest. You can tell Michael more on the call.",
+    },
+    {
+      title: "Which seat interests you most?",
+      sub: "“Not sure yet” is a perfectly good answer. Michael will help you decide.",
+    },
+    {
+      title: "Anything Michael should know?",
+      sub: "All optional. Add a line or two, or go straight to picking a time.",
+    },
+    {
+      title: first ? `Last step, ${first}: pick a time with Michael.` : "Last step: pick a time with Michael.",
+      sub: "Choose a time that leaves you room to go through the resources first. You get them the moment you book.",
+    },
+  ];
+
+  const progress = (
+    <div className={f.progress}>
+      <div className={f.progressTop}>
+        <span className={f.stepCount}>
+          Step {step + 1} of {STEP_COUNT}
+        </span>
+        <span className={f.timeLeft}>{TIME_LEFT[step]}</span>
+      </div>
+      <div
+        className={f.track}
+        role="progressbar"
+        aria-label="Application progress"
+        aria-valuemin={0}
+        aria-valuemax={STEP_COUNT}
+        aria-valuenow={step + 1}
+      >
+        {/* Starts part-filled: people finish what they feel they have already begun. */}
+        <div className={f.fill} style={{ width: `${Math.round(((step + 1) / STEP_COUNT) * 100)}%` }} />
+      </div>
+    </div>
+  );
+
+  const head = (
+    <div className={f.head}>
+      {progress}
+      <h2 ref={headingRef} tabIndex={-1} className={f.q}>
+        {heads[step].title}
+      </h2>
+      <p className={f.qSub}>{heads[step].sub}</p>
+    </div>
+  );
+
   if (step === CALENDAR) {
     return (
-      <div className={f.form}>
-        <div>
-          <span className={f.stepCount}>
-            Step {CALENDAR + 1} of {STEP_TITLES.length}
-          </span>
-          <h2 ref={headingRef} tabIndex={-1} style={{ marginTop: 8, outline: "none" }}>
-            {STEP_TITLES[CALENDAR]}
-          </h2>
-          <p className={f.hint} style={{ marginTop: 0 }}>
-            Thank you{a.firstName ? `, ${a.firstName}` : ""}. Pick a time that leaves you room to go through the
-            resources first. You will get them straight after you book.
-          </p>
+      <div className={f.form} key="calendar">
+        <div className={f.stepAnim}>
+          {head}
+          <SlotPicker />
         </div>
-        <SlotPicker />
       </div>
     );
   }
 
   return (
-    <form className={f.form} onSubmit={next} noValidate>
-      <div>
-        <span className={f.stepCount}>
-          Step {step + 1} of {STEP_TITLES.length}
-        </span>
-        <h2 ref={headingRef} tabIndex={-1} style={{ marginTop: 8, outline: "none" }}>
-          {STEP_TITLES[step]}
-        </h2>
-        {step === 0 ? (
-          <p className={f.hint} style={{ marginTop: 0 }}>
-            We will only use these to reach you about your application and your call.
-          </p>
+    <form ref={formRef} className={f.form} onSubmit={next} noValidate>
+      <div className={f.stepAnim} key={step}>
+        {head}
+
+        {formError ? (
+          <div className={f.formError} role="alert">
+            {formError}
+          </div>
         ) : null}
-      </div>
 
-      {formError ? (
-        <div className={f.formError} role="alert">
-          {formError}
+        <div className={f.fields}>
+          {step === 0 ? (
+            <>
+              <div className={`${f.row} ${f.row2}`}>
+                {input("firstName", "First name", "text", "given-name")}
+                {input("lastName", "Last name", "text", "family-name")}
+              </div>
+              {input("email", "Email address", "email", "email")}
+              <div className={f.field}>
+                <PhoneField
+                  country={phoneCountry}
+                  number={a.phone}
+                  onCountry={setPhoneCountry}
+                  onNumber={(v) => setA((p) => ({ ...p, phone: v }))}
+                  showLabels={{ country: "Country", labelClassName: f.label }}
+                  selectClassName={f.input}
+                  inputClassName={`${f.input} ${errors.phone ? f.invalid : ""}`}
+                  invalid={!!errors.phone}
+                  describedBy={errors.phone ? "e-phone" : undefined}
+                />
+                {err("phone")}
+              </div>
+              <p className={f.reassure}>Private. Never shared or sold. Applying is not a commitment.</p>
+            </>
+          ) : null}
+
+          {step === 1 ? radios("investorType", "Which best describes you?", investorTypes, true) : null}
+
+          {step === 2 ? radios("participationInterest", "Which seat interests you most?", participation, true) : null}
+
+          {step === 3 ? (
+            <>
+              <div className={`${f.row} ${f.row2}`}>
+                {input("organization", "Firm or organization", "text", "organization")}
+                {input("state", "State or country", "text", "address-level1")}
+              </div>
+              {input("heardFrom", "How did you hear about us?", "text")}
+              <label className={f.field} htmlFor="f-questions">
+                <span className={f.label}>What would you most like to cover on your call?</span>
+                <textarea id="f-questions" className={f.textarea} value={a.questions} onChange={set("questions")} />
+              </label>
+            </>
+          ) : null}
         </div>
-      ) : null}
 
-      {step === 0 ? (
-        <>
-          <div className={`${f.row} ${f.row2}`}>
-            {input("firstName", "First name", "text", "given-name")}
-            {input("lastName", "Last name", "text", "family-name")}
-          </div>
-          {input("email", "Email address", "email", "email")}
-          <div className={f.field}>
-            <PhoneField
-              country={phoneCountry}
-              number={a.phone}
-              onCountry={setPhoneCountry}
-              onNumber={(v) => setA((p) => ({ ...p, phone: v }))}
-              showLabels={{ country: "Country", labelClassName: f.label }}
-              selectClassName={f.input}
-              inputClassName={`${f.input} ${errors.phone ? f.invalid : ""}`}
-              invalid={!!errors.phone}
-              describedBy={errors.phone ? "e-phone" : undefined}
-            />
-            {err("phone")}
-          </div>
-        </>
-      ) : null}
-
-      {step === 1 ? (
-        <>
-          {radios("investorType", "Which best describes you?", investorTypes)}
-          {input("organization", "Firm or organization", "text", "organization", true)}
-          {input("state", "State, or country if outside the US", "text", "address-level1", true)}
-        </>
-      ) : null}
-
-      {step === 2 ? (
-        <>
-          {radios("participationInterest", "Which seat interests you most?", participation)}
-        </>
-      ) : null}
-
-      {step === 3 ? (
-        <>
-          {input("heardFrom", "How did you hear about us?", "text", undefined, true)}
-          <label className={f.field} htmlFor="f-questions">
-            <span className={f.label}>
-              What would you most like to cover on your call? <span className={f.optional}>(optional)</span>
-            </span>
-            <textarea id="f-questions" className={f.textarea} value={a.questions} onChange={set("questions")} />
-          </label>
-        </>
-      ) : null}
-
-      <div className={f.actions}>
-        {step > 0 ? (
-          <button type="button" className={f.back} onClick={() => setStep(step - 1)} disabled={busy}>
-            Back
-          </button>
-        ) : (
-          <span />
-        )}
-        <Button type="submit" variant="ink" disabled={busy}>
-          {busy ? "Saving..." : step === LAST_QUESTION ? "Continue to pick a time" : "Continue"}
-        </Button>
+        <div className={f.actions}>
+          {step > 0 ? (
+            <button type="button" className={f.back} onClick={() => setStep(step - 1)} disabled={busy}>
+              Back
+            </button>
+          ) : (
+            <span />
+          )}
+          <Button type="submit" variant="ink" disabled={busy}>
+            {busy ? "Saving..." : step === LAST_QUESTION ? "Continue to pick a time" : "Continue"}
+          </Button>
+        </div>
+        {step === 1 || step === 2 ? <p className={f.autoNote}>Tap an answer to continue.</p> : null}
       </div>
     </form>
   );
