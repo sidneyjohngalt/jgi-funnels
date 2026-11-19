@@ -107,7 +107,7 @@ export default function Lander() {
           </aside>
 
           {/* The problem */}
-          <section className={p.problem} aria-labelledby="problem-title">
+          <section className={`${p.problem} ${p.band} ${p.ivory} ${p.light}`} aria-labelledby="problem-title">
             <p className={p.eyebrow}>The problem</p>
             <h2 id="problem-title" className={p.h2}>
               The hardest work starts after the funeral.
@@ -136,7 +136,7 @@ export default function Lander() {
           </section>
 
           {/* The solution */}
-          <section className={p.solution} aria-labelledby="solution-title">
+          <section className={`${p.solution} ${p.band} ${p.white} ${p.light}`} aria-labelledby="solution-title">
             <p className={p.eyebrow}>The solution</p>
             <h2 id="solution-title" className={p.h2}>
               Do the work now, while the owner can still answer.
@@ -175,7 +175,7 @@ export default function Lander() {
           </section>
 
           {/* The opportunity */}
-          <section className={p.opportunity} aria-labelledby="opp-title">
+          <section className={`${p.opportunity} ${p.band} ${p.glowBand}`} aria-labelledby="opp-title">
             <p className={p.eyebrow}>The opportunity</p>
             <h2 id="opp-title" className={p.h2}>
               Three ways to take a seat.
@@ -204,7 +204,7 @@ export default function Lander() {
           </section>
 
           {/* Scroll 2: what they will learn, host */}
-          <section className={p.learn} aria-labelledby="learn-title">
+          <section className={`${p.learn} ${p.band} ${p.ivory} ${p.light}`} aria-labelledby="learn-title">
             <h2 id="learn-title" className={p.h2}>
               In 60 minutes, you will see
             </h2>
@@ -222,7 +222,7 @@ export default function Lander() {
             {jump}
           </section>
 
-          <section className={p.host} aria-labelledby="host-title">
+          <section className={`${p.host} ${p.hostBand}`} aria-labelledby="host-title">
             <Image
               className={p.hostImg}
               src={IMAGES.michaelOffice}
@@ -244,7 +244,7 @@ export default function Lander() {
           </section>
 
           {/* Scroll 3: who it is for, final call */}
-          <section className={p.close} aria-labelledby="close-title">
+          <section className={`${p.close} ${p.band} ${p.white} ${p.light}`} aria-labelledby="close-title">
             <h2 id="close-title" className={p.h2}>
               Who should attend
             </h2>

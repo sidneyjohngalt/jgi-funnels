@@ -25,7 +25,8 @@
   max-width: 1160px;
   margin: 0 auto;
   display: grid;
-  gap: clamp(32px, 5vw, 48px);
+  --rg: clamp(32px, 5vw, 48px);
+  gap: var(--rg);
   grid-template-areas: "head" "video" "form" "problem" "solution" "opportunity" "learn" "host" "close";
 }
 .head {
@@ -60,7 +61,8 @@
     grid-template-columns: minmax(0, 1fr) 400px;
     grid-template-areas: "head form" "video form" "problem form" "solution form" "opportunity form" "learn form" "host form" "close form";
     column-gap: clamp(48px, 5vw, 72px);
-    row-gap: 56px;
+    --rg: 56px;
+    row-gap: var(--rg);
   }
   .formCol {
     align-self: start;
@@ -525,4 +527,112 @@
 }
 .raiseBox span {
   color: #cfc6b5;
+}
+
+/* ------------------------------------------------------------------ */
+/* Light and dark bands, matching the rest of the funnel.              */
+/* Each band paints a full-width background behind its section and   */
+/* reaches halfway into the gaps, so neighbouring bands meet cleanly. */
+/* The sign-up card keeps floating above them on desktop.             */
+/* ------------------------------------------------------------------ */
+.formCol {
+  position: relative;
+  z-index: 2;
+}
+.band {
+  position: relative;
+  padding-block: clamp(40px, 6vw, 72px);
+}
+.band::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--rg) / -2);
+  bottom: calc(var(--rg) / -2);
+  left: -100vmax;
+  right: -100vmax;
+  z-index: -1;
+}
+.ivory::before {
+  background: var(--ivory);
+}
+.white::before {
+  background: var(--ivory-raised);
+}
+.glowBand::before {
+  background-color: var(--charcoal-deep);
+  background-image: radial-gradient(45% 70% at 25% 0, rgba(255, 196, 0, 0.16) 0%, rgba(255, 196, 0, 0) 70%);
+}
+.close.band {
+  padding-bottom: clamp(56px, 8vw, 96px);
+}
+
+/* Text on light bands */
+.light {
+  color: var(--ink);
+}
+.light .h2 {
+  color: var(--ink);
+}
+.light .eyebrow {
+  color: var(--gold-text);
+}
+.light .body,
+.light .closeText {
+  color: var(--ink-muted);
+}
+.light .statGrid li {
+  background: var(--ivory-raised);
+  border-color: var(--hairline);
+}
+.light .statGrid strong {
+  color: var(--gold-text);
+}
+.light .statGrid span {
+  color: var(--ink-muted);
+}
+.light .sources,
+.light .disclaimer {
+  color: var(--ink-muted);
+}
+.light .sources a {
+  color: var(--gold-text);
+}
+.white .card {
+  background: var(--ivory);
+  border: 1px solid var(--hairline);
+}
+.light .timeline {
+  border-top-color: var(--hairline);
+}
+.light .timeline li {
+  color: var(--ink);
+  border-bottom-color: var(--hairline);
+}
+.light .year {
+  color: var(--gold-text);
+}
+.light .points {
+  border-top-color: var(--charcoal-deep);
+}
+.light .points li {
+  border-bottom-color: var(--hairline);
+}
+.light .points h3 {
+  color: var(--ink);
+}
+.light .points p {
+  color: var(--ink-muted);
+}
+.light .n {
+  color: var(--gold-text);
+}
+
+/* Host card sits on its own dark band with room around it. */
+.hostBand {
+  position: relative;
+  margin-block: clamp(28px, 4vw, 44px);
+}
+/* The last light band runs down to the footer. */
+.close.band::before {
+  bottom: calc(-1 * clamp(56px, 8vw, 96px));
 }
