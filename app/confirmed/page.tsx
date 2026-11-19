@@ -27,9 +27,8 @@ const PREP_STEPS = [
   { id: "call", label: "The call" },
   { id: "seat", label: "Your seat" },
   { id: "answers", label: "Short answers" },
-  { id: "data-room", label: "Data room" },
   { id: "films", label: "Resources" },
-  { id: "contact", label: "Before the call" },
+  { id: "before", label: "Before the call", important: true },
 ];
 
 
@@ -108,7 +107,7 @@ export default async function ConfirmedPage() {
               </div>
             )}
             <p className={c.howTo}>
-              <strong>How to use this page:</strong> before your call, work down the seven steps in the bar at the
+              <strong>How to use this page:</strong> before your call, work down the six steps in the bar at the
               top, at your own pace. Nothing here is held back: the plan, the people and the documents are all on
               this page. Bring anything that is still unclear to Michael.
             </p>
@@ -197,54 +196,6 @@ export default async function ConfirmedPage() {
           <QuestionVideos items={QUESTIONS_BEFORE_CALL} tracked />
         </Chapter>
 
-        {/* ---------- Data room ---------- */}
-        <Chapter label="Data room" id="data-room" tone="glow" title="Everything behind the plan.">
-          {signed ? (
-            <>
-            {s.nda ? (
-              <p className={c.signedNote}>
-                You signed the NDA as {s.nda.name}. Everything below is yours to review before the call.
-              </p>
-            ) : null}
-            <div className={c.drList}>
-              {DATA_ROOM.map((sec) => (
-                <TrackedSection key={sec.id} label={`Data room: ${sec.title}`} className={c.drRow}>
-                  <div>
-                    <h3>{sec.title}</h3>
-                    <p className={c.drNote}>{sec.explainer}</p>
-                  </div>
-                  <ul className={c.docs}>
-                    {sec.docs.map((d) => (
-                      <li key={d.id}>
-                        <TrackedDoc label={d.title} href={d.url} className={c.docLink} pendingClassName={c.docPending} />
-                      </li>
-                    ))}
-                  </ul>
-                </TrackedSection>
-              ))}
-            </div>
-            </>
-          ) : (
-            <div className={c.locked}>
-              <p className={c.lockedLead}>
-                Sign the NDA to open the full data room: proforma, cap table, prospectus and more. It takes about a
-                minute.
-              </p>
-              <ul className={c.lockedList}>
-                {DATA_ROOM.map((sec) => (
-                  <li key={sec.id}>
-                    <span className={c.lockMark} aria-hidden="true">Locked</span>
-                    <span>
-                      <strong>{sec.title}.</strong> {sec.explainer}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <NdaUnlock {...ndaProps} />
-            </div>
-          )}
-        </Chapter>
-
         {/* ---------- Films and resources ---------- */}
         <Chapter label="Watch and read" id="films" title="Films and resources.">
           <div className={c.resGrid}>
@@ -321,19 +272,95 @@ export default async function ConfirmedPage() {
           <p className={c.note}>Individual experiences vary and are not a guarantee of future results.</p>
         </Chapter>
 
-        {/* ---------- Who will contact you ---------- */}
-        <Chapter label="Before the call" id="contact" title="Who you will hear from.">
-          <p className={c.big}>
-            {CONTACT.textFromName ? `${CONTACT.textFromName} ` : "Someone from our team "}
-            will send you a short personal note before your call
-            {CONTACT.textFromNumber ? (
-              <>
-                , from <strong>{CONTACT.textFromNumber}</strong>
-              </>
+        {/* ---------- Before the call: data room + who you will hear from (last, marked important) ---------- */}
+        <Chapter
+          label="Before the call · Important"
+          id="before"
+          tone="glow"
+          title="Open the data room before you talk."
+          intro={
+            <>
+              <p>
+                This is the most useful thing you can do before your call. Your call with Michael is about 45 minutes,
+                and its job is to answer your questions and see whether a seat fits you. If you have already been
+                through the proforma, the cap table, the prospectus and the Stakeholder Agreement, that time goes on
+                your questions, not on the basics.
+              </p>
+              <ul className={c.whyList}>
+                <li>
+                  <strong>Better questions.</strong> You will know what is in the documents, so you can ask about what
+                  matters to you.
+                </li>
+                <li>
+                  <strong>Time for your advisors.</strong> If you want your attorney or CPA to look at the agreement,
+                  starting now means they can before the call, not after it.
+                </li>
+                <li>
+                  <strong>A call shaped around you.</strong> Michael sees which sections you have opened, so he can skip
+                  what you already know and go straight to what you have not covered.
+                </li>
+              </ul>
+            </>
+          }
+        >
+          {signed ? (
+            <>
+            {s.nda ? (
+              <p className={c.signedNote}>
+                You signed the NDA as {s.nda.name}. Everything below is yours to review before the call.
+              </p>
             ) : null}
-            . Reply any time with a question.
-          </p>
-          <p className={c.muted}>You can come back to this page at any time from the same device.</p>
+            <div className={c.drList}>
+              {DATA_ROOM.map((sec) => (
+                <TrackedSection key={sec.id} label={`Data room: ${sec.title}`} className={c.drRow}>
+                  <div>
+                    <h3>{sec.title}</h3>
+                    <p className={c.drNote}>{sec.explainer}</p>
+                  </div>
+                  <ul className={c.docs}>
+                    {sec.docs.map((d) => (
+                      <li key={d.id}>
+                        <TrackedDoc label={d.title} href={d.url} className={c.docLink} pendingClassName={c.docPending} />
+                      </li>
+                    ))}
+                  </ul>
+                </TrackedSection>
+              ))}
+            </div>
+            </>
+          ) : (
+            <div className={c.locked}>
+              <p className={c.lockedLead}>
+                Sign the NDA to open the full data room: proforma, cap table, prospectus and more. It takes about a
+                minute.
+              </p>
+              <ul className={c.lockedList}>
+                {DATA_ROOM.map((sec) => (
+                  <li key={sec.id}>
+                    <span className={c.lockMark} aria-hidden="true">Locked</span>
+                    <span>
+                      <strong>{sec.title}.</strong> {sec.explainer}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <NdaUnlock {...ndaProps} />
+            </div>
+          )}
+
+          <div className={c.contactBox}>
+            <h3 className={c.contactTitle}>Who you will hear from</h3>
+            <p>
+              {CONTACT.textFromName ? `${CONTACT.textFromName} ` : "Someone from our team "}
+              will send you a short personal note before your call
+              {CONTACT.textFromNumber ? (
+                <>
+                  , from <strong>{CONTACT.textFromNumber}</strong>
+                </>
+              ) : null}
+              . Reply any time with a question. You can come back to this page at any time from the same device.
+            </p>
+          </div>
         </Chapter>
       </main>
       <SiteFooter />

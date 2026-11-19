@@ -110,6 +110,23 @@
   transform-origin: left center;
   transition: transform 0.15s linear;
 }
+/* A step marked important: gold label tag, champagne text until reached. */
+.flag {
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font: 600 10px/1.6 var(--font-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.important:not(.done) a {
+  color: var(--champagne);
+}
+.important .num {
+  border-color: var(--gold);
+  color: var(--gold);
+}
 @media (max-width: 640px) {
   .inner {
     gap: 10px;

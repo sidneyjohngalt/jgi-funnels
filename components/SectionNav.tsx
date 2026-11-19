@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import s from "./sectionNav.module.css";
 
-export type NavItem = { id: string; label: string };
+export type NavItem = { id: string; label: string; important?: boolean };
 
 /**
  * Sticky bar that shows every section of a long page, highlights the one in view, ticks off the
@@ -107,12 +107,13 @@ export default function SectionNav({ items, label = "On this page" }: { items: N
           {items.map((it, i) => {
             const state = i < active ? s.done : i === active ? s.now : "";
             return (
-              <li key={it.id} className={`${s.item} ${state}`}>
+              <li key={it.id} className={`${s.item} ${state} ${it.important ? s.important : ""}`}>
                 <a href={`#${it.id}`} onClick={(e) => go(e, it.id)} aria-current={i === active ? "location" : undefined}>
                   <span className={s.num} aria-hidden="true" data-dot>
                     {i < active ? "✓" : i + 1}
                   </span>
                   <span className={s.text}>{it.label}</span>
+                  {it.important ? <span className={s.flag}>Important</span> : null}
                   {i < active ? <span className="sr-only"> (viewed)</span> : null}
                 </a>
               </li>
