@@ -364,11 +364,21 @@ export default function ApplicationForm({
                 />
                 {err("phone")}
               </div>
-              {/* PLACEHOLDER(CRM): A2P-ready SMS consent wording from the GHL phone setup doc replaces this line. Counsel reviews both lines. */}
+              {/* SMS consent wording from CRM (A2P-ready, board 20 Nov 10:24). Optional and unticked. Counsel reviews later. */}
               <label className={f.check} htmlFor="f-smsConsent">
                 <input id="f-smsConsent" type="checkbox" checked={smsConsent} onChange={(e) => setSmsConsent(e.target.checked)} />
                 <span className={f.checkText}>
-                  Text me about my call (optional). Message and data rates may apply. Reply STOP to opt out.
+                  I agree to receive text messages from John Galt Institute about my application and my call with
+                  Michael. Message frequency varies. Message and data rates may apply. Reply STOP to opt out, HELP for
+                  help. Consent is not a condition of applying. See our{" "}
+                  <a href="https://www.johngaltinstitute.com/privacy-policy" target="_blank" rel="noopener">
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a href="https://www.johngaltinstitute.com/terms-of-use" target="_blank" rel="noopener">
+                    Terms
+                  </a>
+                  .
                 </span>
               </label>
               <p className={f.reassure}>Private. Never shared or sold. Applying is not a commitment.</p>

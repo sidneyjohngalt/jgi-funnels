@@ -77,7 +77,7 @@ export const SOURCE_MAP: { match: RegExp; tag: string; investorSource: string }[
   {
     match: /^(social|facebook|fb|instagram|ig|linkedin|x|twitter|youtube|yt|tiktok)$/,
     tag: "source:social",
-    investorSource: "Other", // GHL has no "Social" value; CRM to confirm
+    investorSource: "Social", // value added by CRM, 20 Nov
   },
   { match: /^(personal-?network|network|referral|friend)/, tag: "source:personal-network", investorSource: "Personal network" },
 ];

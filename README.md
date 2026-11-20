@@ -81,7 +81,7 @@ Keep this list current. Each item shows a dashed **Placeholder** box on the page
 | Testimonial videos (v2.0, v3.0) | `content/investor.ts` > `MEDIA.testimonials` | Waiting |
 | Founder film | `content/investor.ts` > `MEDIA.founderFilm` | URL needed |
 | App explainer (final) | `content/investor.ts` > `MEDIA.appExplainer` (the app tour shows until then) | URL needed |
-| SMS consent wording (A2P) | `components/ApplicationForm.tsx`, marked PLACEHOLDER(CRM) | Waiting on CRM, then counsel |
+| SMS consent wording (A2P) | `components/ApplicationForm.tsx` (CRM wording, 20 Nov) | Counsel review |
 | Opportunity lost reason "Not a fit" | `config/investor.ts` > `OPPORTUNITY_LOST_REASON_ID` (none in GHL yet) | Waiting on CRM |
 | Not-qualified page copy | `app/apply/thank-you/page.tsx` | Draft, needs Sidney's OK |
 
