@@ -1,20 +1,23 @@
 import { NextResponse } from "next/server";
 import {
-  CUSTOM_FIELDS,
+  CLASS_INTEREST,
+  FIELDS,
   INVESTOR_PIPELINE,
+  INVESTOR_SEGMENT,
   INVESTOR_TYPES,
+  OPPORTUNITY_LOST_REASON_ID,
   PARTICIPATION_INTEREST,
   TAGS,
   isQualified,
   type ApplicationAnswers,
 } from "@/config/investor";
-import { addNote, addTags, moveOpportunity, updateContact } from "@/lib/ghl";
+import { ghl } from "@/lib/ghl";
 import { clean } from "@/lib/request";
 import { getSession, setSession } from "@/lib/session";
 
 const labelOf = (list: { value: string; label: string }[], v?: string) => list.find((c) => c.value === v)?.label ?? v ?? "";
 
-/** Steps 2 and later. Each step updates the contact; `final: true` runs qualification. */
+/** Event 3, steps 2 and later. Each step updates the contact; `final: true` runs qualification. */
 export async function POST(req: Request) {
   const s = await getSession();
   if (!s) return NextResponse.json({ ok: false, message: "Please start the application again." }, { status: 401 });
@@ -29,19 +32,21 @@ export async function POST(req: Request) {
     questions: clean(body.questions, 2000),
   };
   const final = body.final === true;
+  const g = ghl("apply-complete");
 
   try {
-    await updateContact(s.contactId, {
+    await g.updateContact(s.contactId, {
       companyName: a.organization || undefined,
       state: a.state || undefined,
       customFields: [
-        { key: CUSTOM_FIELDS.investorType, field_value: labelOf(INVESTOR_TYPES, a.investorType) },
-        { key: CUSTOM_FIELDS.participationInterest, field_value: labelOf(PARTICIPATION_INTEREST, a.participationInterest) },
-      ].filter((f) => f.field_value),
+        { key: FIELDS.investorSegment, field_value: INVESTOR_SEGMENT[a.investorType ?? ""] ?? "" },
+        { key: FIELDS.classInterest, field_value: CLASS_INTEREST[a.participationInterest ?? ""] ?? "" },
+      ],
     });
 
     if (!final) return NextResponse.json({ ok: true });
 
+    // Michael's brief: the application summary note stays alongside the fields.
     const lines = [
       "Stakeholder application completed.",
       `Describes themselves as: ${labelOf(INVESTOR_TYPES, a.investorType) || "not given"}`,
@@ -51,14 +56,16 @@ export async function POST(req: Request) {
       `Heard about us from: ${a.heardFrom || "not given"}`,
       `Questions for the call: ${a.questions || "none"}`,
     ];
-    await addNote(s.contactId, lines.join(String.fromCharCode(10)));
+    await g.addNote(s.contactId, lines.join(String.fromCharCode(10)));
 
     const qualified = isQualified({ firstName: s.firstName, lastName: "", email: s.email, phone: "", ...a });
     if (qualified) {
-      await addTags(s.contactId, [TAGS.applicationComplete, TAGS.qualified]);
-      if (s.opportunityId) await moveOpportunity(s.opportunityId, INVESTOR_PIPELINE.stages.qualifiedNotBooked);
+      await g.addTags(s.contactId, [TAGS.applicationComplete, TAGS.qualified]);
+      if (s.opportunityId) await g.moveOpportunity(s.opportunityId, INVESTOR_PIPELINE.stages.qualifiedNotBooked);
     } else {
-      await addTags(s.contactId, [TAGS.applicationComplete, TAGS.notQualified]);
+      await g.addTags(s.contactId, [TAGS.applicationComplete, TAGS.notQualified]);
+      await g.updateContact(s.contactId, { customFields: [{ key: FIELDS.lostReason, field_value: "Not a fit" }] });
+      if (s.opportunityId) await g.loseOpportunity(s.opportunityId, OPPORTUNITY_LOST_REASON_ID || undefined);
     }
 
     const alreadyFurther = ["booked", "nda-signed", "nda-skipped"].includes(s.step);

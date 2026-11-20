@@ -288,7 +288,7 @@ export default async function ConfirmedPage() {
           intro={
             <>
               <p>
-                This is the most useful thing you can do before your call. Your call with Michael is about 45 minutes,
+                This is the most useful thing you can do before your call. Your call with Michael is about {BOOKING.durationMinutes} minutes,
                 and its job is to answer your questions and see whether a seat fits you. If you have already been
                 through the proforma, the cap table, the prospectus and the Stakeholder Agreement, that time goes on
                 your questions, not on the basics.

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { CUSTOM_FIELDS } from "@/config/investor";
-import { addNote, updateContact } from "@/lib/ghl";
+import { ghl } from "@/lib/ghl";
 import { clean } from "@/lib/request";
 import { getSession } from "@/lib/session";
 
 /**
  * Records what each person opens on the confirmation page so Michael gets a pre-call brief.
- * Each event becomes a short note on the GHL contact. The client sends each item once per visit.
+ * Event 7 (Later in the contract): each item becomes a short note on the GHL contact, once per visit.
+ * Appending to the Signals noted field (one line per action, newest first) comes when CRM switches it on.
  */
 export async function POST(req: Request) {
   const s = await getSession();
@@ -20,12 +20,7 @@ export async function POST(req: Request) {
   const verb = kind === "section" ? "Viewed section" : kind === "video" ? "Played video" : "Opened document";
   const when = new Date().toISOString();
   try {
-    await addNote(s.contactId, `Pre-call activity: ${verb}: ${label} (${when})`);
-    if (CUSTOM_FIELDS.dataRoomActivity) {
-      await updateContact(s.contactId, {
-        customFields: [{ key: CUSTOM_FIELDS.dataRoomActivity, field_value: `${verb}: ${label} at ${when}` }],
-      });
-    }
+    await ghl("track").addNote(s.contactId, `Pre-call activity: ${verb}: ${label} (${when})`);
   } catch (e) {
     console.error("track failed", e);
   }

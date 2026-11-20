@@ -1,6 +1,7 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { anyEventLive } from "@/lib/ghl";
 
 /**
  * The applicant's place in the funnel, kept in a signed, http-only cookie.
@@ -23,8 +24,8 @@ const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 function secret(): string {
   const s = process.env.FUNNEL_SESSION_SECRET;
   if (s && s.length >= 32) return s;
-  if (process.env.GHL_LIVE === "true") {
-    throw new Error("FUNNEL_SESSION_SECRET (32+ chars) is required when GHL_LIVE=true");
+  if (anyEventLive()) {
+    throw new Error("FUNNEL_SESSION_SECRET (32+ chars) is required once any GHL event is live");
   }
   // Preview and dry-run only. Live mode refuses to run without a real secret.
   return "jgi-funnels-preview-only-not-for-live-use-000000";
@@ -74,4 +75,13 @@ export async function setSession(s: FunnelSession) {
 export async function clearSession() {
   const jar = await cookies();
   jar.delete(COOKIE);
+}
+
+/**
+ * A personal, signed link to the confirmation page, written to the contact's Confirmation page link
+ * field at booking so emails opened on any device land on the right page. /c?t=... restores the session.
+ */
+export function confirmationLink(s: FunnelSession, req: Request): string {
+  const origin = (process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin).replace(/[/]+$/, "");
+  return `${origin}/c?t=${encode(s)}`;
 }

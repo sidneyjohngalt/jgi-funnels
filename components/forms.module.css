@@ -275,3 +275,15 @@
     transition: none;
   }
 }
+
+.checkText {
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+.consent {
+  margin: 14px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}

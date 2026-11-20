@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
-import { BOOKING, INVESTOR_PIPELINE, TAGS } from "@/config/investor";
+import { BOOKING, FIELDS } from "@/config/investor";
 import { inWindow } from "@/lib/booking";
-import { addTags, calendarId, createAppointment, ghlIsLive, moveOpportunity } from "@/lib/ghl";
+import { calendarId, ghl } from "@/lib/ghl";
 import { clean } from "@/lib/request";
-import { getSession, setSession } from "@/lib/session";
+import { confirmationLink, getSession, setSession } from "@/lib/session";
 
+/**
+ * Event 4: book the first call. The code creates the GHL appointment and writes the person's signed
+ * confirmation page link. CRM's Call booked workflow (triggered by the appointment) adds call:booked,
+ * moves the card to Call Booked and sends the emails.
+ */
 export async function POST(req: Request) {
   const s = await getSession();
   if (!s) return NextResponse.json({ ok: false, message: "Please start the application again." }, { status: 401 });
@@ -21,21 +26,24 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  if (ghlIsLive() && !calendarId()) {
+  const g = ghl("book");
+  if (g.live && !calendarId()) {
     return NextResponse.json({ ok: false, message: "Booking is not open yet. We will be in touch to arrange a time." }, { status: 503 });
   }
   const end = new Date(Date.parse(start) + BOOKING.durationMinutes * 60000).toISOString();
 
   try {
-    await createAppointment({
+    await g.createAppointment({
       contactId: s.contactId,
       startTime: start,
       endTime: end,
       title: `First call with ${BOOKING.hostName}: ${s.firstName}`,
     });
-    if (s.opportunityId) await moveOpportunity(s.opportunityId, INVESTOR_PIPELINE.stages.callBooked);
-    await addTags(s.contactId, [TAGS.callBooked]);
-    await setSession({ ...s, step: s.nda ? "nda-signed" : "booked", booking: { start, end, timezone } });
+    const next = { ...s, step: s.nda ? ("nda-signed" as const) : ("booked" as const), booking: { start, end, timezone } };
+    await g.updateContact(s.contactId, {
+      customFields: [{ key: FIELDS.confirmationPageLink, field_value: confirmationLink(next, req) }],
+    });
+    await setSession(next);
     return NextResponse.json({ ok: true, next: s.nda ? "/confirmed" : "/nda" });
   } catch (e) {
     console.error("book failed", e);

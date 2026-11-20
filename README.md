@@ -40,12 +40,16 @@ Embed code is public page markup, so it is safe to keep in the repo.
 
 ## Safety: dry-run until Sidney says go
 
-Nothing reaches GHL unless **both** of these are set in Vercel:
+Every GHL call belongs to one funnel event. An event talks to GHL only when **all** of these hold (Vercel Production env vars, set by Sidney only):
 
-- `GHL_PRIVATE_TOKEN`: the Private Integration token (Sidney adds it).
-- `GHL_LIVE=true`: set only with Sidney's explicit OK.
+- `GHL_API_TOKEN`: the Private Integration token. `GHL_LOCATION_ID` (optional) overrides the location in `config/investor.ts`.
+- `GHL_LIVE_EVENTS`: a comma list of the events that may write. Empty or missing = everything dry-run. Names or contract numbers both work:
+  `apply-start` (2) · `apply-complete` (3) · `book` (4) · `nda-sign` (5) · `nda-skip` (6) · `track` (7). Switch-on order: 2, then 3, 5, 6, then 4 once the calendar exists.
+- The contact is real: a contact created while event 2 was dry-run is never sent to GHL by a later live event.
 
-Until then every GHL call is logged and skipped, booking shows sample times, and every funnel page shows a "Preview mode" banner. Live mode will not start without `FUNNEL_SESSION_SECRET`. See `.env.example` for the full list. Tokens live only in Vercel env vars, never in code.
+`GHL_TEST_MODE=true` adds the tag `test` to every contact a live event touches. `GHL_CALENDAR_ID` is the investor call calendar. `FUNNEL_SESSION_SECRET` (32+ characters) is required once any event is live. Changing these needs a redeploy so the preview banner updates. Until then every GHL call is logged as `[ghl:dry-run:<event>]` and skipped, booking shows sample times, and every funnel page shows a "Preview mode" banner. Tokens live only in Vercel env vars, never in code.
+
+Tags, field keys and the source mapping live in `config/investor.ts` and follow the "JGI Funnel and CRM integration contract" (Reconciled decisions). Never rename one without updating the contract first.
 
 Pages are set to `noindex` until the production domain is approved.
 
@@ -61,8 +65,7 @@ Keep this list current. Each item shows a dashed **Placeholder** box on the page
 | WebinarKit thank you embed | `content/investor.ts` > `WEBINARKIT.thankYou` | Waiting on Sidney |
 | Webinar schedule line | `content/investor.ts` > `WEBINAR.scheduleNote` | Optional |
 | Qualification criteria | `config/investor.ts` > `QUALIFICATION` (everyone qualifies for now) | TODO Sidney |
-| GHL calendar | `GHL_CALENDAR_ID` env var; set 48 hour minimum notice and a 7 day range in GHL | To be created |
-| Call length | `config/investor.ts` > `BOOKING.durationMinutes` (45 for now) | Confirm |
+| GHL calendar | `GHL_CALENDAR_ID` env var; 48 hour minimum notice, 6 day range, 60 minutes (CRM creates it) | To be created |
 | NDA text | `content/nda.ts` (bump `NDA_VERSION` when it changes) | Waiting on counsel |
 | Lander intro video (60 to 90 s) | `content/investor.ts` > `MEDIA.landerIntro` | Waiting |
 | Main video on /registered (due diligence or "why now") | `content/investor.ts` > `MEDIA.registeredMain` | Waiting |
@@ -78,7 +81,8 @@ Keep this list current. Each item shows a dashed **Placeholder** box on the page
 | Testimonial videos (v2.0, v3.0) | `content/investor.ts` > `MEDIA.testimonials` | Waiting |
 | Founder film | `content/investor.ts` > `MEDIA.founderFilm` | URL needed |
 | App explainer (final) | `content/investor.ts` > `MEDIA.appExplainer` (the app tour shows until then) | URL needed |
-| GHL custom field keys (optional) | `config/investor.ts` > `CUSTOM_FIELDS` (notes are used until then) | Optional |
+| SMS consent wording (A2P) | `components/ApplicationForm.tsx`, marked PLACEHOLDER(CRM) | Waiting on CRM, then counsel |
+| Opportunity lost reason "Not a fit" | `config/investor.ts` > `OPPORTUNITY_LOST_REASON_ID` (none in GHL yet) | Waiting on CRM |
 | Not-qualified page copy | `app/apply/thank-you/page.tsx` | Draft, needs Sidney's OK |
 
 ## Working on it

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { CUSTOM_FIELDS, INVESTOR_PIPELINE, TAGS } from "@/config/investor";
+import { FIELDS, INVESTOR_PIPELINE, TAGS } from "@/config/investor";
 import { NDA_VERSION } from "@/content/nda";
-import { addNote, addTags, moveOpportunity, removeTags, updateContact } from "@/lib/ghl";
+import { ghl, today } from "@/lib/ghl";
 import { clean, clientIp, userAgent } from "@/lib/request";
 import { getSession, setSession } from "@/lib/session";
 
@@ -15,8 +15,10 @@ export async function POST(req: Request) {
 
   try {
     if (action === "skip") {
-      await addTags(s.contactId, [TAGS.ndaSkipped]);
-      await addNote(s.contactId, `Chose to continue without the NDA on ${new Date().toISOString()}. No data room access.`);
+      // Event 6: tag and note only; the card stays at Call Booked.
+      const g = ghl("nda-skip");
+      await g.addTags(s.contactId, [TAGS.ndaSkipped]);
+      await g.addNote(s.contactId, `Chose to continue without the NDA on ${new Date().toISOString()}. No data room access.`);
       await setSession({ ...s, step: s.nda ? "nda-signed" : "nda-skipped" });
       return NextResponse.json({ ok: true, next: "/confirmed" });
     }
@@ -34,7 +36,9 @@ export async function POST(req: Request) {
     const ip = await clientIp();
     const ua = await userAgent();
 
-    await addNote(
+    // Event 5: NDA signed.
+    const g = ghl("nda-sign");
+    await g.addNote(
       s.contactId,
       [
         `NDA signed (click to sign) on ${where}.`,
@@ -46,17 +50,16 @@ export async function POST(req: Request) {
         `Email on file: ${s.email}`,
       ].join(String.fromCharCode(10)),
     );
-    await updateContact(s.contactId, {
+    await g.updateContact(s.contactId, {
       customFields: [
-        { key: CUSTOM_FIELDS.ndaSignedAt, field_value: signedAt },
-        { key: CUSTOM_FIELDS.ndaSignedIp, field_value: ip },
-        { key: CUSTOM_FIELDS.ndaSignedName, field_value: name },
+        { key: FIELDS.confidentialityAgreementSigned, field_value: ["Yes"] },
+        { key: FIELDS.dataRoomAccessDate, field_value: today() },
       ],
     });
-    // The signed tag starts the NDA signer flows in GHL. A later signer leaves the skipped flows.
-    await addTags(s.contactId, [TAGS.ndaSigned]);
-    if (lateSigner) await removeTags(s.contactId, [TAGS.ndaSkipped]).catch(() => undefined);
-    if (s.opportunityId) await moveOpportunity(s.opportunityId, INVESTOR_PIPELINE.stages.ndaSigned);
+    // nda:signed starts CRM's Data room access workflow. A late signer loses nda:skipped (the notes keep the history).
+    await g.addTags(s.contactId, [TAGS.ndaSigned, TAGS.dataroomAccess]);
+    if (lateSigner) await g.removeTags(s.contactId, [TAGS.ndaSkipped]).catch(() => undefined);
+    if (s.opportunityId) await g.moveOpportunity(s.opportunityId, INVESTOR_PIPELINE.stages.ndaSigned);
 
     await setSession({ ...s, step: "nda-signed", nda: { signedAt, name } });
     return NextResponse.json({ ok: true, next: "/confirmed" });

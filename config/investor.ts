@@ -25,37 +25,79 @@ export const INVESTOR_PIPELINE = {
 /** WebinarKit moves people through this pipeline itself. Kept for reference only. */
 export const WEBINAR_PIPELINE_ID = "IUiIXUZC1ztsYKPLTxby";
 
+/**
+ * Tag names, from the "JGI Funnel and CRM integration contract" (Reconciled decisions, 19 to 20 Nov).
+ * Never rename one here without updating the contract first and leaving a board message for CRM.
+ * The code no longer adds a booked tag or moves the Call Booked stage: CRM's Call booked workflow does both.
+ */
 export const TAGS = {
-  applicationStarted: "investor-application-started",
-  applicationComplete: "investor-application-complete",
-  qualified: "investor-qualified",
-  notQualified: "investor-nurture",
-  callBooked: "investor-call-booked",
-  ndaSigned: "nda-signed",
-  ndaSkipped: "nda-skipped",
+  interestInvestor: "interest:investor",
+  applicationStarted: "application:started",
+  applicationComplete: "application:complete",
+  qualified: "application:qualified",
+  notQualified: "application:not-qualified",
+  ndaSigned: "nda:signed",
+  ndaSkipped: "nda:skipped",
+  dataroomAccess: "dataroom:access-granted",
+  smsConsent: "consent:sms",
+  test: "test",
+} as const;
+
+/** GHL contact custom field keys (read from GHL, 20 Nov). */
+export const FIELDS = {
+  interest: "contact.interest",
+  investorSource: "contact.investor_source",
+  leadSourceDetail: "contact.lead_source_detail",
+  emailConsentSource: "contact.email_consent_source",
+  emailConsentDate: "contact.email_consent_date",
+  smsConsent: "contact.sms_consent",
+  investorSegment: "contact.investor_segment",
+  classInterest: "contact.class_interest",
+  lostReason: "contact.lost_reason",
+  confirmationPageLink: "contact.confirmation_page_link",
+  confidentialityAgreementSigned: "contact.confidentiality_agreement_signed",
+  dataRoomAccessDate: "contact.data_room_access_date",
+  signalsNoted: "contact.signals_noted",
 } as const;
 
 /**
- * Optional GHL custom field keys. Leave empty to write notes only.
- * TODO(Sidney): create these custom fields in GHL if you want them on the contact card,
- * then paste the field keys here (Settings > Custom Fields > field key).
+ * Opportunity lost reason "Not a fit". GHL has no opportunity lost reasons yet (checked 20 Nov),
+ * so the code sets status lost without an ID until CRM creates one and its ID goes here.
  */
-export const CUSTOM_FIELDS = {
-  investorType: "", // e.g. "contact.investor_type"
-  participationInterest: "",
-  ndaSignedAt: "",
-  ndaSignedIp: "",
-  ndaSignedName: "",
-  dataRoomActivity: "",
-} as const;
+export const OPPORTUNITY_LOST_REASON_ID = "";
+
+/**
+ * Source tag and Investor source value, from utm_source (or src). Webinar, registered and replay pages
+ * link to the application with src=webinar. Anything unknown is source:site / Inbound site.
+ */
+export const SOURCE_MAP: { match: RegExp; tag: string; investorSource: string }[] = [
+  { match: /^webinar/, tag: "source:webinar", investorSource: "Webinar" },
+  { match: /^(cold-?email|instantly|outreach)/, tag: "source:cold-email", investorSource: "Cold email" },
+  { match: /^(paid|ads?|cpc|ppc|google-?ads|meta-?ads|fb-?ads)/, tag: "source:paid-ads", investorSource: "Paid ads" },
+  {
+    match: /^(social|facebook|fb|instagram|ig|linkedin|x|twitter|youtube|yt|tiktok)$/,
+    tag: "source:social",
+    investorSource: "Other", // GHL has no "Social" value; CRM to confirm
+  },
+  { match: /^(personal-?network|network|referral|friend)/, tag: "source:personal-network", investorSource: "Personal network" },
+];
+export const SOURCE_DEFAULT = { tag: "source:site", investorSource: "Inbound site" };
+
+export function sourceFor(attr: Record<string, string>): { tag: string; investorSource: string } {
+  const raw = (attr.utm_source || attr.src || "").toLowerCase().trim();
+  const medium = (attr.utm_medium || "").toLowerCase().trim();
+  if (raw) for (const m of SOURCE_MAP) if (m.match.test(raw)) return { tag: m.tag, investorSource: m.investorSource };
+  if (/^(cpc|ppc|paid|paid-?social)$/.test(medium)) return { tag: "source:paid-ads", investorSource: "Paid ads" };
+  return SOURCE_DEFAULT;
+}
 
 /** Booking window for the first call with Michael. */
 export const BOOKING = {
   minHoursAhead: 48,
-  maxDaysAhead: 7,
-  durationMinutes: 45, // TODO(Sidney): confirm call length once the GHL calendar exists
+  maxDaysAhead: 6, // Sidney, 20 Nov
+  durationMinutes: 60, // Sidney, 20 Nov
   hostName: "CEO Michael Gegelman",
-  /** TODO(Sidney): set GHL_CALENDAR_ID in Vercel once the calendar is created. */
+  /** The investor call calendar ID comes from GHL_CALENDAR_ID in Vercel (CRM puts it in the contract's Fixed IDs). */
   timezoneDefault: "America/New_York",
 } as const;
 
@@ -80,6 +122,24 @@ export const PARTICIPATION_INTEREST: Choice[] = [
   { value: "platinum", label: "Platinum Capital Partner: fund the Assembly to Launch stage" },
   { value: "unsure", label: "Not sure yet: I would like to talk it through" },
 ];
+
+/** Form choice to the GHL Investor segment value. "Private individual" is a new value CRM adds (Reconciled decisions). */
+export const INVESTOR_SEGMENT: Record<string, string> = {
+  advisor: "RIA or advisor",
+  "family-office": "Family office",
+  angel: "Angel or angel network",
+  hnwi: "Private individual",
+  executive: "Business owner or executive",
+  other: "Other",
+};
+
+/** Seat choice to the Class interest text field. */
+export const CLASS_INTEREST: Record<string, string> = {
+  silver: "Silver",
+  gold: "Gold",
+  platinum: "Platinum",
+  unsure: "Not sure",
+};
 
 export type ApplicationAnswers = {
   firstName: string;

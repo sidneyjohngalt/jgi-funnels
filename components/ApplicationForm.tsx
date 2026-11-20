@@ -34,8 +34,11 @@ export default function ApplicationForm({
   investorTypes,
   participation,
   initialStep = 0,
+  fromWebinar = false,
 }: {
   initialStep?: number;
+  /** True on the webinar replay page: the source is the webinar unless a UTM says otherwise. */
+  fromWebinar?: boolean;
   prefill: Partial<Answers>;
   investorTypes: Choice[];
   participation: Choice[];
@@ -45,6 +48,7 @@ export default function ApplicationForm({
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
+  const [smsConsent, setSmsConsent] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const advanceTimer = useRef<number | undefined>(undefined);
@@ -69,6 +73,8 @@ export default function ApplicationForm({
       const stored = JSON.parse(sessionStorage.getItem("jgi_attr") || "{}");
       for (const k of ATTR_KEYS) if (qs.get(k)) stored[k] = qs.get(k);
       if (!stored.referrer && document.referrer) stored.referrer = document.referrer.slice(0, 200);
+      // Came through the webinar pages (replay, or the lander sign-up in this tab): source is the webinar.
+      if (!stored.utm_source && !stored.src && (fromWebinar || sessionStorage.getItem("jgi_reg"))) stored.src = "webinar";
       sessionStorage.setItem("jgi_attr", JSON.stringify(stored));
     } catch {
       /* ignore */
@@ -161,6 +167,7 @@ export default function ApplicationForm({
           lastName: a.lastName,
           email: a.email,
           phone: toE164(phoneCountry, a.phone),
+          smsConsent,
           attribution,
         });
         if (!r.ok) {
@@ -357,6 +364,13 @@ export default function ApplicationForm({
                 />
                 {err("phone")}
               </div>
+              {/* PLACEHOLDER(CRM): A2P-ready SMS consent wording from the GHL phone setup doc replaces this line. Counsel reviews both lines. */}
+              <label className={f.check} htmlFor="f-smsConsent">
+                <input id="f-smsConsent" type="checkbox" checked={smsConsent} onChange={(e) => setSmsConsent(e.target.checked)} />
+                <span className={f.checkText}>
+                  Text me about my call (optional). Message and data rates may apply. Reply STOP to opt out.
+                </span>
+              </label>
               <p className={f.reassure}>Private. Never shared or sold. Applying is not a commitment.</p>
             </>
           ) : null}
@@ -392,6 +406,12 @@ export default function ApplicationForm({
             {busy ? "Saving..." : step === LAST_QUESTION ? "Continue to pick a time" : "Continue"}
           </Button>
         </div>
+        {step === 0 ? (
+          <p className={f.consent}>
+            By continuing, you agree that John Galt Institute may email you about your application and your call. You
+            can unsubscribe at any time.
+          </p>
+        ) : null}
         {step === 1 || step === 2 ? <p className={f.autoNote}>Tap an answer to continue.</p> : null}
       </div>
     </form>

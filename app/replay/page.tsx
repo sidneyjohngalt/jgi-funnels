@@ -77,6 +77,7 @@ export default function ReplayPage() {
         >
           <div className="panel">
             <ApplicationForm
+              fromWebinar
               prefill={{}}
               investorTypes={INVESTOR_TYPES}
               participation={PARTICIPATION_INTEREST}
