@@ -212,6 +212,39 @@ export function ghl(event: GhlEvent) {
       return out;
     },
 
+    /**
+     * The contact's appointments (GET /contacts/:id/appointments). Read-only; used so the confirmation
+     * page shows the current call after a cancel, a reschedule or a rebooking made outside the funnel.
+     */
+    async contactAppointments(contactId: string): Promise<GhlAppointment[]> {
+      const r = await call<{ events?: unknown[]; appointments?: unknown[] }>(
+        "GET",
+        `/contacts/${contactId}/appointments`,
+        undefined,
+        { events: [] },
+        contactId,
+      );
+      const list = (Array.isArray(r.events) ? r.events : Array.isArray(r.appointments) ? r.appointments : []) as Record<string, unknown>[];
+      return list.map(toAppointment).filter((a): a is GhlAppointment => !!a);
+    },
+
+    /** Moves an existing appointment to a new time (rebook link). CRM's Call rescheduled workflow reacts to it. */
+    async rescheduleAppointment(appointmentId: string, input: { contactId: string; startTime: string; endTime: string }) {
+      await call(
+        "PUT",
+        `/calendars/events/appointments/${appointmentId}`,
+        {
+          calendarId: calendarId(),
+          startTime: input.startTime,
+          endTime: input.endTime,
+          appointmentStatus: "confirmed",
+          ignoreFreeSlotValidation: false,
+        },
+        {},
+        input.contactId,
+      );
+    },
+
     /** Creates the appointment only. CRM's Call booked workflow adds call:booked and moves the stage. */
     async createAppointment(input: { contactId: string; startTime: string; endTime: string; title: string }): Promise<{ appointmentId: string }> {
       await ensureTestTag(input.contactId);
@@ -233,6 +266,35 @@ export function ghl(event: GhlEvent) {
       );
       return { appointmentId: r.id ?? fakeId("appt") };
     },
+  };
+}
+
+export type GhlAppointment = {
+  id: string;
+  calendarId?: string;
+  status: string; // confirmed, new, showed, noshow, cancelled, invalid
+  start: string | null; // ISO, or null when GHL's time has no offset and cannot be read safely
+  end: string | null;
+};
+
+/** GHL times with an explicit offset or Z only; a bare "YYYY-MM-DD HH:MM:SS" is ambiguous, so it is not trusted. */
+export function safeIso(v: unknown): string | null {
+  if (typeof v !== "string") return null;
+  if (!/(Z|[+-][0-9]{2}:?[0-9]{2})$/.test(v.trim())) return null;
+  const t = Date.parse(v);
+  return Number.isNaN(t) ? null : new Date(t).toISOString();
+}
+
+function toAppointment(e: Record<string, unknown>): GhlAppointment | null {
+  const id = typeof e.id === "string" ? e.id : null;
+  if (!id) return null;
+  const status = String(e.appointmentStatus ?? e.status ?? "").toLowerCase();
+  return {
+    id,
+    calendarId: typeof e.calendarId === "string" ? e.calendarId : undefined,
+    status,
+    start: safeIso(e.startTime),
+    end: safeIso(e.endTime),
   };
 }
 

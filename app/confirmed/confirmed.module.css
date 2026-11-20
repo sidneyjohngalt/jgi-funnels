@@ -350,3 +350,15 @@
 .contactBox strong {
   color: var(--ivory);
 }
+
+.rebook {
+  margin: 14px 0 0;
+  font-size: 1rem;
+  color: inherit;
+  opacity: 0.85;
+}
+.rebook a {
+  color: var(--gold, #ffc000);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

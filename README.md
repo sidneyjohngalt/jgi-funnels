@@ -51,6 +51,12 @@ Every GHL call belongs to one funnel event. An event talks to GHL only when **al
 
 Tags, field keys and the source mapping live in `config/investor.ts` and follow the "JGI Funnel and CRM integration contract" (Reconciled decisions). Never rename one without updating the contract first.
 
+## Personal links and anchors (for GHL emails)
+
+- `{{contact.confirmation_page_link}}` (`/c?t=...`) opens the person's confirmation page on any device. Add `#anchor` to jump to a section; the fragment survives the redirect. Anchors: `start`, `call`, `seat`, `answers`, `films`, `before`, the data room sections `opportunity`, `technology`, `economics`, `resources`, `agreement`, `corporate`, `reviews` (for people who skipped the NDA these land on the locked list, which offers the NDA), and `founder-film`, `app-explainer`, `testimonials`.
+- Rebook link (`/r?t=...`, written to `FIELDS.rebookLink` at booking once CRM creates the field) opens `/rebook`: same 48 hour to 6 day window, keeps the application. If GHL still holds an active appointment it is moved (rescheduled); after a cancel a new one is created.
+- With event `book` live, the confirmation page, `/rebook` and the calendar file read the person's current appointment on the investor call calendar from GHL (`GET /contacts/:id/appointments`), so cancels, reschedules and bookings made outside the funnel show correctly; a cancelled call sends them to `/rebook`. The token needs read access to contacts and calendar events. In dry-run they use the time saved at booking.
+
 Pages are set to `noindex` until the production domain is approved.
 
 ## Placeholders to track
@@ -82,6 +88,7 @@ Keep this list current. Each item shows a dashed **Placeholder** box on the page
 | Founder film | `content/investor.ts` > `MEDIA.founderFilm` | URL needed |
 | App explainer (final) | `content/investor.ts` > `MEDIA.appExplainer` (the app tour shows until then) | URL needed |
 | SMS consent wording (A2P) | `components/ApplicationForm.tsx` (CRM wording, 20 Nov) | Counsel review |
+| Rebook link field | `config/investor.ts` > `FIELDS.rebookLink` (empty = not written; `/r?t=...` already works) | Waiting on CRM to create the field |
 | Opportunity lost reason "Not a fit" | `config/investor.ts` > `OPPORTUNITY_LOST_REASON_ID` (none in GHL yet) | Waiting on CRM |
 | Not-qualified page copy | `app/apply/thank-you/page.tsx` | Draft, needs Sidney's OK |
 

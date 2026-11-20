@@ -58,6 +58,8 @@ export const FIELDS = {
   confidentialityAgreementSigned: "contact.confidentiality_agreement_signed",
   dataRoomAccessDate: "contact.data_room_access_date",
   signalsNoted: "contact.signals_noted",
+  /** Empty until CRM creates the text field Rebook link (board, 20 Nov); then its key, e.g. "contact.rebook_link". */
+  rebookLink: "",
 } as const;
 
 /**

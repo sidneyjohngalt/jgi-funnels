@@ -15,6 +15,7 @@ import NdaUnlock from "@/components/NdaUnlock";
 import { NDA_IS_PLACEHOLDER, NDA_PARAGRAPHS, NDA_TITLE } from "@/content/nda";
 import { formatCallParts } from "@/lib/format";
 import { ghlIsLive } from "@/lib/ghl";
+import { currentCall } from "@/lib/appointment";
 import { getSession } from "@/lib/session";
 import c from "./confirmed.module.css";
 
@@ -44,7 +45,10 @@ export default async function ConfirmedPage() {
   if (!s.booking) redirect("/apply");
   const signed = s.step === "nda-signed" || !!s.nda;
   const ndaProps = { title: NDA_TITLE, paragraphs: NDA_PARAGRAPHS, placeholder: NDA_IS_PLACEHOLDER };
-  const when = formatCallParts(s.booking.start, s.booking.timezone);
+  // Live: the current appointment from GHL (after a cancel or a reschedule); dry-run: the cookie's time.
+  const call = await currentCall(s);
+  if (call.status === "cancelled") redirect("/rebook");
+  const when = formatCallParts(call.status === "booked" ? call.start : s.booking.start, s.booking.timezone);
 
   return (
     <>
@@ -88,6 +92,9 @@ export default async function ConfirmedPage() {
                     Prepare for the call
                   </ButtonLink>
                 </div>
+                <p className={c.rebook}>
+                  Need a different time? <a href="/rebook">Choose a new time</a>.
+                </p>
               </div>
               <figure className={c.portrait}>
                 <Image src={IMAGES.michaelOffice} alt="CEO Michael J. Gegelman" width={831} height={1352} sizes="(max-width: 980px) 40vw, 320px" />
@@ -206,7 +213,7 @@ export default async function ConfirmedPage() {
         {/* ---------- Films and resources ---------- */}
         <Chapter label="Watch and read" id="films" title="Films and resources.">
           <div className={c.resGrid}>
-            <TrackedSection label="App explainer video" className={c.res}>
+            <TrackedSection label="App explainer video" className={c.res} id="app-explainer">
               <Video
                 src={MEDIA.appExplainer ?? MEDIA.appTour.src}
                 poster={MEDIA.appExplainer ? undefined : MEDIA.appTour.poster}
@@ -216,13 +223,13 @@ export default async function ConfirmedPage() {
               <h3>The app explained</h3>
               <p className={c.muted}>How version 4.0 helps people organize, inventory and value what they own.</p>
             </TrackedSection>
-            <TrackedSection label="Founder film" className={c.res}>
+            <TrackedSection label="Founder film" className={c.res} id="founder-film">
               <FounderFilm {...FOUNDER_FILM} />
               <h3>The founder film</h3>
               <p className={c.muted}>Why Michael built this, in his own words.</p>
             </TrackedSection>
-            {MEDIA.testimonials.map((t) => (
-              <TrackedSection key={t.label} label={`Testimonial: ${t.label}`} className={c.res}>
+            {MEDIA.testimonials.map((t, i) => (
+              <TrackedSection key={t.label} label={`Testimonial: ${t.label}`} className={c.res} id={i === 0 ? "testimonials" : undefined}>
                 <Video
                   src={t.src}
                   title={`${t.label} testimonial`}
@@ -319,7 +326,7 @@ export default async function ConfirmedPage() {
             ) : null}
             <div className={c.drList}>
               {DATA_ROOM.map((sec) => (
-                <TrackedSection key={sec.id} label={`Data room: ${sec.title}`} className={c.drRow}>
+                <TrackedSection key={sec.id} label={`Data room: ${sec.title}`} className={c.drRow} id={sec.id}>
                   <div>
                     <h3>{sec.title}</h3>
                     <p className={c.drNote}>{sec.explainer}</p>
@@ -343,7 +350,7 @@ export default async function ConfirmedPage() {
               </p>
               <ul className={c.lockedList}>
                 {DATA_ROOM.map((sec) => (
-                  <li key={sec.id}>
+                  <li key={sec.id} id={sec.id}>
                     <span className={c.lockMark} aria-hidden="true">Locked</span>
                     <span>
                       <strong>{sec.title}.</strong> {sec.explainer}

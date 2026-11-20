@@ -15,6 +15,8 @@ export type FunnelSession = {
   email: string;
   step: "started" | "applied" | "qualified" | "not-qualified" | "booked" | "nda-signed" | "nda-skipped";
   booking?: { start: string; end: string; timezone: string };
+  /** GHL appointment ID from booking, so the rebook link can move the same appointment. */
+  appointmentId?: string;
   nda?: { signedAt: string; name: string };
 };
 
@@ -82,6 +84,14 @@ export async function clearSession() {
  * field at booking so emails opened on any device land on the right page. /c?t=... restores the session.
  */
 export function confirmationLink(s: FunnelSession, req: Request): string {
-  const origin = (process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin).replace(/[/]+$/, "");
-  return `${origin}/c?t=${encode(s)}`;
+  return `${siteOrigin(req)}/c?t=${encode(s)}`;
+}
+
+/** A personal, signed link to the rebook step (/r?t=...): keeps the application and books inside the window. */
+export function rebookLink(s: FunnelSession, req: Request): string {
+  return `${siteOrigin(req)}/r?t=${encode(s)}`;
+}
+
+function siteOrigin(req: Request): string {
+  return (process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin).replace(/[/]+$/, "");
 }
