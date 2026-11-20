@@ -145,17 +145,18 @@ export function RaiseProgress({ light }: { light?: boolean } = {}) {
 /* ---------------- Funnel steps ---------------- */
 const FUNNEL_STEPS = ["Apply and book", "Sign the NDA", "Prepare for the call"] as const;
 
-export function FunnelSteps({ current }: { current: 0 | 1 | 2 }) {
+export function FunnelSteps({ current, open }: { current: 0 | 1 | 2; /** A step passed but not done, e.g. NDA skipped. */ open?: number }) {
   return (
     <ol className={s.steps} aria-label="Your progress">
       {FUNNEL_STEPS.map((label, i) => (
         <li
           key={label}
-          className={cx(s.step, i === current && s.stepActive, i < current && s.stepDone)}
+          className={cx(s.step, i === current && s.stepActive, i < current && i !== open && s.stepDone, i === open && s.stepOpen)}
           aria-current={i === current ? "step" : undefined}
         >
           <span className={s.stepNum}>{i + 1}</span>
           <span>{label}</span>
+          {i === open ? <span className={s.stepOpenTag}>Not signed yet</span> : null}
         </li>
       ))}
     </ol>

@@ -55,7 +55,7 @@ export default async function ConfirmedPage() {
         <section className={`glow ${c.head}`} aria-labelledby="conf-title">
           <div className="backdrop" style={{ backgroundImage: `url(${IMAGES.appCollage})` }} aria-hidden="true" />
           <div className={c.headInner}>
-            <FunnelSteps current={2} />
+            <FunnelSteps current={2} open={signed ? undefined : 1} />
             <p className={c.kicker}>Your call is confirmed</p>
             <div className={c.headGrid}>
               <div>
@@ -94,18 +94,22 @@ export default async function ConfirmedPage() {
                 <figcaption>CEO Michael J. Gegelman, Founder</figcaption>
               </figure>
             </div>
+            {signed ? null : (
+              <div className={c.lockNotice} role="note">
+                <span className={c.lockMark}>One step left</span>
+                <div className={c.lockNoticeText}>
+                  <p className={c.lockNoticeTitle}>Your data room is still locked.</p>
+                  <p>
+                    Sign the NDA here, in about a minute, to open the proforma, cap table, prospectus, pitch deck and
+                    the rest before your call. Without it, Michael can only cover the basics with you.
+                  </p>
+                </div>
+                <NdaUnlock {...ndaProps} label="Sign the NDA now" />
+              </div>
+            )}
             <div className={c.tip}>
               <EmailTip sender={CONTACT.emailSender ?? undefined} />
             </div>
-            {signed ? null : (
-              <div className={c.lockNotice} role="note">
-                <p>
-                  <strong>Your data room is locked.</strong> Sign the NDA here on this page to open the proforma, cap
-                  table, prospectus, pitch deck and the rest.
-                </p>
-                <NdaUnlock {...ndaProps} label="Sign the NDA" />
-              </div>
-            )}
             <p className={c.howTo}>
               <strong>How to use this page:</strong> before your call, work down the six steps in the bar at the
               top, at your own pace. Nothing here is held back: the plan, the people and the documents are all on
@@ -114,7 +118,10 @@ export default async function ConfirmedPage() {
           </div>
         </section>
 
-        <SectionNav label="Your preparation, step by step" items={PREP_STEPS} />
+        <SectionNav
+          label="Your preparation, step by step"
+          items={signed ? PREP_STEPS : PREP_STEPS.map((x) => (x.important ? { ...x, flag: "Locked" } : x))}
+        />
 
         {/* ---------- Michael's main video ---------- */}
         <Chapter
@@ -329,7 +336,7 @@ export default async function ConfirmedPage() {
             </div>
             </>
           ) : (
-            <div className={c.locked}>
+            <div className={c.locked} id="locked-room">
               <p className={c.lockedLead}>
                 Sign the NDA to open the full data room: proforma, cap table, prospectus and more. It takes about a
                 minute.
@@ -344,7 +351,7 @@ export default async function ConfirmedPage() {
                   </li>
                 ))}
               </ul>
-              <NdaUnlock {...ndaProps} />
+              <NdaUnlock {...ndaProps} autoOpenWhenVisible="locked-room" />
             </div>
           )}
 
