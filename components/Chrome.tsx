@@ -50,7 +50,8 @@ function PreviewNav() {
     ["/replay", "3. Replay"],
     ["/api/session/reset?to=/apply", "4. Apply and book (fresh)"],
     ["/nda", "5. NDA"],
-    ["/confirmed", "6. Confirmation"],
+    ["/api/session/demo?nda=signed", "6. Confirmation (NDA signed)"],
+    ["/api/session/demo?nda=skipped", "6. Confirmation (NDA skipped)"],
     ["/apply/thank-you", "Not qualified"],
   ];
   return (
@@ -64,7 +65,7 @@ function PreviewNav() {
         ))}
       </p>
       <p style={{ margin: "8px 0 0", color: "rgba(246,241,231,0.7)", fontSize: "0.85rem" }}>
-        The NDA and confirmation pages open after you pick a time in the application.
+        The NDA page opens after you pick a time in the application. The confirmation links use a test person.
       </p>
     </nav>
   );
