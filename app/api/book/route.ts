@@ -12,12 +12,36 @@ import { confirmationLink, getSession, rebookLink, setSession } from "@/lib/sess
  * moves the card to Call Booked and sends the emails.
  * Rebooking (from /rebook): GHL has no Rescheduled trigger, so a call is never moved in place (Reconciled
  * decisions, "Reschedules", 24 Nov). When GHL still holds an active appointment, the code adds call:rescheduled,
- * cancels the old appointment, waits about 5 seconds and books the new time. CRM's Call cancelled (16) sees the tag
- * and sends nothing; Call booked (5) treats the new appointment as a move. After a cancel, a new appointment is
- * simply created.
+ * cancels the old appointment, then waits for the handshake: it polls the contact's tags and books the new time only
+ * once call:rescheduled has gone (CRM's Call cancelled, 16, removes it as its last action, after taking the contact out
+ * of Pre-call nurture, Reminder ladder and Pre-call brief). That keeps 16's "Remove from Workflow" from also removing
+ * the new booking's reminders. On timeout it books anyway and leaves the contact note "Reschedule handshake timed out".
+ * The same handshake covers the put-the-old-time-back path. Dry-run skips the poll. Call booked (5) treats the new
+ * appointment as a move. After a cancel, a new appointment is simply created.
  */
-const MOVE_WAIT_MS = 5000;
+export const maxDuration = 60;
+const HANDSHAKE_POLL_MS = 2000;
+const HANDSHAKE_TIMEOUT_MS = 30000;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Live only: wait until call:rescheduled has gone from the contact. Returns false on timeout (after writing a note). */
+async function rescheduleHandshake(g: ReturnType<typeof ghl>, contactId: string): Promise<boolean> {
+  if (!g.live) return true;
+  const deadline = Date.now() + HANDSHAKE_TIMEOUT_MS;
+  const tag = TAGS.callRescheduled.toLowerCase();
+  while (Date.now() < deadline) {
+    await sleep(HANDSHAKE_POLL_MS);
+    try {
+      if (!(await g.contactTags(contactId)).includes(tag)) return true;
+    } catch (e) {
+      console.error("handshake tag read failed", e);
+    }
+  }
+  await g
+    .addNote(contactId, `Reschedule handshake timed out on ${new Date().toISOString()}: call:rescheduled was still on the contact after ${HANDSHAKE_TIMEOUT_MS / 1000} seconds, so the new time was booked anyway. Check the reminders follow the new time.`)
+    .catch((e) => console.error("handshake note failed", e));
+  return false;
+}
 
 /** Live only: is this start time still free on the calendar? null when GHL gave no slots to check against. */
 async function slotIsFree(g: ReturnType<typeof ghl>, start: string, timezone: string): Promise<boolean | null> {
@@ -55,11 +79,11 @@ export async function POST(req: Request) {
     let appointmentId: string | undefined;
     const title = `First call with ${BOOKING.hostName}: ${s.firstName}`;
     if (now.status === "booked" && now.appointmentId) {
-      // A move: tag, cancel, wait, book. Check the new time first so we never cancel for a taken slot.
+      // A move: tag, cancel, handshake, book. Check the new time first so we never cancel for a taken slot.
       if (g.live && (await slotIsFree(g, start, timezone)) === false) throw new Error("slot taken");
       await g.addTags(s.contactId, [TAGS.callRescheduled]);
       await g.cancelAppointment(now.appointmentId, s.contactId);
-      if (g.live) await sleep(MOVE_WAIT_MS);
+      await rescheduleHandshake(g, s.contactId);
       try {
         appointmentId = (await g.createAppointment({ contactId: s.contactId, startTime: start, endTime: end, title })).appointmentId;
       } catch (e) {

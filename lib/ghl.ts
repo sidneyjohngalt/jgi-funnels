@@ -228,6 +228,13 @@ export function ghl(event: GhlEvent) {
       return list.map(toAppointment).filter((a): a is GhlAppointment => !!a);
     },
 
+    /** The contact's current tags (GET /contacts/:id). Used by the reschedule handshake; dry-run returns none. */
+    async contactTags(contactId: string): Promise<string[]> {
+      const r = await call<{ contact?: { tags?: unknown } }>("GET", `/contacts/${contactId}`, undefined, { contact: { tags: [] } }, contactId);
+      const t = r.contact?.tags;
+      return Array.isArray(t) ? t.filter((x): x is string => typeof x === "string").map((x) => x.toLowerCase()) : [];
+    },
+
     /**
      * Cancels an appointment. Used by /rebook to move a call: GHL has no Rescheduled trigger, so a move is
      * tag call:rescheduled, cancel, then book the new time (Reconciled decisions, "Reschedules", 24 Nov).
