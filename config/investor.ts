@@ -40,6 +40,8 @@ export const TAGS = {
   ndaSkipped: "nda:skipped",
   dataroomAccess: "dataroom:access-granted",
   smsConsent: "consent:sms",
+  /** Set before a /rebook move cancels the old appointment, so CRM's Call cancelled (16) treats it as a move (Reconciled decisions, 24 Nov). */
+  callRescheduled: "call:rescheduled",
   test: "test",
 } as const;
 

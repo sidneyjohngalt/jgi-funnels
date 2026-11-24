@@ -228,20 +228,17 @@ export function ghl(event: GhlEvent) {
       return list.map(toAppointment).filter((a): a is GhlAppointment => !!a);
     },
 
-    /** Moves an existing appointment to a new time (rebook link). CRM's Call rescheduled workflow reacts to it. */
-    async rescheduleAppointment(appointmentId: string, input: { contactId: string; startTime: string; endTime: string }) {
+    /**
+     * Cancels an appointment. Used by /rebook to move a call: GHL has no Rescheduled trigger, so a move is
+     * tag call:rescheduled, cancel, then book the new time (Reconciled decisions, "Reschedules", 24 Nov).
+     */
+    async cancelAppointment(appointmentId: string, contactId: string) {
       await call(
         "PUT",
         `/calendars/events/appointments/${appointmentId}`,
-        {
-          calendarId: calendarId(),
-          startTime: input.startTime,
-          endTime: input.endTime,
-          appointmentStatus: "confirmed",
-          ignoreFreeSlotValidation: false,
-        },
+        { calendarId: calendarId(), appointmentStatus: "cancelled" },
         {},
-        input.contactId,
+        contactId,
       );
     },
 
