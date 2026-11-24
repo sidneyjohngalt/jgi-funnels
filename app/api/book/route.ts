@@ -12,11 +12,11 @@ import { confirmationLink, getSession, rebookLink, setSession } from "@/lib/sess
  * moves the card to Call Booked and sends the emails.
  * Rebooking (from /rebook): GHL has no Rescheduled trigger, so a call is never moved in place (Reconciled
  * decisions, "Reschedules", 24 Nov). When GHL still holds an active appointment, the code adds call:rescheduled,
- * cancels the old appointment, waits a few seconds and books the new time. CRM's Call cancelled (16) sees the tag
+ * cancels the old appointment, waits about 5 seconds and books the new time. CRM's Call cancelled (16) sees the tag
  * and sends nothing; Call booked (5) treats the new appointment as a move. After a cancel, a new appointment is
  * simply created.
  */
-const MOVE_WAIT_MS = 3000;
+const MOVE_WAIT_MS = 5000;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Live only: is this start time still free on the calendar? null when GHL gave no slots to check against. */
