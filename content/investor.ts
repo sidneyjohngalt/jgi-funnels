@@ -142,7 +142,14 @@ export const DATA_ROOM: DataRoomSection[] = [
  * Facts come only from the brief, the prospectus and the investor teaser.
  * TODO(Sidney): approve the wording.
  */
-export type QA = { question: string; answer: string; src: string | null; minutes?: number };
+export type QA = {
+  question: string;
+  answer: string;
+  /** One line (25 words or fewer) shown first; the full answer sits behind "Read more". */
+  short?: string;
+  src: string | null;
+  minutes?: number;
+};
 
 export const QUESTIONS_BEFORE_BRIEFING: QA[] = [
   {
@@ -174,30 +181,35 @@ export const QUESTIONS_BEFORE_BRIEFING: QA[] = [
 export const QUESTIONS_BEFORE_CALL: QA[] = [
   {
     question: "How do contractual participation units work?",
+    short: "Your seat's rights are set out in the Stakeholder Agreement. Units are not stock. The full terms are in the data room.",
     answer:
       "Participation is set out in the Venture Studio Stakeholder Agreement. Depending on your seat, it can include revenue, project and acquisition participation. Units are not stock and carry only the rights the signed agreement gives them. The full terms are in the data room.",
     src: null,
   },
   {
     question: "What does the raise pay for, and how is it going?",
+    short: "It pays to build and launch version 4.0 of both apps. $2.417M of $7.14M is raised so far.",
     answer:
       "It funds the Assembly to Launch stage: building and launching version 4.0 of Estate Transformation and Advisor Transformation, advisor onboarding, reaching families directly, the referral engine, legal and compliance readiness, and working capital. $2.417M of $7.14M is raised so far.",
     src: null,
   },
   {
     question: "Where is the app today?",
+    short: "Version 4.0 is in build as a phone-first app. Earlier versions ran in about 400 advisor offices.",
     answer:
       "Version 4.0 is in build as a phone-first app, and Michael will show you where it stands on the call. It builds on versions used in about 400 advisor offices on thousands of estates.",
     src: null,
   },
   {
     question: "Who can take a seat?",
+    short: "People who will take an active part, in one of three seats. Every seat needs company approval and a signed agreement.",
     answer:
       "People who will take an active part, in one of three seats: Silver Collaborator, Gold Advisor or Platinum Capital Partner. Every seat is subject to company approval and a signed agreement.",
     src: null,
   },
   {
     question: "What happens after our call?",
+    short: "Only if you want to go further: read the data room, review it with your advisors, sign, then send your contribution.",
     answer:
       "Only if you would like to go further: read the data room, review the Stakeholder Agreement with your own attorney or CPA, sign it electronically, then send your contribution by wire. You then receive a welcome pack and your onboarding.",
     src: null,
