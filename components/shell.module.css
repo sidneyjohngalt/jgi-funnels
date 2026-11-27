@@ -1,93 +1,66 @@
-/* Funnel step pages: the lander's dark ground, gold glow, ivory form panels. */
+/* Funnel step pages (application, NDA, not qualified, rebook): plain ivory, one column, ink text.
+   Same look as the confirmation page; the form sits in a raised ivory panel. */
 .page {
-  background: var(--charcoal-2);
-  color: var(--ivory);
+  background: var(--ivory);
+  color: var(--ink);
 }
 .main {
-  position: relative;
-  isolation: isolate;
-  overflow-x: clip;
-  padding: clamp(36px, 6vw, 72px) var(--pad) clamp(64px, 9vw, 104px);
+  padding: clamp(40px, 7vw, 80px) var(--pad) clamp(64px, 9vw, 104px);
   min-height: 70vh;
 }
 .glow {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 900px;
-  z-index: -1;
-  pointer-events: none;
-  background-image: radial-gradient(55% 60% at 30% 0, rgba(255, 196, 0, 0.18) 0%, rgba(255, 196, 0, 0.05) 45%, rgba(255, 196, 0, 0) 70%),
-    radial-gradient(35% 45% at 100% 20%, rgba(213, 164, 0, 0.1) 0%, rgba(213, 164, 0, 0) 70%);
+  display: none;
 }
-.narrow {
-  max-width: 760px;
-  margin: 0 auto;
-}
-.wide {
-  max-width: var(--max);
-  margin: 0 auto;
-}
+.narrow,
+.wide,
 .split {
-  max-width: 1160px;
+  max-width: 720px;
   margin: 0 auto;
-  display: grid;
-  gap: clamp(36px, 5vw, 56px);
-}
-@media (min-width: 1000px) {
-  .split {
-    grid-template-columns: minmax(0, 1fr) 380px;
-    column-gap: clamp(48px, 5vw, 72px);
-    align-items: start;
-  }
-  .aside {
-    position: sticky;
-    top: 24px;
-  }
 }
 .primary {
   min-width: 0;
 }
 .title {
-  font-size: clamp(2.2rem, 4.8vw, 3.4rem);
-  line-height: 1.08;
-  color: var(--ivory);
+  margin: 0 0 16px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: clamp(36px, 6vw, 52px);
+  line-height: 1.1;
+  color: var(--ink);
+  text-wrap: balance;
 }
 .title em {
-  color: var(--gold);
+  font-style: normal;
+  color: var(--ink);
 }
 .intro {
-  font-size: clamp(1.1rem, 1.6vw, 1.25rem);
-  color: #ddd4c4;
-  margin-bottom: clamp(28px, 4vw, 40px);
-  max-width: 40em;
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: clamp(24px, 4vw, 36px);
 }
-.intro strong {
-  color: var(--ivory);
+.intro p {
+  margin: 0 0 12px;
 }
 .intro p:last-child {
   margin-bottom: 0;
 }
 .kicker {
-  font-family: var(--font-label);
+  font: 500 14px/1.3 var(--font-label);
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.85rem;
-  color: var(--champagne);
-  margin: 0 0 14px;
+  letter-spacing: 0.14em;
+  color: var(--gold-text);
+  margin: 0 0 12px;
 }
-/* The step indicator, recoloured for the dark ground. */
-.stepsWrap li {
-  color: rgba(246, 241, 231, 0.6);
-}
-.stepsWrap li[aria-current="step"] {
-  color: var(--ivory);
+.stepsWrap {
+  margin-bottom: 24px;
 }
 .aside {
   min-width: 0;
+  margin-top: 32px;
 }
-/* Ivory form panels, rounded like the lander's sign-up card. */
 .primary :global(.panel) {
-  border: 0;
-  border-radius: 20px;
-  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 196, 0, 0.25);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(30, 28, 25, 0.04), 0 12px 32px -20px rgba(30, 28, 25, 0.25);
 }

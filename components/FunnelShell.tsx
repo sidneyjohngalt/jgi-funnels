@@ -5,9 +5,9 @@ import s from "./shell.module.css";
 import { DryRunBanner, FunnelSteps } from "./ui";
 
 /**
- * Shared frame for the application, NDA and thank-you steps. Same dark, gold-glow ground as the
- * lander so the funnel feels like one place. Forms sit in ivory panels. An optional `aside`
- * restates what the visitor is applying for (sticky beside the form on desktop).
+ * Shared frame for the application, NDA, not-qualified and rebook steps: plain ivory, one column
+ * (27 Nov plain redesign). Forms sit in a raised ivory panel. An optional `aside` sits below the form.
+ *
  */
 export default function FunnelShell({
   step,

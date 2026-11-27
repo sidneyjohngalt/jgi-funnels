@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import ApplicationForm from "@/components/ApplicationForm";
 import FunnelShell from "@/components/FunnelShell";
-import { ApplyingFor } from "@/components/Pitch";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { INVESTOR_TYPES, PARTICIPATION_INTEREST } from "@/config/investor";
@@ -44,7 +43,6 @@ export default async function ApplyPage({ searchParams }: { searchParams: SP }) 
           Michael reads every answer before your call.
         </p>
       }
-      aside={<ApplyingFor pathCurrent={1} />}
     >
       <div className="panel">
         <ApplicationForm

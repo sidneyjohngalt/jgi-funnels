@@ -1,169 +1,139 @@
 import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import FounderFilm from "@/components/FounderFilm";
-import { KeyFigures, RaiseBox, Seats, StakeholderPath } from "@/components/Pitch";
-import SectionNav from "@/components/SectionNav";
+import PlainQuestions from "@/components/PlainQuestions";
 import RawEmbed from "@/components/RawEmbed";
-import { Agenda, Chapter, EmailTip, GlowHero, QuestionVideos, RuledList } from "@/components/sections";
+import SectionNav from "@/components/SectionNav";
+import { EmailTip } from "@/components/sections";
 import { Placeholder } from "@/components/ui";
 import Video from "@/components/Video";
-import {
-  AGENDA,
-  BIG_IDEA,
-  CONTACT,
-  FOUNDER_FILM,
-  IMAGES,
-  MEDIA,
-  QUESTIONS_BEFORE_BRIEFING,
-  WEBINAR,
-  WEBINARKIT,
-} from "@/content/investor";
-import p from "./registered.module.css";
+import c from "@/components/plain.module.css";
+import { AGENDA, CONTACT, FOUNDER_FILM, MEDIA, QUESTIONS_BEFORE_BRIEFING, WEBINAR, WEBINARKIT } from "@/content/investor";
 
 export const metadata: Metadata = { title: "You are registered" };
 
-/** The page's sections, in order, for the sticky progress bar. */
-const WAIT_STEPS = [
-  { id: "why", label: "Why it matters" },
-  { id: "main-video", label: "Start here" },
-  { id: "questions", label: "Short answers" },
+const STEPS = [
+  { id: "registered", label: "You're in" },
+  { id: "start", label: "Michael's video" },
+  { id: "answers", label: "Your questions" },
   { id: "agenda", label: "The briefing" },
-  { id: "seats", label: "Your seat" },
-  { id: "tour", label: "The app" },
   { id: "ready", label: "On the day" },
 ];
 
 /**
- * Custom thank you page. Set the event's thank you page URL in WebinarKit to /registered.
- * One job: get people to the briefing. People research hardest right after they register.
+ * Custom thank you page (set the event's thank you page URL in WebinarKit to /registered).
+ * Plain version, 27 Nov: one ivory column, five parts. One job: get people to the briefing,
+ * and answer what they look up right after registering.
  */
 export default function Registered() {
   const ty = WEBINARKIT.thankYou;
   return (
     <>
       <SiteHeader />
-      <main id="main">
-        <GlowHero
-          backdrop={IMAGES.appCollage}
-          eyebrow="You are registered"
-          title={
-            <>
-              You&apos;re in. <em>Here is what happens next.</em>
-            </>
-          }
-          lead={
-            <p>
-              Your private link is on its way by email. Add the briefing to your calendar now so it is not missed. In
-              the live briefing, CEO Michael Gegelman shows where the $124 trillion wealth transfer stalls, the
-              platform built to fix it, and how you can take a seat.
-            </p>
-          }
-        >
-          <div className={p.embed}>
+      <main id="main" className={c.page}>
+        {/* 1. You are in */}
+        <header className={c.block} aria-labelledby="reg-title" id="registered">
+          <p className={c.label}>You are registered</p>
+          <h1 id="reg-title" className={c.h1}>
+            You&rsquo;re in. See you at the briefing.
+          </h1>
+          <p className={c.lead}>
+            Your private link is on its way by email. Add the briefing to your calendar now, so it is not missed.
+          </p>
+          <div className={c.embed}>
             <div className="panel">
               {ty ? (
                 <RawEmbed html={ty.html} script={ty.script} />
               ) : (
                 <Placeholder
                   title="Your session time, countdown and add to calendar"
-                  note="The thank you embed goes here: the chosen time, gold and dark add to calendar buttons, and the way into the room when it starts."
-                  minHeight={150}
+                  note="The thank you embed goes here: the chosen time, add to calendar buttons, and the way into the room when it starts."
+                  minHeight={120}
                 />
               )}
             </div>
           </div>
-          <div className={p.film}>
-            <p className="eyebrow">While you wait</p>
-            <FounderFilm {...FOUNDER_FILM} />
-          </div>
-          <div className={p.tip}>
-            <EmailTip sender={CONTACT.emailSender ?? undefined} />
-          </div>
-        </GlowHero>
+          <EmailTip sender={CONTACT.emailSender ?? undefined} />
+        </header>
 
-        <SectionNav label="Before the briefing, step by step" items={WAIT_STEPS} />
+        <SectionNav tone="light" label="Before the briefing, step by step" items={STEPS} />
 
-        <Chapter label="Why it matters" id="why" tone="glow" title={BIG_IDEA}>
-          <p className={p.why}>
-            A will says who inherits. It does not say where anything is. So the hardest work of an estate waits until
-            after the funeral, and lands on the family. That is the problem the briefing is about.
-          </p>
-          <KeyFigures />
-        </Chapter>
-
-        <Chapter
-          label="Start here"
-          id="main-video"
-          title="Before you give us an hour, see who we are."
-          intro={<p>A few minutes from Michael on what you will find if you look us up, and why the timing matters.</p>}
-        >
+        {/* 2. Michael's main video */}
+        <section className={c.block} aria-labelledby="start-title" id="start">
+          <p className={c.label}>Start here</p>
+          <h2 id="start-title" className={c.h2}>
+            Before you give us an hour, see who we are.
+          </h2>
+          <p className={c.lead}>What you will find if you look us up, and why the timing matters. A few minutes.</p>
           <Video
             src={MEDIA.registeredMain}
             title="A word from Michael before the briefing"
-            placeholderNote="Main video from Michael: due diligence (what search and AI tools say about us, and what we did when things went wrong) or a dated, outside reason why now. Opens with a 60 second summary."
+            placeholderNote="Main video from Michael: why now, or what search and AI tools say about us. Opens with a 60 second summary."
           />
-        </Chapter>
+        </section>
 
-        <Chapter
-          label="Short answers"
-          id="questions"
-          tone="raised"
-          title="Questions people ask before the briefing."
-          intro={<p>Read the short answer now. Michael answers each one in more depth at the briefing.</p>}
-        >
-          <QuestionVideos items={QUESTIONS_BEFORE_BRIEFING} />
-        </Chapter>
-
-        <Chapter label="What you will hear" id="agenda" title="In 60 minutes, you will see">
-          <Agenda items={AGENDA.map((a) => ({ label: a.label, title: a.title, body: <p>{a.body}</p> }))} />
-        </Chapter>
-
-        <Chapter
-          label="Before the briefing"
-          id="seats"
-          tone="glow"
-          title="Come thinking about which seat fits you."
-          intro={
-            <p>
-              FinTech Transformation is the Venture Studio funding the build and launch of version 4.0. At the end of the
-              briefing, you can apply for a one to one call with Michael about any of these three seats.
-            </p>
-          }
-        >
-          <Seats />
-          <RaiseBox />
-          <p className={p.pathLabel}>Your path to a seat</p>
-          <StakeholderPath current={0} />
-        </Chapter>
-
-        <Chapter
-          label="The app"
-          id="tour"
-          tone="glow"
-          title="See version 4.0 in two minutes."
-          intro={<p>Organize it now. Inventory it now. Value it now.</p>}
-        >
-          <Video
-            src={MEDIA.appExplainer ?? MEDIA.appTour.src}
-            poster={MEDIA.appTour.poster}
-            title="Estate Transformation, the app explained"
+        {/* 3. Questions */}
+        <section className={c.block} aria-labelledby="answers-title" id="answers">
+          <p className={c.label}>Short answers</p>
+          <h2 id="answers-title" className={c.h2}>
+            Questions people ask first.
+          </h2>
+          <PlainQuestions
+            items={QUESTIONS_BEFORE_BRIEFING}
+            media={{
+              "What is Estate Transformation, in two minutes?": (
+                <Video
+                  src={MEDIA.appExplainer ?? MEDIA.appTour.src}
+                  poster={MEDIA.appTour.poster}
+                  title="Estate Transformation, the app explained"
+                />
+              ),
+              "Why is Michael the person to build this?": <FounderFilm {...FOUNDER_FILM} />,
+            }}
           />
-        </Chapter>
+        </section>
 
-        <Chapter label="On the day" id="ready" title="Three small things.">
-          <RuledList
-            items={[
-              { title: "Join on a computer", body: <p>The slides are easier to read on a bigger screen than on a phone.</p> },
-              { title: "Allow about an hour", body: <p>About {WEBINAR.lengthMinutes} minutes, with time at the end for your questions.</p> },
-              { title: "Bring your questions", body: <p>Write them down as they come to you. Michael answers as many as he can.</p> },
-            ]}
-          />
+        {/* 4. What the briefing covers */}
+        <section className={c.block} aria-labelledby="agenda-title" id="agenda">
+          <p className={c.label}>What you will hear</p>
+          <h2 id="agenda-title" className={c.h2}>
+            In {WEBINAR.lengthMinutes} minutes, you will see:
+          </h2>
+          <ol className={c.steps}>
+            {AGENDA.map((a, i) => (
+              <li key={a.label}>
+                <span className={c.qN}>{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <strong>{a.label}.</strong> {a.body}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* 5. On the day */}
+        <section className={c.block} aria-labelledby="ready-title" id="ready">
+          <p className={c.label}>On the day</p>
+          <h2 id="ready-title" className={c.h2}>
+            Three small things.
+          </h2>
+          <ul className={c.plainList}>
+            <li>
+              <strong>Join on a computer.</strong> The slides are easier to read than on a phone.
+            </li>
+            <li>
+              <strong>Allow about {WEBINAR.lengthMinutes} minutes,</strong> with time for your questions at the end.
+            </li>
+            <li>
+              <strong>Bring your questions.</strong> Michael answers as many as he can, live.
+            </li>
+          </ul>
           {CONTACT.textFromNumber ? (
-            <p className={p.textFrom}>
+            <p className={c.fine}>
               Reminders come by text from <strong>{CONTACT.textFromNumber}</strong>. Save it so you recognise it.
             </p>
           ) : null}
-        </Chapter>
+        </section>
       </main>
       <SiteFooter />
     </>

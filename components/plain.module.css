@@ -247,3 +247,58 @@
   font-size: 15px;
   color: var(--ink-muted);
 }
+
+/* Embedded panel (WebinarKit thank you) inside a plain block. */
+.embed {
+  margin: 0 0 24px;
+}
+.embed :global(.panel) {
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+}
+
+/* Numbered short rows (agenda) and a plain bulleted list. */
+.steps,
+.plainList {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.steps li {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-top: 1px solid var(--hairline);
+}
+.steps li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.plainList li {
+  position: relative;
+  padding: 12px 0 12px 28px;
+  border-top: 1px solid var(--hairline);
+}
+.plainList li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.plainList li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.72em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.plainList li:first-child::before {
+  top: calc(0.72em - 12px);
+}
+
+/* Big centred call to action used at the end of the lander and replay. */
+.cta {
+  text-align: left;
+}

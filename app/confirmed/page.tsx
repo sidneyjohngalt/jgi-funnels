@@ -8,6 +8,7 @@ import Video from "@/components/Video";
 import FounderFilm from "@/components/FounderFilm";
 import NdaUnlock from "@/components/NdaUnlock";
 import SectionNav from "@/components/SectionNav";
+import PlainQuestions from "@/components/PlainQuestions";
 import { BOOKING } from "@/config/investor";
 import { CONTACT, DATA_ROOM, FOUNDER_FILM, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL } from "@/content/investor";
 import { NDA_IS_PLACEHOLDER, NDA_PARAGRAPHS, NDA_TITLE } from "@/content/nda";
@@ -15,7 +16,7 @@ import { formatCallParts } from "@/lib/format";
 import { ghlIsLive } from "@/lib/ghl";
 import { currentCall } from "@/lib/appointment";
 import { getSession } from "@/lib/session";
-import c from "./cf.module.css";
+import c from "@/components/plain.module.css";
 
 export const metadata: Metadata = { title: "Your call is confirmed" };
 export const dynamic = "force-dynamic";
@@ -45,10 +46,7 @@ export default async function ConfirmedPage() {
   if (call.status === "cancelled") redirect("/rebook");
   const when = formatCallParts(call.status === "booked" ? call.start : s.booking.start, s.booking.timezone);
 
-  // Films that used to sit in their own grid now live where a reader looks for them.
-  const videoFor: Record<string, { src: string | null; poster?: string }> = {
-    "Where is the app today?": { src: MEDIA.appExplainer ?? MEDIA.appTour.src, poster: MEDIA.appTour.poster },
-  };
+
 
   return (
     <>
@@ -119,37 +117,20 @@ export default async function ConfirmedPage() {
           <h2 id="answers-title" className={c.h2}>
             Your questions, answered.
           </h2>
-          <ol className={c.qList}>
-            {QUESTIONS_BEFORE_CALL.map((q, i) => {
-              const v = videoFor[q.question] ?? { src: q.src };
-              return (
-                <li key={q.question} className={c.q}>
-                  <TrackedSection label={`Question: ${q.question}`}>
-                    <h3 className={c.qTitle}>
-                      <span className={c.qN}>{String(i + 1).padStart(2, "0")}</span>
-                      {q.question}
-                    </h3>
-                    <p className={c.qShort}>{q.short ?? q.answer}</p>
-                    {q.short ? (
-                      <details className={c.more}>
-                        <summary>Read more</summary>
-                        <p>{q.answer}</p>
-                      </details>
-                    ) : null}
-                    <div className={c.qVideo}>
-                      <Video
-                        src={v.src}
-                        poster={v.poster}
-                        title={q.question}
-                        placeholderNote="1 to 3 minute answer from Michael."
-                        trackLabel={`Question video: ${q.question}`}
-                      />
-                    </div>
-                  </TrackedSection>
-                </li>
-              );
-            })}
-          </ol>
+          <PlainQuestions
+            items={QUESTIONS_BEFORE_CALL}
+            tracked
+            media={{
+              "Where is the app today?": (
+                <Video
+                  src={MEDIA.appExplainer ?? MEDIA.appTour.src}
+                  poster={MEDIA.appTour.poster}
+                  title="Where is the app today?"
+                  trackLabel="Question video: Where is the app today?"
+                />
+              ),
+            }}
+          />
         </section>
 
         {/* 4. Data room */}

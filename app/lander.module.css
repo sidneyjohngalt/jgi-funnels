@@ -1,68 +1,39 @@
-/* Webinar opt-in page: one dark ground, three colours (charcoal, ivory, gold). */
-.page {
-  background: var(--charcoal-2);
-  color: var(--ivory);
-  min-height: 100vh;
-}
-.main {
-  position: relative;
-  overflow-x: clip;
-  isolation: isolate;
-  padding: clamp(36px, 6vw, 72px) var(--pad) clamp(56px, 8vw, 96px);
-}
-.glowTop {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1100px;
-  z-index: -1;
-  background-image: radial-gradient(55% 60% at 30% 0, rgba(255, 196, 0, 0.2) 0%, rgba(255, 196, 0, 0.05) 45%, rgba(255, 196, 0, 0) 70%),
-    radial-gradient(35% 45% at 100% 20%, rgba(213, 164, 0, 0.12) 0%, rgba(213, 164, 0, 0) 70%);
-  pointer-events: none;
-}
+/* Lander, plain version (27 Nov): ivory, one reading column, sign-up box beside it.
+   Text styles come from components/plain.module.css; this file only lays the page out. */
 
-/* Layout: content on the left, the opt-in box floats on the right through every scroll. */
 .layout {
-  max-width: 1160px;
-  margin: 0 auto;
   display: grid;
-  --rg: clamp(32px, 5vw, 48px);
-  gap: var(--rg);
-  grid-template-areas: "head" "video" "form" "problem" "solution" "opportunity" "learn" "host" "close";
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "head"
+    "form"
+    "rest";
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(36px, 6vw, 64px) var(--pad) clamp(48px, 8vw, 80px);
+  row-gap: 40px;
 }
 .head {
   grid-area: head;
-}
-.video {
-  grid-area: video;
+  min-width: 0;
 }
 .formCol {
   grid-area: form;
+  min-width: 0;
+  scroll-margin-top: 24px;
 }
-.problem {
-  grid-area: problem;
-}
-.solution {
-  grid-area: solution;
-}
-.opportunity {
-  grid-area: opportunity;
-}
-.learn {
-  grid-area: learn;
-}
-.host {
-  grid-area: host;
-}
-.close {
-  grid-area: close;
+.rest {
+  grid-area: rest;
+  min-width: 0;
 }
 @media (min-width: 1000px) {
   .layout {
-    grid-template-columns: minmax(0, 1fr) 400px;
-    grid-template-areas: "head form" "video form" "problem form" "solution form" "opportunity form" "learn form" "host form" "close form";
-    column-gap: clamp(48px, 5vw, 72px);
-    --rg: 56px;
-    row-gap: var(--rg);
+    grid-template-columns: minmax(0, 660px) 380px;
+    grid-template-areas:
+      "head form"
+      "rest form";
+    column-gap: 64px;
+    justify-content: center;
   }
   .formCol {
     align-self: start;
@@ -71,592 +42,120 @@
   }
 }
 
-/* Scroll 1 */
-.theme {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 12px;
-  margin: 0 0 22px;
-  font: 500 13px/1.4 var(--font-label);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--champagne);
-}
-.live {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 196, 0, 0.45);
-  color: var(--gold);
-}
-.live::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--gold);
-  animation: livePulse 1.8s ease-in-out infinite;
-}
-@keyframes livePulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-}
-.h1 {
-  font-size: clamp(2.5rem, 5.4vw, 4.4rem);
-  line-height: 1.04;
-  letter-spacing: -0.025em;
-  margin: 0;
-  color: var(--ivory);
-  max-width: 13em;
-}
-.h1 em {
-  color: var(--gold);
-}
-.promise {
-  font-size: clamp(1.15rem, 1.7vw, 1.32rem);
-  line-height: 1.6;
-  color: #ddd4c4;
-  max-width: 34em;
-  margin: 24px 0 0;
-}
 .meta {
-  list-style: none;
-  padding: 0;
-  margin: 28px 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.meta li {
-  font-size: 0.95rem;
-  color: #ddd4c4;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(246, 241, 231, 0.18);
-}
-.video {
-  max-width: 760px;
+  margin: 0 0 24px;
+  font-size: 17px;
+  color: var(--ink-muted);
 }
 
-/* Floating opt-in box */
+/* Sign-up box */
 .form {
+  padding: 24px clamp(20px, 3vw, 28px) 20px;
   background: var(--ivory-raised);
-  color: var(--ink);
-  border-radius: 20px;
-  padding: clamp(22px, 3vw, 30px);
-  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 196, 0, 0.25);
-  position: relative;
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px -24px rgba(30, 28, 25, 0.35);
 }
-.form::before {
-  content: "";
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 0;
-  height: 3px;
-  border-radius: 0 0 3px 3px;
-  background: var(--gold-grad);
-}
-.formKicker {
-  margin: 0 0 6px;
-  font: 500 12px var(--font-label);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold-text);
-}
-.host .formKicker {
-  color: var(--champagne);
+@media (min-width: 1000px) and (max-height: 880px) {
+  .form {
+    padding-top: 18px;
+    padding-bottom: 14px;
+  }
 }
 .formTitle {
-  font-size: clamp(1.8rem, 2.6vw, 2.1rem);
-  margin: 0 0 16px;
+  margin: 0 0 12px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1.15;
   color: var(--ink);
-}
-.formBody {
-  margin-top: 18px;
 }
 .privacy {
   margin: 12px 0 0;
-  font-size: 0.85rem;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--ink-muted);
 }
 
-/* Scroll 2 */
-.h2 {
-  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
-  color: var(--ivory);
-  margin: 0 0 24px;
+/* Content blocks: same rhythm as the other plain pages, inside the left column. */
+.block {
+  padding: clamp(40px, 7vw, 64px) 0;
+  border-top: 1px solid var(--hairline);
 }
-.points {
+.head + .formCol + .rest .block:first-child {
+  margin-top: 8px;
+}
+
+.stats {
   list-style: none;
+  margin: 8px 0 16px;
   padding: 0;
-  margin: 0;
   display: grid;
-  gap: 0;
-  border-top: 1px solid rgba(240, 220, 155, 0.3);
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
 }
-.points li {
+.stats li {
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  gap: 8px;
-  padding: 22px 0;
-  border-bottom: 1px solid rgba(246, 241, 231, 0.12);
+  gap: 4px;
 }
-.n {
-  font: 500 15px "IBM Plex Mono", ui-monospace, monospace;
-  color: var(--gold);
-  padding-top: 6px;
+.stats strong {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: clamp(32px, 5vw, 40px);
+  line-height: 1.1;
+  color: var(--ink);
 }
-.points h3 {
-  font-size: clamp(1.35rem, 2.2vw, 1.6rem);
-  font-weight: 400;
-  color: var(--ivory);
-  margin: 0 0 6px;
-}
-.points p {
-  margin: 0;
-  color: #cfc6b5;
-}
-.host {
-  display: grid;
-  grid-template-columns: 140px minmax(0, 1fr);
-  gap: clamp(20px, 3vw, 32px);
-  align-items: start;
-  padding: clamp(24px, 3vw, 32px);
-  border-radius: 20px;
-  background: rgba(246, 241, 231, 0.04);
-  border: 1px solid rgba(240, 220, 155, 0.18);
-}
-.hostImg {
-  width: 100%;
-  height: auto;
-  border-radius: 14px;
-}
-.hostName {
-  font-size: clamp(1.6rem, 2.4vw, 2rem);
-  color: var(--ivory);
-  margin: 0;
-}
-.hostName em {
-  color: var(--champagne);
-}
-.hostBio {
-  color: #cfc6b5;
-  margin: 12px 0 20px;
-}
-.facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 0 16px;
-  margin: 0;
-  border-top: 1px solid rgba(240, 220, 155, 0.25);
-}
-.facts > div {
-  padding: 12px 0;
-}
-.facts dt {
-  font: 500 11px var(--font-label);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--champagne);
-}
-.facts dd {
-  margin: 4px 0 0;
-  font: 400 1.3rem/1.25 var(--font-heading);
-  color: var(--ivory);
-}
-@media (max-width: 560px) {
-  .host {
-    grid-template-columns: 96px minmax(0, 1fr);
-  }
+.stats span {
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--ink-muted);
 }
 
-/* Scroll 3 */
-.closeText {
-  color: #ddd4c4;
-  font-size: 1.15rem;
-  max-width: 34em;
-  margin: 0;
-}
-.disclaimer {
-  margin: 40px 0 0;
-  font-size: 0.88rem;
-  color: rgba(246, 241, 231, 0.55);
-  max-width: 40em;
+.raise {
+  margin: 24px 0 8px;
 }
 
-/* Phone only: buttons that jump back to the form. */
 .jump {
   margin-top: 28px;
 }
-@media (min-width: 1000px) {
-  .jump {
-    display: none;
-  }
+
+.host {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.hostImg {
+  width: 120px;
+  height: 150px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 12px;
+}
+.hostName {
+  margin: 0 0 8px;
+  font: 700 24px/1.3 var(--font-body);
+  color: var(--ink);
+}
+.host p {
+  margin: 0;
 }
 
 .footer {
-  border-top: 1px solid rgba(246, 241, 231, 0.1);
-  padding: 28px var(--pad) calc(28px + 84px);
+  padding: 32px var(--pad) 120px;
+  border-top: 1px solid var(--hairline);
   text-align: center;
-  font-size: 0.85rem;
-  color: rgba(246, 241, 231, 0.55);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-muted);
 }
 .footer p {
-  max-width: 760px;
+  max-width: 720px;
   margin: 0 auto 8px;
 }
 .footer a {
-  color: rgba(246, 241, 231, 0.8);
+  color: var(--ink);
 }
 .preview {
-  color: var(--champagne);
-}
-@media (min-width: 980px) {
-  .footer {
-    padding-bottom: 28px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .live::before {
-    animation: none;
-  }
-}
-
-/* Headline figures */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 20px;
-  margin: 32px 0 0;
-  border-top: 1px solid rgba(240, 220, 155, 0.3);
-}
-.stats > div {
-  padding: 16px 0 0;
-}
-.stats dt {
-  order: 2;
-  font-size: 0.92rem;
-  line-height: 1.45;
-  color: #cfc6b5;
-  margin-top: 6px;
-}
-.stats > div {
-  display: flex;
-  flex-direction: column;
-}
-.stats dd {
-  order: 1;
-  margin: 0;
-  font: 500 clamp(1.5rem, 2.6vw, 2rem) / 1.1 "IBM Plex Mono", ui-monospace, monospace;
-  color: var(--gold);
-}
-@media (max-width: 560px) {
-  .stats {
-    grid-template-columns: 1fr;
-  }
-  .stats > div {
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(246, 241, 231, 0.1);
-  }
-}
-
-/* Problem, solution, opportunity */
-.eyebrow {
-  font: 500 13px/1.4 var(--font-label);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--champagne);
-  margin: 0 0 14px;
-}
-.body {
-  font-size: 1.15rem;
-  line-height: 1.65;
-  color: #ddd4c4;
-  max-width: 36em;
-  margin: 0 0 28px;
-}
-.statGrid {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-.statGrid li {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 22px;
-  border-radius: 20px;
-  background: rgba(246, 241, 231, 0.04);
-  border: 1px solid rgba(240, 220, 155, 0.18);
-}
-.statGrid strong {
-  font: 500 clamp(1.7rem, 3vw, 2.3rem) / 1.05 "IBM Plex Mono", ui-monospace, monospace;
-  color: var(--gold);
-}
-.statGrid span {
-  color: #cfc6b5;
-  line-height: 1.5;
-}
-.sources {
-  font-size: 0.85rem;
-  color: rgba(246, 241, 231, 0.55);
-  margin: 18px 0 0;
-  max-width: 44em;
-}
-.sources a {
-  color: var(--champagne);
-}
-.cards,
-.classes {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.classes {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.card,
-.classCard {
-  padding: clamp(22px, 2.6vw, 28px);
-  border-radius: 20px;
-  background: var(--ivory-raised);
-  color: var(--ink);
-}
-.classCard {
-  background: rgba(246, 241, 231, 0.04);
-  border: 1px solid rgba(255, 196, 0, 0.35);
-  color: var(--ivory);
-}
-.card h3,
-.classCard h3 {
-  font-size: clamp(1.4rem, 2.2vw, 1.65rem);
-  font-weight: 400;
-  margin: 0 0 10px;
-}
-.card p:last-child {
-  margin: 0;
-  color: var(--ink-muted);
-}
-.classCard p:last-child {
-  margin: 0;
-  color: #cfc6b5;
-}
-.cardTag {
-  font: 600 12px/1.3 var(--font-label);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold-text);
-  margin: 0 0 10px;
-}
-.classCard .cardTag {
-  color: var(--gold);
-}
-.timeline {
-  list-style: none;
-  padding: 0;
-  margin: 28px 0 0;
-  display: grid;
-  border-top: 1px solid rgba(240, 220, 155, 0.3);
-}
-.timeline li {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(246, 241, 231, 0.1);
-  color: #ddd4c4;
-}
-.year {
-  font: 500 15px/1.6 "IBM Plex Mono", ui-monospace, monospace;
-  color: var(--gold);
-}
-.raiseBox {
-  margin-top: 22px;
-  padding: clamp(20px, 2.6vw, 26px);
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(246, 241, 231, 0.12);
-}
-@media (max-width: 760px) {
-  .cards,
-  .classes {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 480px) {
-  .statGrid {
-    grid-template-columns: 1fr;
-  }
-}
-.classes {
-  grid-template-columns: 1fr;
-}
-@media (min-width: 640px) {
-  .classCard {
-    display: grid;
-    grid-template-columns: 230px minmax(0, 1fr);
-    column-gap: 24px;
-    align-items: baseline;
-  }
-  .classCard .cardTag {
-    grid-column: 1;
-    grid-row: 1;
-  }
-  .classCard h3 {
-    grid-column: 1;
-    grid-row: 2;
-    margin: 0;
-  }
-  .classCard p:last-child {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    align-self: center;
-  }
-}
-.raiseBox span {
-  color: #cfc6b5;
-}
-
-/* ------------------------------------------------------------------ */
-/* Light and dark bands, matching the rest of the funnel.              */
-/* Each band paints a full-width background behind its section and   */
-/* reaches halfway into the gaps, so neighbouring bands meet cleanly. */
-/* The sign-up card keeps floating above them on desktop.             */
-/* ------------------------------------------------------------------ */
-/* Keep the sign-up card above the bands. Position stays sticky on desktop (set above). */
-.formCol {
-  z-index: 2;
-}
-@media (max-width: 999px) {
-  .formCol {
-    position: relative;
-  }
-}
-/* Shorter laptop screens: tighten the card so the button stays in view while it follows you. */
-@media (min-width: 1000px) and (max-height: 880px) {
-  .formCol {
-    top: 12px;
-  }
-  .form {
-    padding: 18px 22px;
-  }
-  .formTitle {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-  }
-  .formBody {
-    margin-top: 12px;
-  }
-  .privacy {
-    display: none;
-  }
-}
-.band {
-  position: relative;
-  padding-block: clamp(40px, 6vw, 72px);
-}
-.band::before {
-  content: "";
-  position: absolute;
-  top: calc(var(--rg) / -2);
-  bottom: calc(var(--rg) / -2);
-  left: -100vmax;
-  right: -100vmax;
-  z-index: -1;
-}
-.ivory::before {
-  background: var(--ivory);
-}
-.white::before {
-  background: var(--ivory-raised);
-}
-.glowBand::before {
-  background-color: var(--charcoal-deep);
-  background-image: radial-gradient(45% 70% at 25% 0, rgba(255, 196, 0, 0.16) 0%, rgba(255, 196, 0, 0) 70%);
-}
-.close.band {
-  padding-bottom: clamp(56px, 8vw, 96px);
-}
-
-/* Text on light bands */
-.light {
-  color: var(--ink);
-}
-.light .h2 {
-  color: var(--ink);
-}
-.light .eyebrow {
-  color: var(--gold-text);
-}
-.light .body,
-.light .closeText {
-  color: var(--ink-muted);
-}
-.light .statGrid li {
-  background: var(--ivory-raised);
-  border-color: var(--hairline);
-}
-.light .statGrid strong {
-  color: var(--gold-text);
-}
-.light .statGrid span {
-  color: var(--ink-muted);
-}
-.light .sources,
-.light .disclaimer {
-  color: var(--ink-muted);
-}
-.light .sources a {
-  color: var(--gold-text);
-}
-.white .card {
-  background: var(--ivory);
-  border: 1px solid var(--hairline);
-}
-.light .timeline {
-  border-top-color: var(--hairline);
-}
-.light .timeline li {
-  color: var(--ink);
-  border-bottom-color: var(--hairline);
-}
-.light .year {
-  color: var(--gold-text);
-}
-.light .points {
-  border-top-color: var(--charcoal-deep);
-}
-.light .points li {
-  border-bottom-color: var(--hairline);
-}
-.light .points h3 {
-  color: var(--ink);
-}
-.light .points p {
-  color: var(--ink-muted);
-}
-.light .n {
-  color: var(--gold-text);
-}
-
-/* Host card sits on its own dark band with room around it. */
-.hostBand {
-  position: relative;
-  margin-block: clamp(28px, 4vw, 44px);
-}
-/* The last light band runs down to the footer. */
-.close.band::before {
-  bottom: calc(-1 * clamp(56px, 8vw, 96px));
+  margin-top: 16px !important;
 }

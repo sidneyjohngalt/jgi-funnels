@@ -154,24 +154,28 @@ export type QA = {
 export const QUESTIONS_BEFORE_BRIEFING: QA[] = [
   {
     question: "What is Estate Transformation, in two minutes?",
+    short: "A phone-first app that helps people organize, inventory and value what they own, so their family inherits a finished file.",
     answer:
       "A phone-first app that helps people organize, inventory and value everything they own during their lifetime, so their family inherits a finished file, not a project. Advisor Transformation is the version financial advisors offer to their clients.",
     src: null,
   },
   {
     question: "Why is Michael the person to build this?",
+    short: "He has worked on this problem since 2001, and settled his own parents' estate in 2021. That shaped version 4.0.",
     answer:
       "He has worked on this problem since 2001. Version 2.0 reached about 400 advisor offices and thousands of estates. In 2021 he spent 18 months as personal representative of his own parents' estate, and that experience shaped version 4.0.",
     src: null,
   },
   {
     question: "What will I hear at the briefing, and what will I not be asked to do?",
+    short: "The problem, Michael's story, the two apps and how the raise works, then your questions. No payment is taken.",
     answer:
       "The problem, Michael's story, the two platforms and how the Venture Studio raise works, then your questions, live. No payment is taken at the briefing. At the end, you can apply for a one to one call if you would like to look closer.",
     src: null,
   },
   {
     question: "Who is the briefing for?",
+    short: "Advisors, family offices, capital partners and professionals who want to take an active part in building version 4.0.",
     answer:
       "Financial advisors and RIAs, family offices, private capital partners and professionals who want to take an active part in building version 4.0. It is not for anyone looking for quick or promised returns.",
     src: null,
