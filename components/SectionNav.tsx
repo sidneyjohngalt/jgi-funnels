@@ -10,7 +10,16 @@ export type NavItem = { id: string; label: string; important?: boolean; flag?: s
  * ones already passed and fills a progress line as the reader scrolls. Tap a step to jump to it.
  * Works on phones (the row scrolls sideways and keeps the current step in view) and desktop.
  */
-export default function SectionNav({ items, label = "On this page" }: { items: NavItem[]; label?: string }) {
+export default function SectionNav({
+  items,
+  label = "On this page",
+  tone = "dark",
+}: {
+  items: NavItem[];
+  label?: string;
+  /** "light" for ivory pages (the plain confirmation page); "dark" keeps the original charcoal bar. */
+  tone?: "dark" | "light";
+}) {
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
   const barRef = useRef<HTMLElement>(null);
@@ -22,7 +31,8 @@ export default function SectionNav({ items, label = "On this page" }: { items: N
       raf = 0;
       const bar = barRef.current;
       const list = listRef.current;
-      const offset = (bar?.offsetHeight ?? 64) + 24;
+      // A step counts as reached once its section enters the top quarter of the screen.
+      const offset = (bar?.offsetHeight ?? 64) + Math.min(220, Math.round(window.innerHeight * 0.25));
       const els = items.map((it) => document.getElementById(it.id));
       const tops = els.map((el) => (el ? el.getBoundingClientRect().top - offset : Infinity));
       let current = 0;
@@ -98,7 +108,7 @@ export default function SectionNav({ items, label = "On this page" }: { items: N
   }
 
   return (
-    <nav ref={barRef} className={s.bar} aria-label={label}>
+    <nav ref={barRef} className={`${s.bar} ${tone === "light" ? s.light : ""}`} aria-label={label}>
       <div className={s.inner}>
         <p className={s.count} aria-live="polite">
           <span className={s.countLabel}>Step</span> {active + 1} <span className={s.of}>of {items.length}</span>

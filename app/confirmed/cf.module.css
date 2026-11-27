@@ -9,6 +9,7 @@
 }
 
 .block {
+  scroll-margin-top: 48px;
   max-width: 680px;
   margin: 0 auto;
   padding: clamp(48px, 8vw, 80px) var(--pad);

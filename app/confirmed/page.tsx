@@ -7,6 +7,7 @@ import { ButtonLink, DryRunBanner } from "@/components/ui";
 import Video from "@/components/Video";
 import FounderFilm from "@/components/FounderFilm";
 import NdaUnlock from "@/components/NdaUnlock";
+import SectionNav from "@/components/SectionNav";
 import { BOOKING } from "@/config/investor";
 import { CONTACT, DATA_ROOM, FOUNDER_FILM, MEDIA, PITCH_DECK_URL, QUESTIONS_BEFORE_CALL } from "@/content/investor";
 import { NDA_IS_PLACEHOLDER, NDA_PARAGRAPHS, NDA_TITLE } from "@/content/nda";
@@ -26,6 +27,14 @@ export const dynamic = "force-dynamic";
  *   4. The data room, open or locked.  5. Who will contact you.
  * Every block: a title, one sentence, then the thing. Longer answers sit behind "Read more".
  */
+const STEPS = [
+  { id: "booked", label: "You're booked" },
+  { id: "start", label: "Michael's video" },
+  { id: "answers", label: "Your questions" },
+  { id: "before", label: "Data room", important: true },
+  { id: "contact", label: "Who you'll hear from" },
+];
+
 export default async function ConfirmedPage() {
   const s = await getSession();
   if (!s) redirect("/apply");
@@ -47,7 +56,7 @@ export default async function ConfirmedPage() {
       <SiteHeader minimal />
       <main id="main" className={c.page}>
         {/* 1. You are booked */}
-        <header className={c.block} aria-labelledby="conf-title">
+        <header className={c.block} aria-labelledby="conf-title" id="booked">
           <p className={c.label}>Your call is confirmed</p>
           <h1 id="conf-title" className={c.h1}>
             You&rsquo;re booked, {s.firstName}.
@@ -80,6 +89,12 @@ export default async function ConfirmedPage() {
             </div>
           )}
         </header>
+
+        <SectionNav
+          tone="light"
+          label="Your preparation, step by step"
+          items={signed ? STEPS : STEPS.map((x) => (x.important ? { ...x, flag: "Locked" } : x))}
+        />
 
         {/* 2. Michael's main video */}
         <section className={c.block} aria-labelledby="start-title" id="start">
