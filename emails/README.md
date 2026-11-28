@@ -12,6 +12,9 @@ Files
 - Signature photo: `public/email/michael-signature-128.jpg` (128 x 128, shown at 64 px, round; square crop of the full width of
   Michael's office portrait from 2% down, approved by Sidney 27 Nov), served at
   https://jgi-funnels.vercel.app/email/michael-signature-128.jpg. Swap the `src` with the wordmark's.
+- Signature lines (approved by Sidney 27 Nov): under the photo row, "Estate Transformation  |  Advisor Transformation"
+  (Manrope 15px, ink muted) and the tagline "Inventory estate assets now, or traumatize loved ones later." (Playfair
+  Display italic 17px, gold text #7A5A00). The plain-text version carries the same two lines.
 
 Placeholders (CRM replaces them in GHL; Funnels did not guess GHL's merge field names)
 - `[EMAIL BODY]`: the email's own paragraphs, each as `<p>...</p>`.
